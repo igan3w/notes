@@ -1572,14 +1572,41 @@
 
     /* 지식 그래프 & 히타베이스 캔버스 */
     .graph-stage {
-      width: 100%; height: 540px; background: #fbfaf8; border: 1px solid var(--border); border-radius: 10px; position: relative; overflow: hidden;
+      width: 100%; height: clamp(420px, calc(100vh - 335px), 780px); min-height: 420px; background: #fbfaf8; border: 1px solid var(--border); border-radius: 10px; position: relative; overflow: hidden;
     }
     .canvas-stage {
-      width: 100%; height: 580px; background-color: #fbfaf8;
+      width: 100%; height: clamp(420px, calc(100vh - 335px), 780px); min-height: 420px;
+      background-color: #fbfaf8;
+      border: 1px solid var(--border); border-radius: 10px; position: relative; overflow: auto;
+      cursor: grab;
+    }
+    .canvas-stage.expanded {
+      height: auto; min-height: 920px; overflow-x: auto; overflow-y: visible;
+    }
+    .canvas-world-plane {
+      position: relative; width: 2200px; height: 1400px; transform-origin: 0 0;
       background-image: radial-gradient(rgba(55,53,47,0.14) 1px, transparent 1px);
       background-size: 20px 20px;
-      border: 1px solid var(--border); border-radius: 10px; position: relative; overflow: auto;
     }
+    .canvas-section-resize {
+      position: absolute; right: 3px; bottom: 2px; width: 18px; height: 18px;
+      cursor: nwse-resize; opacity: 0.55; font-size: 12px; display: flex;
+      align-items: center; justify-content: center; user-select: none; color: var(--ink-3);
+    }
+    .canvas-section-resize:hover { opacity: 1; color: var(--blue); }
+    body.privacy-blur .priv-blur { filter: blur(6px); transition: filter 0.15s; }
+    body.privacy-blur .priv-blur:hover { filter: blur(1px); }
+    .blk-gdrive-card {
+      border: 1px solid var(--border-strong); border-radius: 8px; padding: 10px 12px;
+      background: #ffffff; display: flex; flex-direction: column; gap: 8px;
+    }
+    .blk-quote-card {
+      border: 1px solid var(--border-strong); border-radius: 8px; padding: 12px 14px;
+      background: #fbfaf8; display: flex; flex-direction: column; gap: 8px;
+    }
+    .blk-quote-card table { width: 100%; border-collapse: collapse; font-size: 12.5px; background: #fff; border-radius: 6px; overflow: hidden; }
+    .blk-quote-card th, .blk-quote-card td { border: 1px solid var(--border); padding: 5px 7px; text-align: left; }
+    .blk-quote-card th { background: var(--bg-sidebar); font-weight: 600; font-size: 11.5px; color: var(--ink-2); }
     .canvas-card {
       position: absolute; width: 225px; min-height: 110px; background: #ffffff;
       border: 1px solid var(--border-strong); border-radius: 8px; padding: 9px 11px;
@@ -1756,6 +1783,9 @@
           <button type="button" class="n-btn-ghost" onclick="openQuickCaptureModal()" title="자연어 · 음성 빠른 캡처 (Ctrl+Shift+Space)">⚡ 캡처</button>
           <button type="button" id="topSplitBtn" class="n-btn-ghost" onclick="toggleSplitPane()" title="2개 문서 나란히 보기">◫ 분할</button>
           <button type="button" id="topPomodoroBtn" class="n-btn-ghost" onclick="togglePomodoroTimer()" title="포모도로 25분 집중 타이머">⏱️ <span id="topPomoClock">25:00</span></button>
+          <button type="button" id="btnFocusNoise" class="n-btn-ghost" onclick="cycleAmbientFocusSound()" title="집중 백색소음·빗소리 (Web Audio)">🎧 OFF</button>
+          <button type="button" class="icon-btn" onclick="speakTodayDailyBriefing()" title="오늘 할일 한국어 음성 브리핑 (TTS)">🗣️</button>
+          <button type="button" id="btnPrivacyBlur" class="icon-btn" onclick="togglePrivacyBlurMode()" title="프라이버시 블러 모드 (금액/개인 가림)">🙈</button>
           <button type="button" class="n-btn-ghost" onclick="openCarbonAssistantModal()">💎 Carbon</button>
           <button type="button" class="n-btn-ghost" onclick="openSyncModal()">Share / Git</button>
           <button type="button" class="icon-btn" id="btnTopFav" onclick="toggleActiveItemPin()" title="즐겨찾기">☆</button>
@@ -1932,6 +1962,7 @@
             <option value="checkbox">☑️ 체크박스</option>
             <option value="number">🔢 숫자 / 금액</option>
             <option value="relation">🔗 연결 페이지 (Relation)</option>
+            <option value="gdrive">📁 구글 드라이브 링크 (Drive File)</option>
             <option value="formula">🧮 수식 (Formula · Coda/Notion Pro)</option>
             <option value="ai_autofill">✨ AI 자동 채우기 (Notion Business AI)</option>
           </select>
@@ -2043,6 +2074,33 @@
         <button type="button" class="n-btn" onclick="document.getElementById('jsonImportFile').click()">📂 JSON 복원</button>
         <input id="jsonImportFile" type="file" accept=".json" style="display:none;" onchange="importBackupJson(this.files[0])" />
       </div>
+      <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+          <strong style="font-size:13.5px;">☁️ Google Drive 실시간 연결 (백업 · 파일 피커 · Docs/Sheets 미리보기)</strong>
+          <span class="ntag ntag-green" id="gdriveStatusPill">링크 즉시 임베드 ON</span>
+        </div>
+        <div style="font-size:12px;color:var(--ink-2);margin-bottom:8px;line-height:1.45;">
+          ① <b>로그인 없이도</b> Google Drive/Docs/Sheets 공유 URL을 에디터에 붙여넣거나 <code>/drive</code>를 입력하면 즉시 미리보기 카드로 연결됩니다.<br>
+          ② 내 드라이브 <code>Oratech_Notion_Vault</code> 폴더 자동 백업·파일 목록 가져오기는 아래 Google OAuth Client ID 또는 Access Token을 연결하세요.
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div>
+            <label class="field-label">Google OAuth Client ID (선택)</label>
+            <input id="cfgGdriveClientId" class="field-input" placeholder="123456-xxx.apps.googleusercontent.com" />
+          </div>
+          <div>
+            <label class="field-label">Google Drive Access Token (직접 입력/자동)</label>
+            <input id="cfgGdriveToken" type="password" class="field-input" placeholder="ya29.a0..." />
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+          <button type="button" class="n-btn-primary" onclick="saveSyncSettings(); connectGoogleDriveOAuth();">🔑 Google 로그인 연동</button>
+          <button type="button" class="n-btn" onclick="saveSyncSettings(); syncToGoogleDriveVault();">⬆️ 드라이브 백업</button>
+          <button type="button" class="n-btn" onclick="saveSyncSettings(); pullFromGoogleDriveVault();">⬇️ 드라이브 복원</button>
+          <button type="button" class="n-btn" onclick="saveSyncSettings(); browseGoogleDriveFiles();">📂 내 파일 가져오기</button>
+        </div>
+        <div id="gdriveFilesList" style="display:none;flex-direction:column;gap:5px;max-height:170px;overflow-y:auto;padding:8px;background:var(--bg-sidebar);border:1px solid var(--border);border-radius:6px;"></div>
+      </div>
       <div id="syncDebugMsg" style="margin-top:10px;font-size:12px;color:var(--ink-2);"></div>
     </div>
   </div>
@@ -2098,9 +2156,17 @@
         <button type="button" class="n-btn" onclick="runCarbonDailyBriefing()">📊 오늘 브리핑 요약</button>
       </div>
       <textarea id="carbonPromptInput" rows="3" class="field-textarea" placeholder="질문(Ask Workspace), 회의록 텍스트, 또는 생성할 체크리스트를 입력하세요..."></textarea>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button type="button" class="n-btn" onclick="askWorkspaceCarbonAI()">🔍 전체 워크스페이스 Q&amp;A</button>
-        <button type="button" class="n-btn-primary" onclick="generateCarbonTemplateBlocks()">✨ 현재 페이지에 블록 생성</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="n-btn" style="font-size:12px;padding:4px 8px;" onclick="runCustomAiAgent('MORNING_BRIEFING')">🤖 모닝 브리핑 에이전트</button>
+          <button type="button" class="n-btn" style="font-size:12px;padding:4px 8px;" onclick="runCustomAiAgent('WEEKLY_CLEANUP')">🧹 주간 정리 리포트</button>
+          <button type="button" class="n-btn" style="font-size:12px;padding:4px 8px;" onclick="runCustomAiAgent('KIDS_WEEKEND')">👨‍👧‍👦 가족 준비 에이전트</button>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="n-btn" onclick="extractMeetingNotesWithCarbon()">🎙️ 회의록→액션 정리</button>
+          <button type="button" class="n-btn" onclick="askWorkspaceCarbonAI()">🔍 전체 워크스페이스 Q&amp;A</button>
+          <button type="button" class="n-btn-primary" onclick="generateCarbonTemplateBlocks()">✨ 현재 페이지에 블록 생성</button>
+        </div>
       </div>
       <div id="carbonOutputArea" style="margin-top:12px;background:var(--bg-sidebar);border:1px solid var(--border);border-radius:6px;padding:12px;font-size:13px;display:none;white-space:pre-wrap;max-height:280px;overflow-y:auto;"></div>
     </div>
@@ -2430,9 +2496,29 @@
         nagRemind: Boolean(overrides.nagRemind),
         repeatRule: overrides.repeatRule || 'NONE',
         supertagData: overrides.supertagData && typeof overrides.supertagData === 'object' ? overrides.supertagData : {},
+        gdrivePreviewOpen: Boolean(overrides.gdrivePreviewOpen),
+        quoteCustomer: overrides.quoteCustomer || '',
+        quoteItems: Array.isArray(overrides.quoteItems) ? overrides.quoteItems : (type === 'quote_calc' ? [
+          { name: 'PCW-5000 포터블 엔진윈치', price: 2450000, qty: 1 },
+          { name: '전용 도르래·슬링 세트', price: 180000, qty: 1 }
+        ] : []),
         updatedAt: Date.now()
       };
       return Object.assign(base, overrides);
+    }
+
+    function parseGoogleDriveUrl(rawUrl) {
+      const url = String(rawUrl || '').trim();
+      if (!url) return null;
+      let id = '', kind = 'file', badge = '📁 Google Drive', previewUrl = '';
+      let m = url.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/);
+      if (m) { id = m[1]; kind = 'doc'; badge = '📘 Google Docs'; previewUrl = `https://docs.google.com/document/d/${id}/preview`; }
+      if (!m) { m = url.match(/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/); if (m) { id = m[1]; kind = 'sheet'; badge = '📗 Google Sheets'; previewUrl = `https://docs.google.com/spreadsheets/d/${id}/preview`; } }
+      if (!m) { m = url.match(/docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/); if (m) { id = m[1]; kind = 'slide'; badge = '📙 Google Slides'; previewUrl = `https://docs.google.com/presentation/d/${id}/preview`; } }
+      if (!m) { m = url.match(/drive\.google\.com\/(?:drive\/u\/\d+\/)?folders\/([a-zA-Z0-9_-]+)/); if (m) { id = m[1]; kind = 'folder'; badge = '🗂️ Drive 폴더'; previewUrl = `https://drive.google.com/embeddedfolderview?id=${id}#list`; } }
+      if (!m) { m = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/); if (m) { id = m[1]; kind = 'file'; badge = '📄 Drive 파일'; previewUrl = `https://drive.google.com/file/d/${id}/preview`; } }
+      if (!id) return null;
+      return { id, kind, badge, previewUrl, openUrl: url };
     }
 
     // ==================== 한국어 자연어 스마트 할 일 파서 (Todoist Pro / TickTick / Tana Supertag) ====================
@@ -4233,7 +4319,7 @@
                onclick="selectPage('${p.id}')">
             <span class="sb-item-left" onpointerdown="startNotionDrag(event,'sidebar-page',{itemId:'${p.id}'},'${escJsStr(p.title)}')">
               <span class="sb-item-icon">${escHtml(p.icon)}</span>
-              <span class="sb-item-title">${escHtml(p.title || '제목 없음')}</span>
+              <span class="sb-item-title ${p.space === 'PERSONAL' ? 'priv-blur' : ''}">${escHtml(p.title || '제목 없음')}</span>
             </span>
             <span class="sb-item-actions">
               <button type="button" class="sb-act-mini" onclick="event.stopPropagation();createNewPage('${p.space}','${p.id}')" title="하위 페이지 추가">+</button>
@@ -4321,6 +4407,9 @@
     };
 
     function renderAll() {
+      document.body.classList.toggle('privacy-blur', !!APP.privacyBlur);
+      const pBtn = document.getElementById('btnPrivacyBlur');
+      if (pBtn) pBtn.textContent = APP.privacyBlur ? '🔒' : '🙈';
       document.querySelectorAll('.space-chip').forEach(c => c.classList.toggle('active', c.dataset.space === APP.activeSpace));
       document.querySelectorAll('#mainViewTabs .view-pill').forEach(p => p.classList.toggle('active', p.dataset.view === APP.activeView));
       updateTopStatusMetrics();
@@ -4561,6 +4650,60 @@
                 </select>
                 <input class="field-input" style="flex:1;min-width:160px;padding:4px 7px;font-size:12px;" value="${escHtml(b.buttonTargetText || '')}" oninput="updateBlockFieldSilent('${ctxKey}','${b.id}','buttonTargetText',this.value)" placeholder="생성할 항목 제목..." />
                 <button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="refreshViewsForCtx('${ctxKey}')">저장</button>
+              </div>
+            </div>`;
+        } else if (b.type === 'gdrive') {
+          const parsed = parseGoogleDriveUrl(b.url || '');
+          const safeUrl = (b.url || '').trim();
+          inner = `
+            <div class="blk-gdrive-card">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:200px;">
+                  <span class="ntag ntag-green">${escHtml(parsed?.badge || '📁 Google Drive')}</span>
+                  <input class="blk-input" style="font-weight:600;font-size:13.5px;flex:1;" value="${escHtml(b.bookmarkTitle || '')}" oninput="updateBlockFieldSilent('${ctxKey}','${b.id}','bookmarkTitle',this.value)" placeholder="파일/문서 이름 (예: PCW-5000 단가표 · 아이 안내장)..." />
+                </div>
+                <div style="display:flex;gap:5px;align-items:center;">
+                  ${parsed?.previewUrl ? `<button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="updateBlockFieldAndSync('${ctxKey}','${b.id}','gdrivePreviewOpen',${!b.gdrivePreviewOpen})">${b.gdrivePreviewOpen ? '🔽 미리보기 닫기' : '👁️ 문서 미리보기'}</button>` : ''}
+                  ${safeUrl ? `<a href="${escHtml(safeUrl)}" target="_blank" rel="noopener" class="n-btn-primary" style="font-size:11.5px;padding:3px 9px;text-decoration:none;">↗ Drive 열기</a>` : `<button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="openSyncModal()">📂 Drive 파일 선택</button>`}
+                </div>
+              </div>
+              <input class="blk-input" style="font-size:12px;color:var(--ink-3);" value="${escHtml(safeUrl)}" onchange="updateBlockFieldAndSync('${ctxKey}','${b.id}','url',this.value)" placeholder="Google Drive / Docs / Sheets 공유 URL 붙여넣기 (https://drive.google.com/...)" />
+              ${b.gdrivePreviewOpen && parsed?.previewUrl ? `<iframe src="${escHtml(parsed.previewUrl)}" style="width:100%;height:340px;border:1px solid var(--border);border-radius:6px;background:#fff;" loading="lazy"></iframe>` : ''}
+            </div>`;
+        } else if (b.type === 'quote_calc') {
+          const qItems = Array.isArray(b.quoteItems) ? b.quoteItems : [];
+          const subTotal = qItems.reduce((s, it) => s + Number(it.price || 0) * Number(it.qty || 0), 0);
+          const vat = Math.round(subTotal * 0.1);
+          const grand = subTotal + vat;
+          inner = `
+            <div class="blk-quote-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:6px;flex:1;">
+                  <span class="ntag ntag-blue">🧮 퀵 견적 · 예산 계산기</span>
+                  <input class="field-input" style="max-width:220px;padding:3px 8px;font-size:12.5px;" value="${escHtml(b.quoteCustomer || '')}" oninput="updateBlockFieldSilent('${ctxKey}','${b.id}','quoteCustomer',this.value)" placeholder="거래처명 또는 행사명 (선택)..." />
+                </div>
+                <div style="display:flex;gap:5px;">
+                  <button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="addQuoteCalcRow('${ctxKey}','${b.id}')">+ 품목 추가</button>
+                  <button type="button" class="n-btn-primary" style="font-size:11.5px;padding:3px 8px;" onclick="copyQuoteCalcText('${ctxKey}','${b.id}')">📋 견적 요약 복사</button>
+                </div>
+              </div>
+              <table>
+                <thead><tr><th>품목명 / 내역</th><th style="width:120px;">단가(원)</th><th style="width:70px;">수량</th><th style="width:120px;">소계</th><th style="width:36px;"></th></tr></thead>
+                <tbody>
+                  ${qItems.map((it, qIdx) => `
+                    <tr>
+                      <td><input value="${escHtml(it.name||'')}" oninput="updateQuoteCalcItem('${ctxKey}','${b.id}',${qIdx},'name',this.value,true)" style="width:100%;border:none;outline:none;font-size:12.5px;" placeholder="품목..." /></td>
+                      <td><input type="number" class="priv-blur" value="${Number(it.price||0)}" onchange="updateQuoteCalcItem('${ctxKey}','${b.id}',${qIdx},'price',Number(this.value||0))" style="width:100%;border:none;outline:none;font-size:12.5px;" /></td>
+                      <td><input type="number" value="${Number(it.qty||1)}" onchange="updateQuoteCalcItem('${ctxKey}','${b.id}',${qIdx},'qty',Number(this.value||0))" style="width:100%;border:none;outline:none;font-size:12.5px;" /></td>
+                      <td class="priv-blur" style="font-variant-numeric:tabular-nums;font-weight:600;">₩${(Number(it.price||0)*Number(it.qty||0)).toLocaleString('ko-KR')}</td>
+                      <td><button type="button" class="sb-act-mini" onclick="removeQuoteCalcRow('${ctxKey}','${b.id}',${qIdx})">×</button></td>
+                    </tr>`).join('')}
+                </tbody>
+              </table>
+              <div style="display:flex;justify-content:flex-end;gap:14px;font-size:12.5px;flex-wrap:wrap;" class="priv-blur">
+                <span>공급가 <b>₩${subTotal.toLocaleString('ko-KR')}</b></span>
+                <span>부가세(10%) <b>₩${vat.toLocaleString('ko-KR')}</b></span>
+                <span style="color:#1d6cd4;font-size:13.5px;">총 합계 <b>₩${grand.toLocaleString('ko-KR')}</b></span>
               </div>
             </div>`;
         } else if (b.type === 'bookmark') {
@@ -4815,6 +4958,8 @@
               <button type="button" class="ghost-meta-btn" onclick="appendBlock('${page.id}','columns')">+ ◫ 2단 칼럼</button>
               <button type="button" class="ghost-meta-btn" onclick="appendBlock('${page.id}','synced')">+ 🔄 동기화 블록</button>
               <button type="button" class="ghost-meta-btn" onclick="appendBlock('${page.id}','button')">+ ⚡ 액션 버튼</button>
+              <button type="button" class="ghost-meta-btn" onclick="appendBlock('${page.id}','gdrive')">+ 📁 구글 드라이브</button>
+              <button type="button" class="ghost-meta-btn" onclick="appendBlock('${page.id}','quote_calc')">+ 🧮 퀵 견적/예산</button>
               <button type="button" class="ghost-meta-btn" onclick="appendBlock('${page.id}','project_embed')">+ 📁 프로젝트 삽입</button>
             </div>
 
@@ -4884,6 +5029,23 @@
             focusBlock(b.id, 0);
             return;
           }
+        }
+      }
+
+      // Auto-convert pasted Google Drive / Docs / Sheets URL in text blocks
+      if (b.type === 'text' && /^https:\/\/(drive|docs)\.google\.com\/\S+$/i.test(val.trim())) {
+        const parsedG = parseGoogleDriveUrl(val.trim());
+        if (parsedG) {
+          b.type = 'gdrive';
+          b.url = val.trim();
+          b.bookmarkTitle = parsedG.badge.replace(/^[^\s]+\s/, '') + ' 연결 문서';
+          b.text = '';
+          b.updatedAt = Date.now();
+          ctxObj.target.updatedAt = Date.now();
+          saveAppState();
+          refreshViewsForCtx(ctxKey);
+          showToast('📁 Google Drive 링크를 임베드 카드로 자동 변환했습니다!');
+          return;
         }
       }
 
@@ -5365,6 +5527,11 @@
         else if (b.type === 'code') lines.push('```' + (b.codeLang || '') + '\n' + (b.text || '') + '\n```');
         else if (b.type === 'divider') lines.push('---');
         else if (b.type === 'bookmark') lines.push(`- [${b.bookmarkTitle || b.url}](${b.url})`);
+      else if (b.type === 'gdrive') lines.push(`- [📁 Google Drive: ${b.bookmarkTitle || b.url}](${b.url})`);
+      else if (b.type === 'quote_calc') {
+        const tot = (b.quoteItems || []).reduce((s, it) => s + Number(it.price || 0) * Number(it.qty || 0), 0);
+        lines.push(`- 🧮 견적/예산(${b.quoteCustomer || '일반'}): 총 ₩${Math.round(tot * 1.1).toLocaleString('ko-KR')}`);
+      }
         else if (b.type === 'synced') lines.push(`> 🔄 ${APP.syncedGroups?.[b.syncGroupId]?.text || b.text}`);
         else if (b.text) lines.push(b.text);
       });
@@ -5457,6 +5624,8 @@
       { type: 'button', icon: '⚡', label: '자동화 액션 버튼', kw: 'button 자동화 버튼 액션' },
       { type: 'toc', icon: '📑', label: '목차 (Table of Contents)', kw: 'toc 목차 색인' },
       { type: 'bookmark', icon: '🔖', label: '웹 북마크 카드', kw: 'bookmark 링크 웹 북마크' },
+      { type: 'gdrive', icon: '📁', label: 'Google Drive 파일·문서', kw: 'drive gdrive google 구글 드라이브 docs sheets pdf' },
+      { type: 'quote_calc', icon: '🧮', label: 'B2B 견적·예산 계산 블록', kw: 'quote calc 견적 단가 계산 예산 정산' },
       { type: 'chart', icon: '📈', label: '프로젝트 실시간 차트', kw: 'chart 그래프 차트 통계' },
       { type: 'photo', icon: '🖼️', label: '사진 · 앨범 블록', kw: 'photo image 사진 이미지' },
       { type: 'table', icon: '📊', label: '표 (Table)', kw: 'table 표 테이블' },
@@ -5497,10 +5666,46 @@
       if (newType === 'project_embed' && !found.block.projectId && APP.projects?.[0]) found.block.projectId = APP.projects[0].id;
       if (newType === 'chart' && !found.block.projectId && APP.projects?.[0]) found.block.projectId = APP.projects[0].id;
       if (newType === 'bookmark' && !found.block.url) { found.block.url = 'https://www.orawinch.com'; found.block.bookmarkTitle = '(주)오라테크 공식 홈페이지'; }
+      if (newType === 'quote_calc' && (!Array.isArray(found.block.quoteItems) || !found.block.quoteItems.length)) {
+        found.block.quoteItems = [{ name: 'PCW-5000 포터블 엔진윈치', price: 2450000, qty: 1 }, { name: '전용 도르래·슬링 세트', price: 180000, qty: 1 }];
+      }
       if (newType === 'columns' && !Array.isArray(found.block.cols)) found.block.cols = [[createBlock('text')], [createBlock('text')]];
       saveAppState();
       refreshViewsForCtx(activeSlash.ctxKey);
       focusBlock(found.block.id, 0);
+    };
+
+    window.addQuoteCalcRow = (ctxKey, bid) => {
+      const f = findBlockDeep(getContextObj(ctxKey), bid); if (!f) return;
+      if (!Array.isArray(f.block.quoteItems)) f.block.quoteItems = [];
+      f.block.quoteItems.push({ name: '', price: 0, qty: 1 });
+      saveAppState(); refreshViewsForCtx(ctxKey);
+    };
+    window.updateQuoteCalcItem = (ctxKey, bid, qIdx, k, v, silent = false) => {
+      const f = findBlockDeep(getContextObj(ctxKey), bid); if (!f || !f.block.quoteItems?.[qIdx]) return;
+      f.block.quoteItems[qIdx][k] = v;
+      if (silent) debouncedSave();
+      else { saveAppState(); refreshViewsForCtx(ctxKey); }
+    };
+    window.removeQuoteCalcRow = (ctxKey, bid, qIdx) => {
+      const f = findBlockDeep(getContextObj(ctxKey), bid); if (!f || !Array.isArray(f.block.quoteItems)) return;
+      f.block.quoteItems.splice(qIdx, 1);
+      saveAppState(); refreshViewsForCtx(ctxKey);
+    };
+    window.copyQuoteCalcText = (ctxKey, bid) => {
+      const f = findBlockDeep(getContextObj(ctxKey), bid); if (!f) return;
+      const items = f.block.quoteItems || [];
+      const sub = items.reduce((s, it) => s + Number(it.price || 0) * Number(it.qty || 0), 0);
+      const vat = Math.round(sub * 0.1), grand = sub + vat;
+      const lines = [
+        `[${f.block.quoteCustomer || '(주)오라테크'} 견적 요약]`,
+        ...items.map((it, i) => `${i+1}. ${it.name || '품목'} (${Number(it.qty||0)}개 × ₩${Number(it.price||0).toLocaleString('ko-KR')}) = ₩${(Number(it.price||0)*Number(it.qty||0)).toLocaleString('ko-KR')}`),
+        `공급가: ₩${sub.toLocaleString('ko-KR')} / 부가세: ₩${vat.toLocaleString('ko-KR')} / 총 합계: ₩${grand.toLocaleString('ko-KR')}`
+      ];
+      const text = lines.join('\n');
+      window.__lastCopiedQuote = text;
+      navigator.clipboard?.writeText(text).catch(() => {});
+      showToast('📋 견적 요약이 클립보드에 복사되었습니다!');
     };
 
     window.openBlockActionMenu = function(ev, ctxKey, bid) {
@@ -6217,7 +6422,15 @@
         return `<input type="checkbox" class="n-chk" ${val ? 'checked' : ''} onchange="${isCore ? `updateProjectRowField('${proj.id}','${row.id}','${pr.id}',this.checked)` : `updateProjectCustomProp('${proj.id}','${row.id}','${pr.id}',this.checked)`}" />`;
       }
       if (pr.type === 'number') {
-        return `<input type="number" style="width:100%;border:none;outline:none;background:transparent;font-size:13px;font-variant-numeric:tabular-nums;" value="${escHtml(val)}" placeholder="0" oninput="updateProjectCustomProp('${proj.id}','${row.id}','${pr.id}',this.value,true)" />`;
+        return `<input type="number" class="priv-blur" style="width:100%;border:none;outline:none;background:transparent;font-size:13px;font-variant-numeric:tabular-nums;" value="${escHtml(val)}" placeholder="0" oninput="updateProjectCustomProp('${proj.id}','${row.id}','${pr.id}',this.value,true)" />`;
+      }
+      if (pr.type === 'gdrive') {
+        const gParsed = parseGoogleDriveUrl(val || '');
+        return `
+          <div style="display:flex;align-items:center;gap:4px;">
+            <input style="flex:1;min-width:95px;border:none;outline:none;background:transparent;font-size:12px;color:#1d6cd4;" value="${escHtml(val)}" placeholder="Drive URL 입력..." onchange="updateProjectCustomProp('${proj.id}','${row.id}','${pr.id}',this.value)" />
+            ${val ? `<a href="${escHtml(val)}" target="_blank" rel="noopener" class="sb-act-mini" style="text-decoration:none;" title="${escHtml(gParsed?.badge || 'Drive 열기')}">📁</a>` : ''}
+          </div>`;
       }
       if (pr.type === 'formula') {
         const res = evaluateRowFormula(proj, row, pr);
@@ -6975,7 +7188,36 @@
 
     // Obsidian 지식 그래프 + Heptabase 무한 공간 캔버스
     let canvasConnectSrcId = null;
+    let canvasZoom = 1;
+    let canvasExpanded = false;
     window.setGraphSubView = (m) => { APP.graphSubView = m; canvasConnectSrcId = null; saveAppState(false); renderGraphCanvasView(); };
+    window.setCanvasZoom = (z) => {
+      canvasZoom = Math.max(0.5, Math.min(1.5, Math.round(z * 100) / 100));
+      const plane = document.getElementById('canvasWorldPlane');
+      const lbl = document.getElementById('canvasZoomLabel');
+      if (plane) plane.style.transform = `scale(${canvasZoom})`;
+      if (lbl) lbl.textContent = `${Math.round(canvasZoom * 100)}%`;
+    };
+    window.toggleCanvasExpand = () => {
+      canvasExpanded = !canvasExpanded;
+      renderGraphCanvasView();
+    };
+    window.fitCanvasView = () => {
+      const stage = document.getElementById('heptabaseCanvasStage');
+      const cv = getActiveCanvasObj();
+      const items = [
+        ...(cv.cards || []).map(c => ({ x2: Number(c.x || 0) + 260, y2: Number(c.y || 0) + 210 })),
+        ...(cv.sections || []).map(s => ({ x2: Number(s.x || 0) + Number(s.w || 520) + 30, y2: Number(s.y || 0) + Number(s.h || 340) + 30 }))
+      ];
+      if (!stage || !items.length) { window.setCanvasZoom(1); return; }
+      const maxX = Math.max(600, ...items.map(i => i.x2));
+      const maxY = Math.max(420, ...items.map(i => i.y2));
+      const zx = (stage.clientWidth - 28) / maxX;
+      const zy = (stage.clientHeight - 28) / maxY;
+      window.setCanvasZoom(Math.min(1, Math.max(0.5, Math.min(zx, zy))));
+      stage.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+      showToast(`🎯 캔버스 전체 보기 맞춤 (${Math.round(canvasZoom * 100)}%)`);
+    };
     function findOpenCanvasSpot(cards) {
       for (let row = 0; row < 6; row++) {
         for (let col = 0; col < 4; col++) {
@@ -7125,18 +7367,42 @@
       renderGraphCanvasView();
     };
     window.startCanvasSectionDrag = (ev, sid) => {
-      if (ev.target.closest('button,input')) return;
+      if (ev.target.closest('button,input,.canvas-section-resize')) return;
       const sec = getActiveCanvasObj().sections?.find(x => x.id === sid);
       const el = ev.currentTarget.closest('.canvas-section-frame');
       if (!sec || !el) return;
-      ev.preventDefault();
+      ev.preventDefault(); ev.stopPropagation();
       const sx = ev.clientX, sy = ev.clientY, ox = Number(sec.x || 20), oy = Number(sec.y || 20);
       const onMove = (me) => {
-        sec.x = Math.max(8, Math.round(ox + (me.clientX - sx)));
-        sec.y = Math.max(8, Math.round(oy + (me.clientY - sy)));
+        sec.x = Math.max(8, Math.round(ox + (me.clientX - sx) / canvasZoom));
+        sec.y = Math.max(8, Math.round(oy + (me.clientY - sy) / canvasZoom));
         el.style.left = sec.x + 'px'; el.style.top = sec.y + 'px';
       };
       const onUp = () => { window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); saveAppState(false); };
+      window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
+    };
+    window.startCanvasSectionResize = (ev, sid) => {
+      const sec = getActiveCanvasObj().sections?.find(x => x.id === sid);
+      const el = ev.currentTarget.closest('.canvas-section-frame');
+      if (!sec || !el) return;
+      ev.preventDefault(); ev.stopPropagation();
+      const sx = ev.clientX, sy = ev.clientY, ow = Number(sec.w || 460), oh = Number(sec.h || 320);
+      const onMove = (me) => {
+        sec.w = Math.max(240, Math.round(ow + (me.clientX - sx) / canvasZoom));
+        sec.h = Math.max(160, Math.round(oh + (me.clientY - sy) / canvasZoom));
+        el.style.width = sec.w + 'px'; el.style.height = sec.h + 'px';
+      };
+      const onUp = () => { window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); saveAppState(false); };
+      window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
+    };
+    window.startCanvasPan = (ev) => {
+      if (ev.target.closest('.canvas-card,.canvas-section-frame,button,input,textarea,select')) return;
+      const st = document.getElementById('heptabaseCanvasStage');
+      if (!st) return;
+      const sx = ev.clientX, sy = ev.clientY, sl = st.scrollLeft, top = st.scrollTop;
+      st.style.cursor = 'grabbing';
+      const onMove = (me) => { st.scrollLeft = sl - (me.clientX - sx); st.scrollTop = top - (me.clientY - sy); };
+      const onUp = () => { st.style.cursor = 'grab'; window.removeEventListener('pointermove', onMove); window.removeEventListener('pointerup', onUp); };
       window.addEventListener('pointermove', onMove); window.addEventListener('pointerup', onUp);
     };
     window.startCanvasCardDrag = (ev, cid) => {
@@ -7144,12 +7410,12 @@
       const card = APP.canvas?.cards?.find(c => c.id === cid);
       const el = ev.currentTarget.closest('.canvas-card');
       if (!card || !el) return;
-      ev.preventDefault();
+      ev.preventDefault(); ev.stopPropagation();
       const startX = ev.clientX, startY = ev.clientY;
       const origX = Number(card.x || 0), origY = Number(card.y || 0);
       const onMove = (me) => {
-        card.x = Math.max(12, Math.round(origX + (me.clientX - startX)));
-        card.y = Math.max(12, Math.round(origY + (me.clientY - startY)));
+        card.x = Math.max(12, Math.round(origX + (me.clientX - startX) / canvasZoom));
+        card.y = Math.max(12, Math.round(origY + (me.clientY - startY) / canvasZoom));
         el.style.left = card.x + 'px';
         el.style.top = card.y + 'px';
         const svg = document.getElementById('canvasEdgesSvg');
@@ -7220,6 +7486,8 @@
         const activeCv = getActiveCanvasObj();
         const colorMap = { warm: '#ffffff', blue: '#f0f7ff', orange: '#fff7ed', purple: '#f8f5ff', green: '#f2fbf5' };
         const borderMap = { warm: '#e5e5e0', blue: '#bfdbfe', orange: '#fed7aa', purple: '#ddd6fe', green: '#bbf7d0' };
+        const worldW = Math.max(1800, ...(activeCv.cards || []).map(c => Number(c.x || 0) + 340), ...(activeCv.sections || []).map(s => Number(s.x || 0) + Number(s.w || 520) + 120));
+        const worldH = Math.max(1100, ...(activeCv.cards || []).map(c => Number(c.y || 0) + 260), ...(activeCv.sections || []).map(s => Number(s.y || 0) + Number(s.h || 340) + 120));
         stageHtml = `
           <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
             ${(APP.canvases || []).map(cv => `
@@ -7239,41 +7507,51 @@
                 ${canvasConnectSrcId === '__PICK__' ? '🔗 시작 카드 클릭...' : (canvasConnectSrcId ? '🏹 도착 카드 클릭...' : '🔗 화살표 연결')}
               </button>
             </div>
-            <button type="button" class="n-btn" onclick="resetCanvasToSeed()">↺ 기본 배치 복원</button>
+            <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+              <button type="button" class="n-btn" style="padding:4px 8px;font-size:12px;" onclick="setCanvasZoom(canvasZoom - 0.15)" title="축소">－</button>
+              <span id="canvasZoomLabel" style="font-size:11.5px;font-weight:600;min-width:38px;text-align:center;">${Math.round(canvasZoom * 100)}%</span>
+              <button type="button" class="n-btn" style="padding:4px 8px;font-size:12px;" onclick="setCanvasZoom(canvasZoom + 0.15)" title="확대">＋</button>
+              <button type="button" class="n-btn" style="padding:4px 8px;font-size:12px;" onclick="fitCanvasView()" title="모든 카드 한눈에 보기">🎯 한눈에</button>
+              <button type="button" class="${canvasExpanded ? 'n-btn-primary' : 'n-btn'}" style="padding:4px 8px;font-size:12px;" onclick="toggleCanvasExpand()" title="세로 잘림 없이 크게 펼치기">${canvasExpanded ? '🗗 기본 높이' : '⛶ 크게 펼치기'}</button>
+              <button type="button" class="n-btn" style="padding:4px 8px;font-size:12px;" onclick="resetCanvasToSeed()">↺ 복원</button>
+            </div>
           </div>
-          <div class="canvas-stage" id="heptabaseCanvasStage">
-            ${(activeCv.sections || []).map(sec => `
-              <div class="canvas-section-frame" data-canvas-section="${sec.id}" style="left:${Number(sec.x||20)}px;top:${Number(sec.y||20)}px;width:${Number(sec.w||520)}px;height:${Number(sec.h||340)}px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;cursor:grab;border-bottom:1px dashed rgba(55,53,47,0.14);" onpointerdown="startCanvasSectionDrag(event,'${sec.id}')">
-                  <input value="${escHtml(sec.title)}" oninput="updateCanvasSectionTitle('${sec.id}',this.value)" style="border:none;outline:none;background:transparent;font-size:12.5px;font-weight:700;color:var(--ink-2);width:85%;" />
-                  <button type="button" class="sb-act-mini" onclick="deleteCanvasSection('${sec.id}')">×</button>
-                </div>
-              </div>`).join('')}
-            <svg id="canvasEdgesSvg" width="1600" height="900" style="position:absolute;inset:0;pointer-events:none;z-index:1;">${buildCanvasEdgesSvgInner()}</svg>
-            ${(activeCv.cards || []).map(c => {
-              const col = c.color || 'warm';
-              const isSelectedSrc = canvasConnectSrcId === c.id;
-              return `
-                <div class="canvas-card" data-canvas-card="${c.id}"
-                     style="width:240px;z-index:2;left:${Number(c.x || 60)}px;top:${Number(c.y || 60)}px;background:${colorMap[col] || '#fff'};border-color:${isSelectedSrc ? 'var(--brand-accent)' : (borderMap[col] || 'var(--border)')};box-shadow:${isSelectedSrc ? '0 0 0 2px rgba(35,131,226,0.3)' : '0 3px 10px rgba(0,0,0,0.06)'};"
-                     onclick="handleCanvasCardConnectClick('${c.id}')">
-                  <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;border-bottom:1px solid rgba(55,53,47,0.08);cursor:grab;background:rgba(55,53,47,0.025);"
-                       onpointerdown="startCanvasCardDrag(event,'${c.id}')">
-                    <span style="font-size:11px;color:var(--ink-3);font-weight:600;">⋮⋮ 드래그 이동</span>
-                    <div style="display:flex;gap:3px;">
-                      ${c.pageId ? `<button type="button" class="sb-act-mini" onclick="event.stopPropagation();selectPage('${escJsStr(c.pageId)}')" title="연결 페이지 열기">↗</button>` : ''}
-                      <button type="button" class="sb-act-mini" onclick="event.stopPropagation();cycleCanvasCardColor('${c.id}')" title="카드 색상 변경">🎨</button>
-                      <button type="button" class="sb-act-mini" onclick="event.stopPropagation();deleteCanvasCard('${c.id}')" title="카드 삭제">×</button>
+          <div class="canvas-stage ${canvasExpanded ? 'expanded' : ''}" id="heptabaseCanvasStage" onpointerdown="startCanvasPan(event)">
+            <div class="canvas-world-plane" id="canvasWorldPlane" style="width:${worldW}px;height:${worldH}px;transform:scale(${canvasZoom});">
+              ${(activeCv.sections || []).map(sec => `
+                <div class="canvas-section-frame" data-canvas-section="${sec.id}" style="left:${Number(sec.x||20)}px;top:${Number(sec.y||20)}px;width:${Number(sec.w||520)}px;height:${Number(sec.h||340)}px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;cursor:grab;border-bottom:1px dashed rgba(55,53,47,0.14);" onpointerdown="startCanvasSectionDrag(event,'${sec.id}')">
+                    <input value="${escHtml(sec.title)}" oninput="updateCanvasSectionTitle('${sec.id}',this.value)" style="border:none;outline:none;background:transparent;font-size:12.5px;font-weight:700;color:var(--ink-2);width:85%;" />
+                    <button type="button" class="sb-act-mini" onclick="deleteCanvasSection('${sec.id}')">×</button>
+                  </div>
+                  <div class="canvas-section-resize" onpointerdown="startCanvasSectionResize(event,'${sec.id}')" title="드래그해 영역 크기 조절">◢</div>
+                </div>`).join('')}
+              <svg id="canvasEdgesSvg" width="${worldW}" height="${worldH}" style="position:absolute;inset:0;pointer-events:none;z-index:1;">${buildCanvasEdgesSvgInner()}</svg>
+              ${(activeCv.cards || []).map(c => {
+                const col = c.color || 'warm';
+                const isSelectedSrc = canvasConnectSrcId === c.id;
+                return `
+                  <div class="canvas-card" data-canvas-card="${c.id}"
+                       style="width:240px;z-index:2;left:${Number(c.x || 60)}px;top:${Number(c.y || 60)}px;background:${colorMap[col] || '#fff'};border-color:${isSelectedSrc ? 'var(--brand-accent)' : (borderMap[col] || 'var(--border)')};box-shadow:${isSelectedSrc ? '0 0 0 2px rgba(35,131,226,0.3)' : '0 3px 10px rgba(0,0,0,0.06)'};"
+                       onclick="handleCanvasCardConnectClick('${c.id}')">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;border-bottom:1px solid rgba(55,53,47,0.08);cursor:grab;background:rgba(55,53,47,0.025);"
+                         onpointerdown="startCanvasCardDrag(event,'${c.id}')">
+                      <span style="font-size:11px;color:var(--ink-3);font-weight:600;">⋮⋮ 드래그 이동</span>
+                      <div style="display:flex;gap:3px;">
+                        ${c.pageId ? `<button type="button" class="sb-act-mini" onclick="event.stopPropagation();selectPage('${escJsStr(c.pageId)}')" title="연결 페이지 열기">↗</button>` : ''}
+                        <button type="button" class="sb-act-mini" onclick="event.stopPropagation();cycleCanvasCardColor('${c.id}')" title="카드 색상 변경">🎨</button>
+                        <button type="button" class="sb-act-mini" onclick="event.stopPropagation();deleteCanvasCard('${c.id}')" title="카드 삭제">×</button>
+                      </div>
                     </div>
-                  </div>
-                  <div style="padding:10px;">
-                    <input value="${escHtml(c.title || '')}" oninput="updateCanvasCardField('${c.id}','title',this.value)"
-                           style="width:100%;border:none;outline:none;background:transparent;font-size:13.5px;font-weight:700;margin-bottom:6px;color:var(--ink);" placeholder="카드 제목..." />
-                    <textarea oninput="updateCanvasCardField('${c.id}','body',this.value)"
-                              style="width:100%;border:none;outline:none;background:transparent;font-size:12px;line-height:1.5;color:var(--ink-2);resize:vertical;min-height:58px;" placeholder="아이디어 메모...">${escHtml(c.body || '')}</textarea>
-                  </div>
-                </div>`;
-            }).join('')}
+                    <div style="padding:10px;">
+                      <input value="${escHtml(c.title || '')}" oninput="updateCanvasCardField('${c.id}','title',this.value)"
+                             style="width:100%;border:none;outline:none;background:transparent;font-size:13.5px;font-weight:700;margin-bottom:6px;color:var(--ink);" placeholder="카드 제목..." />
+                      <textarea oninput="updateCanvasCardField('${c.id}','body',this.value)"
+                                style="width:100%;border:none;outline:none;background:transparent;font-size:12px;line-height:1.5;color:var(--ink-2);resize:vertical;min-height:58px;" placeholder="아이디어 메모...">${escHtml(c.body || '')}</textarea>
+                    </div>
+                  </div>`;
+              }).join('')}
+            </div>
           </div>`;
       } else {
         // Obsidian Knowledge Graph
@@ -7685,11 +7963,31 @@
       document.getElementById('cfgVaultRepo').value = APP.vaultRepo || 'oratech-notes-vault';
       document.getElementById('cfgAutoSyncMode').value = APP.autoSyncMode || 'OFF';
       document.getElementById('cfgGeminiKey').value = getLocalSecret('ora_gemini_api_key', '');
+      const gCid = document.getElementById('cfgGdriveClientId');
+      const gTok = document.getElementById('cfgGdriveToken');
+      const gTokVal = getLocalSecret('ora_gdrive_token', '');
+      if (gCid) gCid.value = getLocalSecret('ora_gdrive_client_id', '');
+      if (gTok) gTok.value = gTokVal;
+      const pill = document.getElementById('gdriveStatusPill');
+      if (pill) {
+        pill.textContent = gTokVal ? '✅ Google Drive API 연결됨' : '링크 즉시 임베드 ON';
+        pill.className = `ntag ${gTokVal ? 'ntag-blue' : 'ntag-green'}`;
+      }
       openModal('syncModal');
     };
     window.saveSyncSettings = () => {
       setLocalSecret('ora_vault_gh_token', (document.getElementById('cfgGithubToken')?.value || '').trim());
       setLocalSecret('ora_gemini_api_key', (document.getElementById('cfgGeminiKey')?.value || '').trim());
+      const gCidEl = document.getElementById('cfgGdriveClientId');
+      const gTokEl = document.getElementById('cfgGdriveToken');
+      if (gCidEl) setLocalSecret('ora_gdrive_client_id', gCidEl.value.trim());
+      if (gTokEl) setLocalSecret('ora_gdrive_token', gTokEl.value.trim());
+      const pill = document.getElementById('gdriveStatusPill');
+      if (pill) {
+        const hasTok = !!getLocalSecret('ora_gdrive_token', '');
+        pill.textContent = hasTok ? '✅ Google Drive API 연결됨' : '링크 즉시 임베드 ON';
+        pill.className = `ntag ${hasTok ? 'ntag-blue' : 'ntag-green'}`;
+      }
       APP.vaultRepo = (document.getElementById('cfgVaultRepo')?.value || 'oratech-notes-vault').trim().replace(/[^a-zA-Z0-9._-]/g, '-');
       APP.autoSyncMode = document.getElementById('cfgAutoSyncMode')?.value || 'OFF';
       saveAppState(false);
@@ -7760,6 +8058,208 @@
         await saveAppState(false); renderAll(); closeModal('historyModal');
         showToast(commitSha ? '🕰️ 선택한 시점으로 복원되었습니다!' : '✅ 최신 데이터를 불러왔습니다!');
       } catch (err) { showToast('❌ 불러오기 실패: ' + err.message); }
+    };
+
+    // ==================== 15.5 Google Drive 2-Way Vault & File Picker ====================
+    function setSyncDebugHtml(msg) {
+      const dbg = document.getElementById('syncDebugMsg');
+      if (dbg) dbg.innerHTML = msg;
+    }
+
+    async function gdriveFetch(url, token, options = {}) {
+      const headers = { Authorization: `Bearer ${token}`, ...(options.headers || {}) };
+      const res = await fetch(url, { ...options, headers });
+      if (!res.ok) {
+        let detail = '';
+        try { const errJson = await res.json(); detail = errJson?.error?.message || ''; } catch (_) {}
+        throw new Error(`Google Drive API ${res.status}${detail ? ': ' + detail : ''}`);
+      }
+      return res;
+    }
+
+    async function findOrCreateDriveVaultFolder(token) {
+      const q = encodeURIComponent("name='Oratech_Notion_Vault' and mimeType='application/vnd.google-apps.folder' and trashed=false");
+      const listRes = await gdriveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`, token);
+      const listData = await listRes.json();
+      if (listData.files && listData.files.length) return listData.files[0].id;
+      const createRes = await gdriveFetch('https://www.googleapis.com/drive/v3/files?fields=id,name', token, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: 'Oratech_Notion_Vault', mimeType: 'application/vnd.google-apps.folder' })
+      });
+      const created = await createRes.json();
+      return created.id;
+    }
+
+    window.connectGoogleDriveOAuth = async () => {
+      const clientId = getLocalSecret('ora_gdrive_client_id', '');
+      const manualToken = getLocalSecret('ora_gdrive_token', '');
+      if (!clientId && manualToken) {
+        try {
+          const aboutRes = await gdriveFetch('https://www.googleapis.com/drive/v3/about?fields=user(displayName,emailAddress)', manualToken);
+          const about = await aboutRes.json();
+          const u = about.user ? `${about.user.displayName || ''} (${about.user.emailAddress || ''})` : 'Google 계정';
+          setSyncDebugHtml(`✅ Google Drive Access Token 연결 확인: <b>${escHtml(u)}</b>`);
+          showToast(`☁️ Google Drive 연결 확인 (${u})`);
+          await window.browseGoogleDriveFiles();
+        } catch (err) {
+          setSyncDebugHtml(`❌ 토큰 확인 실패: ${escHtml(err.message)}`);
+          showToast('❌ Google Drive 토큰을 다시 확인해 주세요.');
+        }
+        return;
+      }
+      if (!clientId) {
+        setSyncDebugHtml('💡 Google OAuth Client ID (또는 Access Token)를 입력해 주세요. Client ID 없이도 에디터에 <code>/drive</code> 또는 Google Drive 공유 링크를 붙여넣으면 즉시 임베드됩니다.');
+        showToast('Google Client ID 또는 Access Token을 먼저 입력해 주세요.');
+        return;
+      }
+      try {
+        if (!window.google?.accounts?.oauth2) {
+          await new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = 'https://accounts.google.com/gsi/client';
+            s.onload = resolve;
+            s.onerror = () => reject(new Error('Google 로그인 스크립트(gsi/client)를 불러올 수 없습니다.'));
+            document.head.appendChild(s);
+          });
+        }
+        const tokenClient = window.google.accounts.oauth2.initTokenClient({
+          client_id: clientId,
+          scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly',
+          callback: async (resp) => {
+            if (resp.error || !resp.access_token) {
+              setSyncDebugHtml(`❌ Google OAuth 거부/오류: ${escHtml(resp.error || '토큰 없음')}`);
+              return;
+            }
+            setLocalSecret('ora_gdrive_token', resp.access_token);
+            const tokInput = document.getElementById('cfgGdriveToken');
+            if (tokInput) tokInput.value = resp.access_token;
+            const pill = document.getElementById('gdriveStatusPill');
+            if (pill) { pill.textContent = '✅ Google Drive API 연결됨'; pill.className = 'ntag ntag-blue'; }
+            setSyncDebugHtml('✅ Google Drive OAuth 로그인 연결 완료! 이제 백업 및 파일 가져오기가 가능합니다.');
+            showToast('☁️ Google Drive 로그인 연동 완료!');
+            await window.browseGoogleDriveFiles();
+          }
+        });
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      } catch (err) {
+        setSyncDebugHtml(`❌ Google 로그인 초기화 실패: ${escHtml(err.message)}`);
+        showToast('❌ Google 로그인 연결 실패: ' + err.message);
+      }
+    };
+
+    window.syncToGoogleDriveVault = async () => {
+      const token = getLocalSecret('ora_gdrive_token', '');
+      if (!token) {
+        setSyncDebugHtml('💡 먼저 Google 로그인 연동 또는 Access Token을 입력해 주세요.');
+        showToast('Google Drive 토큰이 필요합니다.');
+        return;
+      }
+      try {
+        setSyncDebugHtml('☁️ Google Drive <code>Oratech_Notion_Vault</code> 폴더 백업 중...');
+        const folderId = await findOrCreateDriveVaultFolder(token);
+        const q = encodeURIComponent(`name='oratech_workspace.json' and '${folderId}' in parents and trashed=false`);
+        const existRes = await gdriveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`, token);
+        const existData = await existRes.json();
+        const existingId = existData.files?.[0]?.id || null;
+
+        const payloadJson = JSON.stringify({ version: 4, source: 'Oratech-Notion-OS', exportedAt: new Date().toISOString(), app: APP }, null, 2);
+        const boundary = '-------oratechNotionDriveBoundary';
+        const meta = existingId
+          ? { name: 'oratech_workspace.json', mimeType: 'application/json' }
+          : { name: 'oratech_workspace.json', parents: [folderId], mimeType: 'application/json' };
+        const multipartBody = `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(meta)}\r\n--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${payloadJson}\r\n--${boundary}--`;
+        const uploadUrl = existingId
+          ? `https://www.googleapis.com/upload/drive/v3/files/${existingId}?uploadType=multipart`
+          : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+        await gdriveFetch(uploadUrl, token, {
+          method: existingId ? 'PATCH' : 'POST',
+          headers: { 'Content-Type': `multipart/related; boundary=${boundary}` },
+          body: multipartBody
+        });
+
+        APP.lastDriveSyncAt = new Date().toISOString();
+        logActivity('Google Drive 백업 완료', `${APP.pages.length} pages`);
+        await saveAppState(false);
+        setSyncDebugHtml(`✅ Google Drive <code>Oratech_Notion_Vault/oratech_workspace.json</code> 저장 완료 (${APP.lastDriveSyncAt.slice(11, 16)})`);
+        showToast('☁️ Google Drive 백업이 완료되었습니다!');
+      } catch (err) {
+        setSyncDebugHtml(`❌ Google Drive 백업 실패: ${escHtml(err.message)}`);
+        showToast('❌ Google Drive 백업 실패: ' + err.message);
+      }
+    };
+
+    window.pullFromGoogleDriveVault = async () => {
+      const token = getLocalSecret('ora_gdrive_token', '');
+      if (!token) { showToast('Google Drive 토큰을 먼저 입력/연결해 주세요.'); return; }
+      try {
+        setSyncDebugHtml('⬇️ Google Drive에서 백업 파일을 찾는 중...');
+        const folderId = await findOrCreateDriveVaultFolder(token);
+        const q = encodeURIComponent(`name='oratech_workspace.json' and '${folderId}' in parents and trashed=false`);
+        const listRes = await gdriveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime)`, token);
+        const listData = await listRes.json();
+        const fileId = listData.files?.[0]?.id;
+        if (!fileId) throw new Error('Oratech_Notion_Vault/oratech_workspace.json 파일이 없습니다.');
+        const dlRes = await gdriveFetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, token);
+        const parsed = await dlRes.json();
+        if (!parsed?.app) throw new Error('올바른 워크스페이스 백업 형식이 아닙니다.');
+        APP = parsed.app;
+        migrateAppState();
+        APP.lastDriveSyncAt = new Date().toISOString();
+        await saveAppState(false);
+        renderAll();
+        closeModal('syncModal');
+        showToast('✅ Google Drive에서 최신 워크스페이스를 복원했습니다!');
+      } catch (err) {
+        setSyncDebugHtml(`❌ Google Drive 복원 실패: ${escHtml(err.message)}`);
+        showToast('❌ Google Drive 복원 실패: ' + err.message);
+      }
+    };
+
+    window.browseGoogleDriveFiles = async () => {
+      const token = getLocalSecret('ora_gdrive_token', '');
+      const box = document.getElementById('gdriveFilesList');
+      if (!token) {
+        if (box) { box.style.display = 'flex'; box.innerHTML = '<div style="font-size:12px;color:var(--ink-2);">🔑 위에서 Google 로그인 연동 또는 Access Token을 입력하면 내 드라이브 최근 파일 15개를 불러옵니다.</div>'; }
+        return;
+      }
+      try {
+        if (box) { box.style.display = 'flex'; box.innerHTML = '<div style="font-size:12px;color:var(--ink-2);">📂 Google Drive 파일 목록 불러오는 중...</div>'; }
+        const res = await gdriveFetch('https://www.googleapis.com/drive/v3/files?pageSize=15&q=trashed=false&orderBy=modifiedTime desc&fields=files(id,name,mimeType,webViewLink,modifiedTime)', token);
+        const data = await res.json();
+        const files = data.files || [];
+        if (!files.length) {
+          if (box) box.innerHTML = '<div style="font-size:12px;color:var(--ink-3);">표시할 Drive 파일이 없습니다.</div>';
+          return;
+        }
+        if (box) {
+          box.innerHTML = files.map(f => {
+            const url = f.webViewLink || `https://drive.google.com/file/d/${f.id}/view`;
+            const mType = (f.mimeType || '').includes('spreadsheet') ? '📊 Sheets' : (f.mimeType || '').includes('document') ? '📄 Docs' : (f.mimeType || '').includes('folder') ? '🗂️ 폴더' : '📁 파일';
+            return `
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 8px;background:#fff;border:1px solid var(--border);border-radius:6px;font-size:12px;">
+                <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${mType} <b>${escHtml(f.name)}</b></span>
+                <button type="button" class="n-btn" style="padding:2px 8px;font-size:11.5px;flex-shrink:0;" onclick="attachDriveFileToActivePage('${escJsStr(f.name)}','${escJsStr(url)}')">+ 페이지에 첨부</button>
+              </div>`;
+          }).join('');
+        }
+      } catch (err) {
+        if (box) box.innerHTML = `<div style="font-size:12px;color:#c93b3b;">❌ 파일 목록 조회 실패: ${escHtml(err.message)}</div>`;
+      }
+    };
+
+    window.attachDriveFileToActivePage = (name, url) => {
+      const pg = APP.activeView === 'EDITOR'
+        ? (APP.pages.find(p => p.id === APP.activePageId && !p.archived) || ensureTodayDailyPage())
+        : ensureTodayDailyPage();
+      pg.blocks.push(createBlock('gdrive', { url, bookmarkTitle: name || 'Google Drive 문서', gdrivePreviewOpen: true }));
+      APP.activePageId = pg.id;
+      APP.activeView = 'EDITOR';
+      logActivity('Google Drive 파일 첨부', name, pg.id);
+      closeModal('syncModal');
+      saveAppState();
+      renderAll();
+      showToast(`📁 '${name}' 파일을 페이지에 임베드했습니다!`);
     };
     let currentHistoryTab = 'LOCAL';
     window.captureCurrentPageSnapshotManual = () => {
@@ -7956,6 +8456,192 @@
         const b = await callCarbonJson(`미완료: ${todos.filter(x=>!x.checked).map(x=>x.text).join(', ')}. JSON {"summary":"요약","topPriority":"1순위"} 반환`);
         if (b?.summary && out) out.textContent = `📊 ${b.summary}\n🎯 1순위: ${b.topPriority || ''}`;
       } catch (_) {}
+    };
+
+    function createAgentReportPage(title, icon, space, blocks) {
+      const pg = {
+        id: uid('pg'), parentId: null, space, icon, title,
+        coverTheme: space === 'KIDS' ? 'sunrise' : 'aurora',
+        font: 'sans', fullWidth: false, smallText: false, pinned: false, archived: false, isDaily: false,
+        createdAt: Date.now(), updatedAt: Date.now(),
+        blocks
+      };
+      APP.pages.unshift(pg);
+      return pg;
+    }
+
+    window.runCustomAiAgent = async (agentKind) => {
+      const out = document.getElementById('carbonOutputArea');
+      if (out) { out.style.display = 'block'; out.textContent = `🤖 Custom AI 에이전트(${agentKind}) 스캔 및 작업 실행 중...`; }
+      const tdPage = ensureTodayDailyPage();
+      const activeProjs = (APP.projects || []).filter(p => !p.archived);
+      const upcomingDdays = (APP.ddays || []).map(d => ({ ...d, diff: calcDaysDiff(d.date) })).filter(d => d.diff >= 0 && d.diff <= 14).sort((a, b) => a.diff - b.diff);
+      const urgentRows = [];
+      activeProjs.forEach(pr => (pr.rows || []).forEach(r => {
+        if (r.status !== '완료' && (r.priority === '긴급' || (r.dueDate && r.dueDate <= todayStr(1)))) {
+          urgentRows.push({ proj: pr.title, ...r });
+        }
+      }));
+
+      let reportText = '';
+      if (agentKind === 'MORNING_BRIEFING') {
+        const openTodos = tdPage.blocks.filter(b => b.type === 'todo' && !b.checked);
+        let aiSummary = '';
+        try {
+          const res = await callCarbonJson(`오늘(${todayStr(0)}) 미완료 할일: ${openTodos.map(t=>t.text).join(', ')}. 긴급 프로젝트: ${urgentRows.map(r=>r.title).join(', ')}. JSON {"briefing":"2줄 모닝 브리핑","topActions":["핵심액션1","핵심액션2"]}`);
+          if (res?.briefing) aiSummary = res.briefing;
+        } catch (_) {}
+        const ddaySummary = upcomingDdays[0] ? `${upcomingDdays[0].emoji} ${upcomingDdays[0].title} (D-${upcomingDdays[0].diff})` : '예정 D-Day 없음';
+        const finalCallout = aiSummary || `🤖 AI 모닝 브리핑: 미완료 할일 ${openTodos.length}건 · 긴급 DB ${urgentRows.length}건 · 다가오는 일정 [${ddaySummary}]`;
+        tdPage.blocks.unshift(createBlock('callout', { bg: 'blue', text: finalCallout }));
+        if (urgentRows[0] && !openTodos.some(t => t.text.includes(urgentRows[0].title))) {
+          tdPage.blocks.push(createBlock('todo', { text: `[긴급·${urgentRows[0].proj}] ${urgentRows[0].title}`, space: urgentRows[0].space || 'WORK', dueDate: urgentRows[0].dueDate || todayStr(0) }));
+        }
+        reportText = `🤖 [모닝 브리핑 에이전트 완료]\n• 오늘 데일리 페이지 최상단에 브리핑 콜아웃 자동 반영\n• 긴급 프로젝트 ${urgentRows.length}건 · 미완료 ${openTodos.length}건 스캔\n• D-Day: ${ddaySummary}`;
+      } else if (agentKind === 'WEEKLY_CLEANUP') {
+        const openAll = [];
+        APP.pages.filter(p => !p.archived).forEach(p => (p.blocks || []).forEach(b => {
+          if (b.type === 'todo' && !b.checked) openAll.push({ page: p.title, text: b.text, space: b.space || p.space });
+        }));
+        const blocks = [
+          createBlock('callout', { bg: 'yellow', text: `🧹 전체 워크스페이스 스캔 결과: 미완료 할일 ${openAll.length}건, 미완료 긴급 DB ${urgentRows.length}건을 한 페이지로 정리했습니다.` }),
+          createBlock('h2', { text: '우선 처리 추천 체크리스트' }),
+          ...openAll.slice(0, 6).map(x => createBlock('todo', { text: `[${x.page}] ${x.text}`, space: x.space })),
+          ...urgentRows.slice(0, 4).map(r => createBlock('todo', { text: `[DB:${r.proj}] ${r.title} (${r.status})`, space: r.space || 'WORK' }))
+        ];
+        const pg = createAgentReportPage(`🧹 주간 정리 리포트 (${todayStr(0)})`, '🧹', 'WORK', blocks);
+        APP.activePageId = pg.id; APP.activeView = 'EDITOR';
+        reportText = `🧹 [주간 정리 에이전트 완료]\n• 새 페이지 '${pg.title}' 생성 완료\n• 미완료 할일 ${openAll.length}건 / 긴급 DB ${urgentRows.length}건 집계`;
+      } else {
+        const kidsDdays = upcomingDdays.filter(d => d.space === 'KIDS');
+        const kidsRows = [];
+        activeProjs.filter(pr => pr.space === 'KIDS').forEach(pr => (pr.rows || []).filter(r => r.status !== '완료').forEach(r => kidsRows.push(r.title)));
+        const blocks = [
+          createBlock('callout', { bg: 'orange', text: `👨‍👧‍👦 가족 주말·아이 스케줄 에이전트: 다가오는 기념일 ${kidsDdays.map(d => `${d.title}(D-${d.diff})`).join(', ') || '이번 주말 나들이'} 중심 맞춤 준비물입니다.` }),
+          createBlock('todo', { text: '아이 여벌 옷 · 물티슈 · 간식/물통 챙기기', space: 'KIDS', dueDate: todayStr(1) }),
+          createBlock('todo', { text: '가정통신문·준비물·차량 안전 시트 최종 점검', space: 'KIDS', dueDate: todayStr(1) }),
+          ...kidsRows.slice(0, 4).map(t => createBlock('todo', { text: t, space: 'KIDS', dueDate: todayStr(1) }))
+        ];
+        const pg = createAgentReportPage(`👨‍👧‍👦 가족 주말 플랜 (${todayStr(0)})`, '🧸', 'KIDS', blocks);
+        APP.activePageId = pg.id; APP.activeView = 'EDITOR';
+        reportText = `👨‍👧‍👦 [가족 준비 에이전트 완료]\n• 새 페이지 '${pg.title}' 생성 (할일 ${blocks.length - 1}건)\n• D-Day & 애들 프로젝트 자동 연동 완료`;
+      }
+      logActivity('Custom AI Agent 실행', agentKind);
+      await saveAppState();
+      renderAll();
+      if (out) out.textContent = reportText;
+      showToast('🤖 Custom AI 에이전트 작업이 완료되었습니다!');
+    };
+
+    window.extractMeetingNotesWithCarbon = async () => {
+      const raw = (document.getElementById('carbonPromptInput')?.value || '').trim();
+      if (!raw) { showToast('회의록이나 메모 내용을 먼저 입력해 주세요.'); return; }
+      const out = document.getElementById('carbonOutputArea');
+      if (out) { out.style.display = 'block'; out.textContent = '🎙️ 회의록을 핵심 요약 + 결정사항 + 액션 할일로 구조화하는 중...'; }
+      let structured = null;
+      try {
+        structured = await callCarbonJson(`다음 회의록/통화메모를 구조화해 JSON으로 반환: {"title":"회의제목","summary":"2줄 핵심요약","decisions":["결정사항1"],"actions":[{"text":"액션할일","space":"WORK 또는 KIDS"}]}\n\n원문:\n${raw}`);
+      } catch (_) {}
+      if (!structured?.actions?.length) {
+        const lines = raw.split(/\r?\n|->|\d+\)/).map(s => s.trim()).filter(s => s.length >= 2);
+        structured = {
+          title: '회의록 & 통화 액션 정리',
+          summary: lines.slice(0, 2).join(' · ') || raw.slice(0, 80),
+          decisions: lines.length > 1 ? [lines[0]] : ['핵심 실행 항목 즉시 착수'],
+          actions: lines.map(t => ({
+            text: t,
+            space: /아이|학원|학교|소풍|가족|유치원/.test(t) ? 'KIDS' : (/병원|개인|운동/.test(t) ? 'PERSONAL' : 'WORK')
+          }))
+        };
+      }
+      const targetPage = APP.activeView === 'EDITOR'
+        ? (APP.pages.find(p => p.id === APP.activePageId && !p.archived) || ensureTodayDailyPage())
+        : ensureTodayDailyPage();
+      targetPage.blocks.push(
+        createBlock('h2', { text: `🎙️ ${structured.title || '회의록 정리'}` }),
+        createBlock('callout', { bg: 'purple', text: `핵심 요약: ${structured.summary || raw.slice(0, 60)}` }),
+        ...(structured.decisions || []).map(d => createBlock('bullet', { text: `결정: ${d}` })),
+        ...(structured.actions || []).map(a => createBlock('todo', { text: a.text, space: a.space || targetPage.space || 'WORK', dueDate: todayStr(0) }))
+      );
+      logActivity('AI 회의록 구조화', structured.title || '회의록', targetPage.id);
+      await saveAppState();
+      renderAll();
+      if (out) out.textContent = `🎙️ ['${targetPage.title}'에 회의록 구조화 삽입 완료]\n요약: ${structured.summary}\n• 액션 체크리스트 ${(structured.actions || []).length}개 생성됨`;
+      showToast(`🎙️ 회의록에서 할일 ${(structured.actions || []).length}건을 추출했습니다!`);
+    };
+
+    // ==================== 17.5 집중 백색소음 · 한국어 TTS 브리핑 · 프라이버시 블러 ====================
+    let ambientNoiseState = { mode: 0, ctx: null, src: null, gain: null };
+    window.cycleAmbientFocusSound = () => {
+      ambientNoiseState.mode = (ambientNoiseState.mode + 1) % 3;
+      const btn = document.getElementById('btnFocusNoise');
+      try {
+        if (ambientNoiseState.src) { ambientNoiseState.src.stop(); ambientNoiseState.src.disconnect(); ambientNoiseState.src = null; }
+      } catch (_) {}
+      if (ambientNoiseState.mode === 0) {
+        if (btn) btn.textContent = '🎧 OFF';
+        showToast('🎧 집중 사운드를 껐습니다.');
+        return;
+      }
+      const label = ambientNoiseState.mode === 1 ? '🎧 빗소리 ON' : '🎧 집중음 ON';
+      if (btn) btn.textContent = label;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          if (!ambientNoiseState.ctx) ambientNoiseState.ctx = new AudioCtx();
+          if (ambientNoiseState.ctx.state === 'suspended') ambientNoiseState.ctx.resume();
+          const ctx = ambientNoiseState.ctx;
+          const bufLen = ctx.sampleRate * 2;
+          const buffer = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          let lastOut = 0;
+          for (let i = 0; i < bufLen; i++) {
+            const white = Math.random() * 2 - 1;
+            lastOut = (lastOut + 0.03 * white) / 1.03;
+            data[i] = ambientNoiseState.mode === 1 ? (lastOut * 2.5 + white * 0.08) : (lastOut * 3.5);
+          }
+          const src = ctx.createBufferSource();
+          src.buffer = buffer;
+          src.loop = true;
+          const gain = ctx.createGain();
+          gain.gain.value = 0.055;
+          src.connect(gain);
+          gain.connect(ctx.destination);
+          src.start();
+          ambientNoiseState.src = src;
+          ambientNoiseState.gain = gain;
+        }
+      } catch (_) {}
+      showToast(`${label} — 몰입 배경 사운드 재생 중`);
+    };
+
+    window.speakTodayDailyBriefing = () => {
+      const tdPage = ensureTodayDailyPage();
+      const allTodos = tdPage.blocks.filter(b => b.type === 'todo');
+      const openTodos = allTodos.filter(b => !b.checked);
+      const nextDday = (APP.ddays || []).map(d => ({ ...d, diff: calcDaysDiff(d.date) })).filter(d => d.diff >= 0).sort((a, b) => a.diff - b.diff)[0];
+      const topTitles = openTodos.slice(0, 3).map((t, i) => `${i + 1}번째, ${t.text}`).join('. ');
+      const script = `안녕하세요 대표님. 오늘 예정된 할 일 총 ${allTodos.length}건 중 ${openTodos.length}건이 남아 있습니다. ${openTodos.length ? '우선 순위 항목은 ' + topTitles + ' 입니다.' : '오늘 할 일을 모두 완료하셨습니다!'} ${nextDday ? `다가오는 일정은 ${nextDday.title}까지 ${nextDday.diff}일 남았습니다.` : ''}`;
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(script);
+          u.lang = 'ko-KR';
+          u.rate = 1.02;
+          window.speechSynthesis.speak(u);
+        }
+      } catch (_) {}
+      showToast(`🗣️ 음성 브리핑: 미완료 ${openTodos.length}건${nextDday ? ` · ${nextDday.title} D-${nextDday.diff}` : ''}`);
+      return script;
+    };
+
+    window.togglePrivacyBlurMode = () => {
+      APP.privacyBlur = !APP.privacyBlur;
+      document.body.classList.toggle('privacy-blur', !!APP.privacyBlur);
+      const pBtn = document.getElementById('btnPrivacyBlur');
+      if (pBtn) pBtn.textContent = APP.privacyBlur ? '🔒' : '🙈';
+      saveAppState(false);
+      showToast(APP.privacyBlur ? '🔒 프라이버시 블러 ON — 견적 금액·개인 페이지가 가려집니다.' : '🔓 프라이버시 블러 OFF');
     };
     window.analyzePhotoWithCarbon = async (photoId) => {
       const ph = PHOTOS[photoId]; if (!ph) return;
