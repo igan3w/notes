@@ -2044,14 +2044,22 @@
         <strong>안심 Private 금고:</strong> 입력하신 토큰과 키는 브라우저 로컬에만 보관되며, 모든 노트·프로젝트·사진 데이터는 자동으로 <strong>Private(비공개)</strong> GitHub 저장소에 분리 업로드됩니다.
       </div>
       <div style="display:grid;gap:12px;">
+        <div id="localErpBridgeBanner" style="display:none;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:6px;padding:9px 12px;font-size:12px;line-height:1.5;"></div>
         <div>
-          <label class="field-label">GitHub Personal Access Token (PAT)</label>
-          <input id="cfgGithubToken" type="password" class="field-input" placeholder="ghp_... (repo 권한 포함 토큰 입력)" />
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <label class="field-label" style="margin:0;">GitHub Personal Access Token (PAT · 외부 접속 시 필요)</label>
+            <span id="ghPatHint" style="font-size:11px;color:var(--ink-3);"></span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input id="cfgGithubToken" name="ora_gh_pat_manual" type="password" autocomplete="new-password" spellcheck="false" class="field-input" style="flex:1;" oninput="updateGhPatHint(this.value)" placeholder="ghp_... 또는 github_pat_... (로컬 ERP 연동 시 비워둬도 됨)" />
+            <button type="button" class="n-btn" style="padding:6px 9px;font-size:12px;flex-shrink:0;" onclick="toggleInputSecret('cfgGithubToken', this)" title="입력값 보기/숨기기">👁️</button>
+            <button type="button" class="n-btn" style="padding:6px 9px;font-size:12px;flex-shrink:0;" onclick="clearGithubTokenInput()" title="저장된 브라우저 토큰 지우기">🗑️</button>
+          </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div>
             <label class="field-label">비공개 금고 저장소 이름</label>
-            <input id="cfgVaultRepo" class="field-input" placeholder="oratech-notes-vault" />
+            <input id="cfgVaultRepo" class="field-input" autocomplete="off" placeholder="oratech-notes-vault" />
           </div>
           <div>
             <label class="field-label">자동 동기화 간격</label>
@@ -2063,12 +2071,13 @@
         </div>
         <div>
           <label class="field-label">💎 Gemini 4 Carbon 개인 API 키 (사진 OCR · 하루 브리핑)</label>
-          <input id="cfgGeminiKey" type="password" class="field-input" placeholder="AQ... 또는 AIza... (선택: :3080 로컬 서버 자동 연동)" />
+          <input id="cfgGeminiKey" name="ora_gemini_manual" type="password" autocomplete="new-password" spellcheck="false" class="field-input" placeholder="AQ... 또는 AIza... (선택: :3080 로컬 서버 자동 연동)" />
         </div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap;">
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
           <button type="button" class="n-btn-primary" onclick="saveSyncSettings(); syncToGithubVault(false);">💾 저장 &amp; Git 올리기</button>
+          <button type="button" class="n-btn" onclick="saveSyncSettings(); testGithubConnection();">🧪 연결 테스트</button>
           <button type="button" class="n-btn" onclick="saveSyncSettings(); pullFromGithubVault();">⬇️ Git에서 불러오기</button>
         </div>
         <button type="button" class="n-btn" onclick="document.getElementById('jsonImportFile').click()">📂 JSON 복원</button>
@@ -7949,9 +7958,96 @@
 
     function b64EncodeUnicode(str) { return btoa(unescape(encodeURIComponent(str))); }
     function b64DecodeUnicode(b64) { return decodeURIComponent(escape(atob(String(b64).replace(/\s/g, '')))); }
+    const VAULT_BRIDGE_BASE = IS_LOCAL_SERVER ? '' : 'http://localhost:3080';
+
+    function normalizeGithubToken(raw) {
+      return String(raw || '')
+        .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        .trim()
+        .replace(/^['"]+|['"]+$/g, '')
+        .replace(/^(Bearer|token)\s+/i, '')
+        .replace(/\s+/g, '');
+    }
+
+    function splitOwnerRepoInput(repoInput, defaultOwner) {
+      const clean = String(repoInput || 'oratech-notes-vault').trim().replace(/^\/+|\/+$/g, '');
+      if (clean.includes('/')) {
+        const [o, r] = clean.split('/').filter(Boolean);
+        return {
+          owner: o.replace(/[^a-zA-Z0-9._-]/g, '-'),
+          repoName: (r || 'oratech-notes-vault').replace(/[^a-zA-Z0-9._-]/g, '-')
+        };
+      }
+      return { owner: defaultOwner, repoName: (clean || 'oratech-notes-vault').replace(/[^a-zA-Z0-9._-]/g, '-') };
+    }
+
+    window.toggleInputSecret = (inputId, btn) => {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      const show = el.type === 'password';
+      el.type = show ? 'text' : 'password';
+      if (btn) btn.textContent = show ? '🙈' : '👁️';
+    };
+
+    window.updateGhPatHint = (rawVal) => {
+      const hint = document.getElementById('ghPatHint');
+      if (!hint) return;
+      const tok = normalizeGithubToken(rawVal);
+      if (!tok) {
+        hint.textContent = '미입력 (로컬 ERP 연결 시 자동 동기화)';
+        hint.style.color = 'var(--ink-3)';
+      } else if (/^(ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9]{20,})$/.test(tok)) {
+        hint.textContent = `🟢 유효 PAT 형식 (${tok.slice(0, 4)}… · ${tok.length}자)`;
+        hint.style.color = '#15803d';
+      } else {
+        hint.textContent = `⚠️ 비정상 형식 (${tok.length}자 · ghp_ 또는 github_pat_ 확인)`;
+        hint.style.color = '#c93b3b';
+      }
+    };
+
+    window.clearGithubTokenInput = () => {
+      const el = document.getElementById('cfgGithubToken');
+      if (el) el.value = '';
+      setLocalSecret('ora_vault_gh_token', '');
+      updateGhPatHint('');
+      setSyncDebugHtml('🗑️ 브라우저 저장 PAT를 비웠습니다. 로컬 ERP(:3080)가 실행 중이면 PAT 없이 바로 동기화할 수 있습니다.');
+      showToast('브라우저 GitHub 토큰을 비웠습니다.');
+    };
+
+    async function probeLocalErpVaultBridge() {
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 1600);
+        const res = await fetch(`${VAULT_BRIDGE_BASE}/api/notes-vault/status`, { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (!res.ok) return { available: false };
+        return await res.json();
+      } catch (_) {
+        return { available: false };
+      }
+    }
+
+    async function refreshErpBridgeBanner() {
+      const banner = document.getElementById('localErpBridgeBanner');
+      if (!banner) return;
+      const st = await probeLocalErpVaultBridge();
+      if (st?.available) {
+        banner.style.display = 'flex';
+        banner.style.justifyContent = 'space-between';
+        banner.style.alignItems = 'center';
+        banner.style.gap = '8px';
+        banner.style.flexWrap = 'wrap';
+        banner.innerHTML = `<span>🖥️ <strong>로컬 ERP(:3080) GitHub 계정(${escHtml(st.login || '연결됨')})</strong> 자동 연동 준비됨 — PAT를 비워도 즉시 올리기 가능</span><button type="button" class="n-btn" style="padding:3px 9px;font-size:11.5px;background:#fff;border-color:#93c5fd;color:#1d4ed8;" onclick="saveSyncSettings(); syncViaLocalErpBridge(false);">🚀 ERP로 즉시 올리기</button>`;
+      } else {
+        banner.style.display = 'none';
+      }
+      return st;
+    }
+
     async function ghApiCall(token, method, endpoint, body = null) {
+      const cleanToken = normalizeGithubToken(token);
       const res = await fetch(`https://api.github.com${endpoint}`, {
-        method, headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' },
+        method, headers: { 'Authorization': `Bearer ${cleanToken}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json' },
         body: body ? JSON.stringify(body) : null
       });
       const txt = await res.text();
@@ -7959,7 +8055,9 @@
       return { ok: res.ok, status: res.status, data };
     }
     window.openSyncModal = () => {
-      document.getElementById('cfgGithubToken').value = getLocalSecret('ora_vault_gh_token', '');
+      const savedPat = getLocalSecret('ora_vault_gh_token', '');
+      document.getElementById('cfgGithubToken').value = savedPat;
+      updateGhPatHint(savedPat);
       document.getElementById('cfgVaultRepo').value = APP.vaultRepo || 'oratech-notes-vault';
       document.getElementById('cfgAutoSyncMode').value = APP.autoSyncMode || 'OFF';
       document.getElementById('cfgGeminiKey').value = getLocalSecret('ora_gemini_api_key', '');
@@ -7973,10 +8071,16 @@
         pill.textContent = gTokVal ? '✅ Google Drive API 연결됨' : '링크 즉시 임베드 ON';
         pill.className = `ntag ${gTokVal ? 'ntag-blue' : 'ntag-green'}`;
       }
+      setSyncDebugHtml('');
       openModal('syncModal');
+      refreshErpBridgeBanner();
     };
     window.saveSyncSettings = () => {
-      setLocalSecret('ora_vault_gh_token', (document.getElementById('cfgGithubToken')?.value || '').trim());
+      const cleanPat = normalizeGithubToken(document.getElementById('cfgGithubToken')?.value || '');
+      const patInput = document.getElementById('cfgGithubToken');
+      if (patInput && patInput.value !== cleanPat) patInput.value = cleanPat;
+      setLocalSecret('ora_vault_gh_token', cleanPat);
+      updateGhPatHint(cleanPat);
       setLocalSecret('ora_gemini_api_key', (document.getElementById('cfgGeminiKey')?.value || '').trim());
       const gCidEl = document.getElementById('cfgGdriveClientId');
       const gTokEl = document.getElementById('cfgGdriveToken');
@@ -7988,32 +8092,162 @@
         pill.textContent = hasTok ? '✅ Google Drive API 연결됨' : '링크 즉시 임베드 ON';
         pill.className = `ntag ${hasTok ? 'ntag-blue' : 'ntag-green'}`;
       }
-      APP.vaultRepo = (document.getElementById('cfgVaultRepo')?.value || 'oratech-notes-vault').trim().replace(/[^a-zA-Z0-9._-]/g, '-');
+      APP.vaultRepo = (document.getElementById('cfgVaultRepo')?.value || 'oratech-notes-vault').trim().replace(/[^a-zA-Z0-9._\/-]/g, '-') || 'oratech-notes-vault';
       APP.autoSyncMode = document.getElementById('cfgAutoSyncMode')?.value || 'OFF';
       saveAppState(false);
     };
-    async function ensurePrivateVaultRepo(token, repoName) {
+
+    async function ensurePrivateVaultRepo(token, repoInput) {
       const u = await ghApiCall(token, 'GET', '/user');
-      if (!u.ok) throw new Error(`GitHub 인증 실패 (${u.status})`);
-      const owner = u.data.login;
+      let defaultOwner = u.ok ? u.data?.login : '';
+      let parsedRepo = splitOwnerRepoInput(repoInput, defaultOwner);
+      if (!u.ok) {
+        if (u.status === 401) {
+          throw new Error(`GitHub 인증 실패 (401: ${u.data?.message || 'Bad credentials'}) — 입력된 PAT(${normalizeGithubToken(token).length}자)가 만료·폐기되었거나 잘못 입력되었습니다.`);
+        }
+        if (parsedRepo.owner) {
+          const directRepo = await ghApiCall(token, 'GET', `/repos/${parsedRepo.owner}/${parsedRepo.repoName}`);
+          if (directRepo.ok) {
+            return { owner: parsedRepo.owner, repoName: parsedRepo.repoName, branch: directRepo.data?.default_branch || 'main' };
+          }
+        }
+        throw new Error(`GitHub 계정/권한 확인 실패 (${u.status}: ${u.data?.message || ''})`);
+      }
+      const owner = parsedRepo.owner || defaultOwner;
+      const repoName = parsedRepo.repoName;
       let repo = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}`);
       if (repo.status === 404) {
         const cr = await ghApiCall(token, 'POST', '/user/repos', { name: repoName, description: 'Oratech Notion+ Private Vault', private: true, auto_init: true });
-        if (!cr.ok) throw new Error(`비공개 저장소 생성 실패 (${cr.status})`);
+        if (!cr.ok) throw new Error(`비공개 저장소 생성 실패 (${cr.status}: ${cr.data?.message || 'repo 또는 Administration write 권한 확인 필요'})`);
         await new Promise(r => setTimeout(r, 1500));
         repo = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}`);
       }
+      if (!repo.ok) throw new Error(`저장소 조회 실패 (${repo.status}: ${repo.data?.message || ''})`);
       if (repo.data && repo.data.private === false) await ghApiCall(token, 'PATCH', `/repos/${owner}/${repoName}`, { private: true });
-      return { owner, branch: (repo.data && repo.data.default_branch) || 'main' };
+      return { owner, repoName, branch: (repo.data && repo.data.default_branch) || 'main' };
     }
-    window.syncToGithubVault = async (silent = false) => {
-      const token = getLocalSecret('ora_vault_gh_token', '');
-      const dbg = document.getElementById('syncDebugMsg');
-      if (!token) { if (!silent) { openSyncModal(); showToast('GitHub 토큰을 입력해 주세요.'); } return; }
+
+    function buildWorkspaceExportBundle() {
+      const photoIndex = {};
+      Object.values(PHOTOS).forEach(ph => {
+        photoIndex[ph.id] = { id: ph.id, name: ph.name, space: ph.space, pageId: ph.pageId, blockId: ph.blockId, noteDate: ph.noteDate, caption: ph.caption, createdAt: ph.createdAt };
+      });
+      return { version: 2, exportedAt: new Date().toISOString(), app: APP, photoIndex };
+    }
+
+    window.syncViaLocalErpBridge = async (silent = false) => {
       try {
-        const repoName = APP.vaultRepo || 'oratech-notes-vault';
-        const { owner, branch } = await ensurePrivateVaultRepo(token, repoName);
-        const refRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/ref/heads/${branch}`);
+        setSyncDebugHtml('🖥️ 로컬 ERP(:3080) 연동으로 GitHub 비공개 금고에 업로드 중...');
+        const unsynced = Object.values(PHOTOS).filter(p => !p.synced && p.dataUrl);
+        const photosPayload = unsynced.map(p => ({ id: p.id, base64: p.dataUrl.split(',')[1] })).filter(p => p.base64);
+        const res = await fetch(`${VAULT_BRIDGE_BASE}/api/notes-vault/sync`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            repoName: APP.vaultRepo || 'oratech-notes-vault',
+            workspaceJson: buildWorkspaceExportBundle(),
+            photos: photosPayload,
+            commitMessage: `📝 Sync Notion+ (${APP.pages.length} pages, ${(APP.projects || []).length} projects)`
+          })
+        });
+        const j = await res.json();
+        if (!res.ok || !j.ok) throw new Error(j.error || `HTTP ${res.status}`);
+        for (const phId of (j.syncedPhotoIds || [])) {
+          if (PHOTOS[phId]) { PHOTOS[phId].synced = true; await idbPut('photos', PHOTOS[phId]); }
+        }
+        APP.lastSyncAt = new Date().toISOString();
+        APP.lastCommitSha = j.commitSha;
+        await saveAppState(false);
+        renderAll();
+        setSyncDebugHtml(`✅ <strong>${escHtml(j.owner)}/${escHtml(j.repo)}</strong> (로컬 ERP 연동) 동기화 완료 (+사진 ${photosPayload.length}장)`);
+        if (!silent) showToast(`✅ Git 비공개 금고(${j.owner}/${j.repo}) 저장 완료!`);
+        return true;
+      } catch (err) {
+        setSyncDebugHtml(`❌ 로컬 ERP 동기화 오류: ${escHtml(err.message)}`);
+        if (!silent) showToast('❌ 동기화 오류: ' + err.message);
+        return false;
+      }
+    };
+
+    window.pullViaLocalErpBridge = async (commitSha = null) => {
+      try {
+        setSyncDebugHtml('⬇️ 로컬 ERP(:3080) 연동으로 GitHub 비공개 금고에서 불러오는 중...');
+        const res = await fetch(`${VAULT_BRIDGE_BASE}/api/notes-vault/pull`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ repoName: APP.vaultRepo || 'oratech-notes-vault', commitSha, existingPhotoIds: Object.keys(PHOTOS) })
+        });
+        const j = await res.json();
+        if (!res.ok || !j.ok) throw new Error(j.error || `HTTP ${res.status}`);
+        for (const ph of (j.downloadedPhotos || [])) {
+          PHOTOS[ph.id] = ph;
+          await idbPut('photos', ph);
+        }
+        APP = j.parsed.app;
+        migrateAppState();
+        APP.lastSyncAt = new Date().toISOString();
+        await saveAppState(false);
+        renderAll();
+        closeModal('historyModal');
+        setSyncDebugHtml(`✅ <strong>${escHtml(j.owner)}/${escHtml(j.repo)}</strong>에서 최신 데이터를 불러왔습니다!`);
+        showToast(commitSha ? '🕰️ 선택한 시점으로 복원되었습니다!' : '✅ Git에서 최신 데이터를 불러왔습니다!');
+      } catch (err) {
+        setSyncDebugHtml(`❌ 불러오기 실패: ${escHtml(err.message)}`);
+        showToast('❌ 불러오기 실패: ' + err.message);
+      }
+    };
+
+    window.clearBadPatAndSyncViaBridge = async () => {
+      clearGithubTokenInput();
+      await window.syncViaLocalErpBridge(false);
+    };
+
+    window.testGithubConnection = async () => {
+      const token = normalizeGithubToken(getLocalSecret('ora_vault_gh_token', ''));
+      if (!token) {
+        const st = await refreshErpBridgeBanner();
+        if (st?.available) {
+          setSyncDebugHtml(`✅ 브라우저 PAT는 비어 있지만 <strong>로컬 ERP(:3080 · ${escHtml(st.login)} 계정)</strong> 연결이 활성화되어 있어 바로 동기화할 수 있습니다!`);
+          showToast(`✅ 로컬 ERP(${st.login}) GitHub 연결 확인!`);
+        } else {
+          setSyncDebugHtml('💡 브라우저 PAT가 비어 있습니다. GitHub PAT(ghp_... / github_pat_...)를 입력하거나 PC의 로컬 ERP 서버(:3080)를 실행하세요.');
+          showToast('GitHub PAT를 입력해 주세요.');
+        }
+        return;
+      }
+      try {
+        setSyncDebugHtml('🧪 GitHub 연결 확인 중...');
+        const { owner, repoName, branch } = await ensurePrivateVaultRepo(token, APP.vaultRepo || 'oratech-notes-vault');
+        setSyncDebugHtml(`✅ GitHub 인증 성공! 계정: <strong>${escHtml(owner)}</strong> · 저장소: <strong>${escHtml(repoName)}</strong> (${escHtml(branch)})`);
+        showToast(`✅ ${owner}/${repoName} 연결 확인 완료!`);
+      } catch (err) {
+        const st = await probeLocalErpVaultBridge();
+        const extraBtn = st?.available
+          ? `<div style="margin-top:6px;"><button type="button" class="n-btn-primary" style="font-size:12px;padding:4px 10px;" onclick="clearBadPatAndSyncViaBridge()">🔄 잘못된 입력 비우고 ERP(:3080 · ${escHtml(st.login)})로 즉시 연동</button></div>`
+          : '';
+        setSyncDebugHtml(`❌ ${escHtml(err.message)}${extraBtn}`);
+        showToast('❌ 연결 실패: ' + err.message);
+      }
+    };
+
+    window.syncToGithubVault = async (silent = false) => {
+      const token = normalizeGithubToken(getLocalSecret('ora_vault_gh_token', ''));
+      if (!token) {
+        const st = await probeLocalErpVaultBridge();
+        if (st?.available) return await window.syncViaLocalErpBridge(silent);
+        if (!silent) { openSyncModal(); showToast('GitHub 토큰을 입력해 주세요.'); }
+        return;
+      }
+      try {
+        const repoInput = APP.vaultRepo || 'oratech-notes-vault';
+        const { owner, repoName, branch } = await ensurePrivateVaultRepo(token, repoInput);
+        let refRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/ref/heads/${branch}`);
+        if (!refRes.ok) {
+          await ghApiCall(token, 'PUT', `/repos/${owner}/${repoName}/contents/.nojekyll`, { message: 'Initialize Oratech Notion+ Private Vault', content: '' });
+          await new Promise(r => setTimeout(r, 1200));
+          refRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/ref/heads/${branch}`);
+        }
+        if (!refRes.ok || !refRes.data?.object?.sha) throw new Error(`브랜치 참조 조회 실패 (${refRes.status})`);
         const baseSha = refRes.data.object.sha;
         const baseTreeSha = (await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/commits/${baseSha}`)).data.tree.sha;
         const treeItems = [];
@@ -8022,28 +8256,36 @@
           const blob = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/blobs`, { content: ph.dataUrl.split(',')[1], encoding: 'base64' });
           if (blob.ok && blob.data.sha) { treeItems.push({ path: `vault/photos/${ph.id}.jpg`, mode: '100644', type: 'blob', sha: blob.data.sha }); ph.synced = true; await idbPut('photos', ph); }
         }
-        const photoIndex = {};
-        Object.values(PHOTOS).forEach(ph => { photoIndex[ph.id] = { id: ph.id, name: ph.name, space: ph.space, pageId: ph.pageId, blockId: ph.blockId, noteDate: ph.noteDate, caption: ph.caption, createdAt: ph.createdAt }; });
-        const wsBlob = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/blobs`, { content: b64EncodeUnicode(JSON.stringify({ version: 2, exportedAt: new Date().toISOString(), app: APP, photoIndex }, null, 2)), encoding: 'base64' });
+        const wsBlob = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/blobs`, { content: b64EncodeUnicode(JSON.stringify(buildWorkspaceExportBundle(), null, 2)), encoding: 'base64' });
         treeItems.push({ path: 'vault/workspace.json', mode: '100644', type: 'blob', sha: wsBlob.data.sha });
         const treeRes = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/trees`, { base_tree: baseTreeSha, tree: treeItems });
+        if (!treeRes.ok || !treeRes.data?.sha) throw new Error(`Git Tree 생성 실패 (${treeRes.status})`);
         const newCommit = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/commits`, { message: `📝 Sync Notion+ (${APP.pages.length} pages, ${(APP.projects||[]).length} projects)`, tree: treeRes.data.sha, parents: [baseSha] });
+        if (!newCommit.ok || !newCommit.data?.sha) throw new Error(`Git Commit 생성 실패 (${newCommit.status})`);
         await ghApiCall(token, 'PATCH', `/repos/${owner}/${repoName}/git/refs/heads/${branch}`, { sha: newCommit.data.sha, force: true });
         APP.lastSyncAt = new Date().toISOString(); APP.lastCommitSha = newCommit.data.sha;
         await saveAppState(false);
-        if (dbg) dbg.textContent = `✅ (${owner}/${repoName}) 동기화 완료 (+사진 ${unsynced.length}장)`;
+        renderAll();
+        setSyncDebugHtml(`✅ <strong>${escHtml(owner)}/${escHtml(repoName)}</strong> 동기화 완료 (+사진 ${unsynced.length}장)`);
         if (!silent) showToast(`✅ Git 비공개 금고 저장 완료!`);
       } catch (err) {
-        if (dbg) dbg.textContent = '❌ 오류: ' + err.message;
+        const st = await probeLocalErpVaultBridge();
+        const extraBtn = st?.available && String(err.message).includes('401')
+          ? `<div style="margin-top:6px;"><button type="button" class="n-btn-primary" style="font-size:12px;padding:4px 10px;" onclick="clearBadPatAndSyncViaBridge()">🔄 잘못된 입력 지우고 ERP(:3080 · ${escHtml(st.login)})로 지금 올리기</button></div>`
+          : '';
+        setSyncDebugHtml(`❌ 오류: ${escHtml(err.message)}${extraBtn}`);
         if (!silent) showToast('❌ 동기화 오류: ' + err.message);
       }
     };
     window.pullFromGithubVault = async (commitSha = null) => {
-      const token = getLocalSecret('ora_vault_gh_token', '');
-      if (!token) { openSyncModal(); showToast('GitHub 토큰을 입력해 주세요.'); return; }
+      const token = normalizeGithubToken(getLocalSecret('ora_vault_gh_token', ''));
+      if (!token) {
+        const st = await probeLocalErpVaultBridge();
+        if (st?.available) return await window.pullViaLocalErpBridge(commitSha);
+        openSyncModal(); showToast('GitHub 토큰을 입력해 주세요.'); return;
+      }
       try {
-        const repoName = APP.vaultRepo || 'oratech-notes-vault';
-        const { owner, branch } = await ensurePrivateVaultRepo(token, repoName);
+        const { owner, repoName, branch } = await ensurePrivateVaultRepo(token, APP.vaultRepo || 'oratech-notes-vault');
         const refQ = commitSha ? `?ref=${commitSha}` : `?ref=${branch}`;
         const wsRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/contents/vault/workspace.json${refQ}`);
         if (!wsRes.ok || !wsRes.data.content) throw new Error('저장소 백업이 아직 없습니다.');
@@ -8057,7 +8299,10 @@
         APP = parsed.app; migrateAppState(); APP.lastSyncAt = new Date().toISOString();
         await saveAppState(false); renderAll(); closeModal('historyModal');
         showToast(commitSha ? '🕰️ 선택한 시점으로 복원되었습니다!' : '✅ 최신 데이터를 불러왔습니다!');
-      } catch (err) { showToast('❌ 불러오기 실패: ' + err.message); }
+      } catch (err) {
+        setSyncDebugHtml(`❌ 불러오기 실패: ${escHtml(err.message)}`);
+        showToast('❌ 불러오기 실패: ' + err.message);
+      }
     };
 
     // ==================== 15.5 Google Drive 2-Way Vault & File Picker ====================
@@ -8313,11 +8558,26 @@
             </div>`).join('') || '<div style="padding:16px;text-align:center;color:var(--ink-3);">감사 로그가 비어 있습니다.</div>'}`;
         return;
       }
-      const token = getLocalSecret('ora_vault_gh_token', '');
-      if (!token) { box.innerHTML = '<div style="padding:16px;text-align:center;color:var(--ink-3);">[Share / Git] 에서 토큰을 연결하면 모든 커밋 히스토리를 무료 복원할 수 있습니다.</div>'; return; }
+      const token = normalizeGithubToken(getLocalSecret('ora_vault_gh_token', ''));
+      if (!token) {
+        const st = await probeLocalErpVaultBridge();
+        if (st?.available) {
+          try {
+            const r = await fetch(`${VAULT_BRIDGE_BASE}/api/notes-vault/history?repoName=${encodeURIComponent(APP.vaultRepo || 'oratech-notes-vault')}`);
+            const j = await r.json();
+            if (!r.ok || !j.ok) throw new Error(j.error || `HTTP ${r.status}`);
+            box.innerHTML = (j.commits || []).map(c => `
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;">
+                <div style="min-width:0;"><div style="font-size:13px;font-weight:500;">${escHtml(c.commit.message)}</div><div style="font-size:11px;color:var(--ink-3);">${new Date(c.commit.author.date).toLocaleString('ko-KR')}</div></div>
+                <button class="n-btn-primary" style="font-size:11.5px;padding:4px 9px;" onclick="pullFromGithubVault('${c.sha}')">복원</button>
+              </div>`).join('') || '<div style="padding:16px;text-align:center;color:var(--ink-3);">저장된 Git 커밋 기록이 아직 없습니다.</div>';
+          } catch (e) { box.innerHTML = `<div style="padding:12px;">로컬 ERP Git 기록 조회 오류: ${escHtml(e.message)}</div>`; }
+          return;
+        }
+        box.innerHTML = '<div style="padding:16px;text-align:center;color:var(--ink-3);">[Share / Git] 에서 토큰을 연결하거나 로컬 ERP(:3080)를 실행하면 모든 커밋 히스토리를 무료 복원할 수 있습니다.</div>'; return;
+      }
       try {
-        const repoName = APP.vaultRepo || 'oratech-notes-vault';
-        const { owner } = await ensurePrivateVaultRepo(token, repoName);
+        const { owner, repoName } = await ensurePrivateVaultRepo(token, APP.vaultRepo || 'oratech-notes-vault');
         const commits = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/commits?per_page=15`);
         box.innerHTML = (commits.data || []).map(c => `
           <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border:1px solid var(--border);border-radius:6px;">
