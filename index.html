@@ -1,0 +1,3390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오라테크 노션+ OS · 일 · 아이 · 사진 · Git 비공개 데일리 워크스페이스</title>
+  <style>
+    :root {
+      --bg-app: #ffffff;
+      --bg-sidebar: #f7f8fa;
+      --bg-soft: #f1f5f9;
+      --bg-hover: #eef2ff;
+      --ink-900: #0f172a;
+      --ink-700: #334155;
+      --ink-500: #64748b;
+      --ink-400: #94a3b8;
+      --line: #e2e8f0;
+      --line-strong: #cbd5e1;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --rose: #e11d48;
+      --rose-soft: #fff1f2;
+      --emerald: #059669;
+      --emerald-soft: #ecfdf5;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --purple: #6d28d9;
+      --purple-soft: #f5f3ff;
+      --radius: 12px;
+      --shadow-sm: 0 1px 4px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.09);
+      --font-sans: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg-app);
+      color: var(--ink-900);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, select {
+      font-family: inherit;
+    }
+
+    /* Ecosystem Top Bar (7 Apps Unified) */
+    .eco-bar {
+      background: linear-gradient(90deg, #041230 0%, #092154 60%, #0c2b6b 100%);
+      color: #f8fafc;
+      height: 36px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid #1e3a8a;
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .eco-bar::-webkit-scrollbar { display: none; }
+    .eco-left, .eco-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .eco-brand {
+      font-size: 11px;
+      font-weight: 900;
+      color: #7dd3fc;
+      letter-spacing: 0.05em;
+      padding-right: 8px;
+      border-right: 1px solid rgba(125, 211, 252, 0.3);
+      margin-right: 2px;
+    }
+    .eco-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #dbeafe;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.14s;
+    }
+    .eco-pill:hover { background: rgba(37, 99, 235, 0.45); border-color: #60a5fa; color: #fff; }
+    .eco-pill.active {
+      background: linear-gradient(135deg, #0284c7, #1d4ed8);
+      border-color: #7dd3fc;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+    }
+
+    /* Main App Shell */
+    .app-shell {
+      display: flex;
+      height: calc(100vh - 36px);
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Notion Sidebar */
+    .sidebar {
+      width: 274px;
+      min-width: 274px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: transform 0.2s ease, width 0.2s ease;
+      z-index: 40;
+    }
+    .sidebar.collapsed {
+      width: 0;
+      min-width: 0;
+      overflow: hidden;
+      border-right: none;
+    }
+    .sb-top {
+      padding: 12px 12px 10px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .sb-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sb-brand-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--ink-900);
+    }
+    .sb-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #1d4ed8, #e11d48);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .sb-search-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--ink-500);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .sb-search-btn:hover { border-color: #93c5fd; color: var(--ink-900); }
+    .kbd {
+      font-size: 10.5px;
+      background: var(--bg-soft);
+      border: 1px solid var(--line-strong);
+      border-radius: 5px;
+      padding: 1px 5px;
+      color: var(--ink-500);
+    }
+
+    /* Space Filter Pills */
+    .space-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      background: #fcfcfd;
+    }
+    .space-chip {
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: 7px;
+      padding: 5px 4px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ink-500);
+      cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .space-chip:hover { background: var(--bg-soft); color: var(--ink-900); }
+    .space-chip.active {
+      background: #ffffff;
+      border-color: var(--line-strong);
+      color: var(--ink-900);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sb-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 8px 16px 8px;
+    }
+    .sb-sec-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--ink-400);
+      padding: 10px 8px 4px 8px;
+      letter-spacing: 0.03em;
+    }
+    .sb-mini-btn {
+      border: none;
+      background: transparent;
+      color: var(--ink-500);
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+    .sb-mini-btn:hover { background: var(--line); color: var(--ink-900); }
+
+    .page-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 6px 8px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12.8px;
+      font-weight: 600;
+      color: var(--ink-700);
+      margin-bottom: 2px;
+      transition: background 0.12s;
+    }
+    .page-nav-item:hover { background: #eaeef5; color: var(--ink-900); }
+    .page-nav-item.active {
+      background: #e0ebff;
+      color: #0f3d99;
+      font-weight: 800;
+    }
+    .page-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      flex: 1;
+    }
+    .page-nav-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .page-nav-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+    .sp-WORK { background: var(--blue-soft); color: var(--blue); }
+    .sp-KIDS { background: var(--rose-soft); color: var(--rose); }
+    .sp-PERSONAL { background: var(--purple-soft); color: var(--purple); }
+
+    .sb-bottom {
+      padding: 10px;
+      border-top: 1px solid var(--line);
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sb-sync-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 11px;
+    }
+
+    /* Main Workspace Area */
+    .workspace-main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #ffffff;
+    }
+
+    /* Top View Switcher & Utility Header */
+    .ws-topbar {
+      min-height: 50px;
+      padding: 6px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #ffffff;
+      flex-wrap: wrap;
+    }
+    .ws-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+    .view-pills {
+      display: inline-flex;
+      background: var(--bg-soft);
+      padding: 3px;
+      border-radius: 10px;
+      gap: 2px;
+      border: 1px solid var(--line);
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .view-pills::-webkit-scrollbar { display: none; }
+    .view-pill {
+      border: none;
+      background: transparent;
+      padding: 4px 8px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--ink-500);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.14s;
+    }
+    .view-pill:hover { color: var(--ink-900); }
+    .view-pill.active {
+      background: #ffffff;
+      color: var(--blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ws-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--line-strong);
+      background: #ffffff;
+      color: var(--ink-700);
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      transition: all 0.12s;
+    }
+    .btn:hover { background: var(--bg-soft); color: var(--ink-900); }
+    .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .btn-primary:hover { background: #1e40af; color: #fff; }
+    .btn-emerald { background: var(--emerald); border-color: var(--emerald); color: #fff; }
+    .btn-emerald:hover { background: #047857; color: #fff; }
+    .btn-rose { background: var(--rose); border-color: var(--rose); color: #fff; }
+    .btn-rose:hover { background: #be123c; color: #fff; }
+    .btn-ghost { border-color: transparent; background: transparent; }
+    .btn-ghost:hover { background: var(--bg-soft); }
+
+    /* Content Viewport */
+    .ws-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 28px 64px 28px;
+      background: #ffffff;
+    }
+
+    /* Quick Command / Status Ribbon */
+    .status-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(90deg, #eff6ff 0%, #fff1f2 100%);
+      border: 1px solid #dbeafe;
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .dday-strip {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .dday-badge {
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--line-strong);
+      color: var(--ink-900);
+      cursor: pointer;
+    }
+    .dday-badge b { color: var(--rose); margin-left: 3px; }
+    .dday-badge.work b { color: var(--blue); }
+
+    /* Notion Page Editor */
+    .editor-wrap {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    .page-cover {
+      height: 86px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover-blue { background: linear-gradient(120deg, #07225a, #1d4ed8, #0284c7); }
+    .cover-rose { background: linear-gradient(120deg, #881337, #e11d48, #fb7185); }
+    .cover-emerald { background: linear-gradient(120deg, #064e3b, #059669, #34d399); }
+    .cover-amber { background: linear-gradient(120deg, #78350f, #d97706, #fbbf24); }
+    .cover-slate { background: linear-gradient(120deg, #0f172a, #334155, #475569); }
+
+    .page-header-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .page-icon-btn {
+      font-size: 32px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #f8fafc;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .page-title-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--ink-900);
+      background: transparent;
+      letter-spacing: -0.02em;
+      min-width: 0;
+    }
+    .page-props-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+
+    /* Notion Blocks */
+    .blocks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .block-row {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 8px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .block-row:hover {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+    }
+    .block-tools {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      opacity: 0.45;
+      padding-top: 4px;
+      flex-shrink: 0;
+    }
+    .block-row:hover .block-tools { opacity: 1; }
+    .blk-tool-btn {
+      border: none;
+      background: transparent;
+      font-size: 11.5px;
+      color: var(--ink-500);
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .blk-tool-btn:hover { background: var(--line); color: var(--ink-900); }
+    .block-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .blk-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--ink-900);
+      font-size: 14.5px;
+      line-height: 1.55;
+      resize: none;
+    }
+    .blk-h1 { font-size: 21px; font-weight: 900; padding: 4px 0; }
+    .blk-h2 { font-size: 17px; font-weight: 900; color: #1e3a8a; padding: 3px 0; }
+
+    /* Todo Block */
+    .todo-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+    .todo-chk {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      accent-color: var(--blue);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .todo-text-done {
+      text-decoration: line-through;
+      color: var(--ink-400);
+    }
+    .todo-meta {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+    }
+    .meta-sel, .meta-date {
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 2px 6px;
+      background: #ffffff;
+      color: var(--ink-700);
+    }
+
+    /* Callout & Toggle */
+    .callout-box {
+      border-radius: 10px;
+      padding: 11px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+    }
+    .callout-box.rose { border-color: #fecdd3; background: #fff1f2; }
+    .callout-box.amber { border-color: #fde68a; background: #fffbeb; }
+    .callout-box.emerald { border-color: #a7f3d0; background: #ecfdf5; }
+
+    .toggle-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: #fafafa;
+    }
+    .toggle-head {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .toggle-arrow {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--ink-700);
+      padding: 2px 5px;
+    }
+    .toggle-inner {
+      margin-top: 8px;
+      padding-left: 22px;
+      border-left: 2px solid #cbd5e1;
+    }
+
+    /* Photo Block & Dropzone */
+    .photo-block-card {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .photo-thumb-wrap {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      background: #0f172a;
+      aspect-ratio: 4/3;
+    }
+    .photo-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: zoom-in;
+      display: block;
+    }
+    .photo-thumb-actions {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      display: flex;
+      gap: 4px;
+    }
+    .photo-act-btn {
+      background: rgba(15, 23, 42, 0.78);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 2px 6px;
+      cursor: pointer;
+    }
+    .photo-act-btn:hover { background: #1d4ed8; }
+
+    .photo-dropzone {
+      border: 2px dashed #93c5fd;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      background: #ffffff;
+      color: var(--ink-500);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .photo-dropzone.dragover { background: #eff6ff; border-color: var(--blue); color: var(--blue); }
+
+    /* Table Block */
+    .table-wrap { overflow-x: auto; }
+    .blk-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      background: #fff;
+    }
+    .blk-table td {
+      border: 1px solid var(--line-strong);
+      padding: 4px 6px;
+    }
+    .blk-table tr:first-child td {
+      background: #f1f5f9;
+      font-weight: 800;
+    }
+    .blk-table input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 12.5px;
+      font-weight: inherit;
+      color: var(--ink-900);
+    }
+
+    /* Slash Popup & Add Block Dock */
+    .add-block-dock {
+      margin-top: 16px;
+      padding: 10px 12px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 12px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .slash-menu {
+      position: fixed;
+      z-index: 120;
+      width: 245px;
+      background: #ffffff;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+      padding: 6px;
+      display: none;
+    }
+    .slash-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      border: none;
+      background: transparent;
+      text-align: left;
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink-900);
+    }
+    .slash-item:hover { background: var(--blue-soft); color: var(--blue); }
+
+    /* Today Dashboard Grid */
+    .today-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .panel-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    /* Kanban Board */
+    .kanban-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .kanban-col {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 420px;
+    }
+    .kanban-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Calendar Grid */
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .cal-head {
+      background: #f1f5f9;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .cal-cell {
+      min-height: 98px;
+      padding: 7px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .cal-cell:hover { background: #f8fbff; }
+    .cal-cell.today { background: #eff6ff; outline: 2px solid var(--blue); outline-offset: -2px; }
+    .cal-cell.muted { background: #fafafa; color: var(--ink-400); }
+    .cal-event-pill {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Photo Wall Masonry */
+    .wall-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .wall-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .wall-card img {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+    }
+
+    /* Habit Heatmap */
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(14, 1fr);
+      gap: 6px;
+    }
+    .heat-cell {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    /* Modals & Lightbox */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.62);
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 16px;
+    }
+    .modal-bg.open { display: flex; }
+    .modal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 660px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px 22px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+    }
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink-700);
+      margin-bottom: 5px;
+    }
+    .field-input, .field-select, .field-textarea {
+      width: 100%;
+      border: 1.5px solid var(--line-strong);
+      border-radius: 9px;
+      padding: 8px 11px;
+      font-size: 13px;
+      outline: none;
+      background: #ffffff;
+      color: var(--ink-900);
+    }
+    .field-input:focus, .field-textarea:focus { border-color: var(--blue); }
+
+    .toast-box {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 300;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 800;
+      box-shadow: var(--shadow-md);
+      display: none;
+    }
+
+    /* Responsive Mobile */
+    .mobile-menu-btn { display: none; }
+    @media (max-width: 960px) {
+      .mobile-menu-btn { display: inline-flex; }
+      .sidebar {
+        position: fixed;
+        top: 36px;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        box-shadow: var(--shadow-md);
+      }
+      .sidebar.mobile-open { transform: translateX(0); width: 274px; min-width: 274px; }
+      .today-grid, .kanban-grid { grid-template-columns: 1fr; }
+      .ws-content { padding: 14px 14px 70px 14px; }
+      .page-title-input { font-size: 21px; }
+    }
+
+    @media print {
+      .eco-bar, .sidebar, .ws-topbar, .status-banner, .add-block-dock, .block-tools { display: none !important; }
+      .ws-content { padding: 0; overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 7대 오라테크 통합 생태계 바 -->
+  <div class="eco-bar">
+    <div class="eco-left">
+      <span class="eco-brand">ORATECH OS · 7 APPS</span>
+      <a href="https://igan3w.github.io/erp/" target="_blank" class="eco-pill">🏢 ERP</a>
+      <a href="https://igan3w.github.io/orawinch/" data-local="/orawinch" target="_blank" class="eco-pill">🌐 공식홈</a>
+      <a href="https://igan3w.github.io/studio/" data-local="/studio" target="_blank" class="eco-pill">🎨 상세스튜디오</a>
+      <a href="http://localhost:3080/" data-local="/" target="_blank" class="eco-pill">📣 김대리</a>
+      <a href="https://igan3w.github.io/sourcing/" data-local="/sourcing" target="_blank" class="eco-pill">🌏 소싱랩</a>
+      <a href="https://igan3w.github.io/strategy/" data-local="/strategy" target="_blank" class="eco-pill">📈 시장전략</a>
+      <span class="eco-pill active">📝 노션+ 데일리</span>
+    </div>
+    <div class="eco-right">
+      <span id="hdrVaultStatus" class="eco-pill" onclick="openSyncModal()" style="background:rgba(5,150,105,0.28);border-color:#34d399;color:#a7f3d0;">☁️ 로컬 즉시저장 (Git 금고 연결)</span>
+    </div>
+  </div>
+
+  <!-- 메인 앱 셸 -->
+  <div class="app-shell">
+    <!-- 좌측 노션 스타일 사이드바 -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sb-top">
+        <div class="sb-brand">
+          <div class="sb-brand-left">
+            <div class="sb-logo">N+</div>
+            <span>오라테크 노션+ OS</span>
+          </div>
+          <button type="button" class="btn btn-ghost" style="padding:4px 7px;font-size:12px;" onclick="toggleSidebar()" title="사이드바 접기">«</button>
+        </div>
+        <button type="button" class="sb-search-btn" onclick="openSearchModal()">
+          <span>🔍 빠른 검색 · 페이지 이동</span>
+          <span class="kbd">Ctrl+K</span>
+        </button>
+      </div>
+
+      <!-- 공간 전환 필터 (전체 / 일 / 애들 / 개인) -->
+      <div class="space-tabs" id="spaceTabs">
+        <button type="button" class="space-chip active" data-space="ALL" onclick="setActiveSpace('ALL')">🌐 전체</button>
+        <button type="button" class="space-chip" data-space="WORK" onclick="setActiveSpace('WORK')">💼 일</button>
+        <button type="button" class="space-chip" data-space="KIDS" onclick="setActiveSpace('KIDS')">👨‍👧‍👦 애들</button>
+        <button type="button" class="space-chip" data-space="PERSONAL" onclick="setActiveSpace('PERSONAL')">🔒 개인</button>
+      </div>
+
+      <div class="sb-scroll">
+        <div class="sb-sec-label">
+          <span>빠른 작업</span>
+        </div>
+        <div class="page-nav-item" onclick="openTodayNoteAndView('TODAY')">
+          <div class="page-nav-left"><span>🌅</span><span class="page-nav-title">오늘 데일리 &amp; 루틴</span></div>
+          <span id="sbTodayRemain" class="page-nav-badge sp-WORK">0</span>
+        </div>
+        <div class="page-nav-item" onclick="createNewPage('WORK')">
+          <div class="page-nav-left"><span>➕</span><span class="page-nav-title">새 일/업무 페이지</span></div>
+        </div>
+        <div class="page-nav-item" onclick="createNewPage('KIDS')">
+          <div class="page-nav-left"><span>🧸</span><span class="page-nav-title">새 애들/가족 페이지</span></div>
+        </div>
+
+        <div class="sb-sec-label">
+          <span>⭐ 즐겨찾기</span>
+        </div>
+        <div id="sbFavList"></div>
+
+        <div class="sb-sec-label">
+          <span>📂 내 페이지 트리</span>
+          <button type="button" class="sb-mini-btn" onclick="createNewPage()" title="새 페이지 추가">+</button>
+        </div>
+        <div id="sbPageTree"></div>
+      </div>
+
+      <div class="sb-bottom">
+        <div class="sb-sync-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <strong style="color:#0f172a;">🔐 Git 비공개 금고</strong>
+            <span id="sbSyncBadge" style="font-size:10px;font-weight:800;color:#059669;">대기중</span>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <button type="button" class="btn btn-primary" style="flex:1;justify-content:center;padding:5px;font-size:11px;" onclick="syncToGithubVault(false)">⬆️ Git 올리기</button>
+            <button type="button" class="btn" style="flex:1;justify-content:center;padding:5px;font-size:11px;" onclick="pullFromGithubVault()">⬇️ 가져오기</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;">
+          <button type="button" class="btn" style="flex:1;justify-content:center;font-size:11px;" onclick="openSyncModal()">⚙️ 설정/Git</button>
+          <button type="button" class="btn" style="flex:1;justify-content:center;font-size:11px;" onclick="openTelegramModal()">✈️ 텔레그램</button>
+          <button type="button" class="btn" style="flex:1;justify-content:center;font-size:11px;" onclick="exportBackupJson()" title="전체 JSON 백업">💾 백업</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 우측 워크스페이스 메인 -->
+    <main class="workspace-main">
+      <!-- 상단 뷰 스위처 바 -->
+      <header class="ws-topbar">
+        <div class="ws-topbar-left">
+          <button type="button" class="btn btn-ghost mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+          <button type="button" id="btnShowSidebar" class="btn btn-ghost" style="display:none;padding:5px 8px;" onclick="toggleSidebar()">» 목록</button>
+          <div class="view-pills" id="mainViewTabs">
+            <button type="button" class="view-pill active" data-view="EDITOR" onclick="setMainView('EDITOR')">📝 노트</button>
+            <button type="button" class="view-pill" data-view="TODAY" onclick="setMainView('TODAY')">🌅 오늘·루틴</button>
+            <button type="button" class="view-pill" data-view="KANBAN" onclick="setMainView('KANBAN')">📋 칸반</button>
+            <button type="button" class="view-pill" data-view="CALENDAR" onclick="setMainView('CALENDAR')">📅 캘린더</button>
+            <button type="button" class="view-pill" data-view="GALLERY" onclick="setMainView('GALLERY')">🖼️ 사진금고</button>
+            <button type="button" class="view-pill" data-view="HABITS" onclick="setMainView('HABITS')">📊 집중·습관</button>
+          </div>
+        </div>
+        <div class="ws-topbar-right">
+          <!-- 포모도로 미니 타이머 -->
+          <button type="button" id="topPomodoroBtn" class="btn" style="background:#fefce8;border-color:#fde047;color:#854d0e;padding:5px 8px;font-size:11.5px;" onclick="togglePomodoroTimer()" title="클릭하여 25분 집중 타이머 시작/정지">
+            ⏱️ <span id="topPomoClock">25:00</span>
+          </button>
+          <button type="button" class="btn" onclick="openCarbonAssistantModal()" style="background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;padding:5px 8px;font-size:11.5px;">💎 Carbon</button>
+          <button type="button" class="btn" onclick="openHistoryModal()" style="padding:5px 8px;font-size:11.5px;">🕰️ 버전복원</button>
+          <button type="button" class="btn" onclick="openLockModal()" id="btnTopPinLock" style="padding:5px 8px;font-size:11.5px;">🔓 잠금</button>
+        </div>
+      </header>
+
+      <!-- 메인 스크롤 컨텐츠 -->
+      <div id="wsContent" class="ws-content">
+        <!-- D-Day & 오늘 진행률 배너 -->
+        <div class="status-banner" id="topStatusBanner">
+          <div class="dday-strip" id="ddayBannerStrip"></div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:800;color:#1e3a8a;">
+            <span id="todayProgressSummary">오늘 할일 0 / 0 완료</span>
+            <button type="button" class="btn" style="padding:4px 9px;font-size:11px;" onclick="carryOverYesterdayTodos()">♻️ 어제 미완료 이월</button>
+            <button type="button" class="btn btn-primary" style="padding:4px 9px;font-size:11px;" onclick="applyTodayRoutines(true)">🔁 반복루틴 적용</button>
+          </div>
+        </div>
+
+        <!-- 동적 뷰 컨테이너 -->
+        <div id="mainViewContainer"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 슬래시 명령어 팝업 -->
+  <div id="slashMenu" class="slash-menu">
+    <div style="font-size:10.5px;font-weight:900;color:#94a3b8;padding:4px 8px;">블록 삽입 (/ 명령)</div>
+    <button type="button" class="slash-item" onclick="applySlashType('todo')">☑️ 할 일 체크박스</button>
+    <button type="button" class="slash-item" onclick="applySlashType('h1')">H1 대제목</button>
+    <button type="button" class="slash-item" onclick="applySlashType('h2')">H2 중제목</button>
+    <button type="button" class="slash-item" onclick="applySlashType('text')">📝 일반 메모 단락</button>
+    <button type="button" class="slash-item" onclick="applySlashType('toggle')">▶ 접기/펼치기 토글</button>
+    <button type="button" class="slash-item" onclick="applySlashType('callout')">💡 강조 콜아웃 박스</button>
+    <button type="button" class="slash-item" onclick="applySlashType('photo')">🖼️ 사진 · 앨범 블록</button>
+    <button type="button" class="slash-item" onclick="applySlashType('table')">📊 간편 표 (Table)</button>
+    <button type="button" class="slash-item" onclick="applySlashType('divider')">➖ 구분선</button>
+  </div>
+
+  <!-- 검색 모달 (Ctrl+K) -->
+  <div id="searchModal" class="modal-bg" onclick="if(event.target===this) closeModal('searchModal')">
+    <div class="modal-card" style="max-width:560px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <strong>🔍 전체 페이지 · 할일 · 사진 캡션 빠른 검색</strong>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('searchModal')">✕</button>
+      </div>
+      <input id="globalSearchInput" class="field-input" placeholder="제목, 거래처명, 아이 준비물, 사진 설명 검색..." oninput="renderSearchResults(this.value)" />
+      <div id="globalSearchResults" style="margin-top:12px;max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+  </div>
+
+  <!-- Git 비공개 저장소 & Carbon 키 설정 모달 -->
+  <div id="syncModal" class="modal-bg" onclick="if(event.target===this) closeModal('syncModal')">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:17px;font-weight:900;">🔐 GitHub 비공개 저장소 &amp; Gemini 4 Carbon 설정</h3>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('syncModal')">✕</button>
+      </div>
+      <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:11px 13px;font-size:12px;color:#065f46;margin-bottom:14px;line-height:1.55;">
+        <strong>안심 보안 구조:</strong> 입력하신 토큰과 키는 사장님 기기 브라우저 내부에만 저장되며, 데이터는 자동으로 <strong>Private(비공개)</strong> GitHub 저장소에 분리 업로드됩니다. 사진은 자동 최적화(1440px JPEG) 후 중복 없이 신규 사진만 증분 전송합니다.
+      </div>
+      <div style="display:grid;gap:12px;">
+        <div>
+          <label class="field-label">GitHub Personal Access Token (PAT)</label>
+          <input id="cfgGithubToken" type="password" class="field-input" placeholder="ghp_... (repo 권한 포함 토큰 입력)" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label class="field-label">비공개 금고 저장소 이름 (자동 Private 생성)</label>
+            <input id="cfgVaultRepo" class="field-input" placeholder="oratech-notes-vault" />
+          </div>
+          <div>
+            <label class="field-label">자동 동기화 간격</label>
+            <select id="cfgAutoSyncMode" class="field-select">
+              <option value="OFF">수동 버튼으로 동기화</option>
+              <option value="15S">수정 후 15초마다 자동 커밋 (추천)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="field-label">💎 Gemini 4 Carbon 개인 API 키 (이미지 분석·하루 요약용)</label>
+          <input id="cfgGeminiKey" type="password" class="field-input" placeholder="AQ... 또는 AIza... (선택: 로컬 서버 연동 시 자동)" />
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-emerald" onclick="saveSyncSettings(); syncToGithubVault(false);">💾 저장 &amp; 지금 Git 업로드</button>
+          <button type="button" class="btn" onclick="saveSyncSettings(); pullFromGithubVault();">⬇️ Git에서 불러오기</button>
+        </div>
+        <button type="button" class="btn" onclick="document.getElementById('jsonImportFile').click()">📂 JSON 파일 복원</button>
+        <input id="jsonImportFile" type="file" accept=".json" style="display:none;" onchange="importBackupJson(this.files[0])" />
+      </div>
+      <div id="syncDebugMsg" style="margin-top:10px;font-size:12px;color:#334155;"></div>
+    </div>
+  </div>
+
+  <!-- Git 타임머신 (버전 히스토리 무료 복원) -->
+  <div id="historyModal" class="modal-bg" onclick="if(event.target===this) closeModal('historyModal')">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:17px;font-weight:900;">🕰️ Git 버전 히스토리 (노션 유료 복원 무료 제공)</h3>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('historyModal')">✕</button>
+      </div>
+      <p style="margin:0 0 12px 0;font-size:12px;color:#475569;">GitHub 비공개 금고에 커밋된 과거 시점 스냅샷을 선택해 언제든 당시 상태 그대로 복원할 수 있습니다.</p>
+      <div id="historyCommitList" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+  </div>
+
+  <!-- 텔레그램 알림 & 인박스 모달 -->
+  <div id="telegramModal" class="modal-bg" onclick="if(event.target===this) closeModal('telegramModal')">
+    <div class="modal-card" style="max-width:540px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:17px;font-weight:900;">✈️ 텔레그램 알림 &amp; 현장 사진 인박스 연동</h3>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('telegramModal')">✕</button>
+      </div>
+      <p style="margin:0 0 12px 0;font-size:12px;color:#475569;">데이터 저장은 Git으로 하고, 텔레그램은 아침/마감 알림 발송과 외근 중 봇에 보낸 사진·메모를 오늘 노트로 가져오는 용도로 쓰세요.</p>
+      <div style="display:grid;gap:10px;">
+        <div>
+          <label class="field-label">텔레그램 봇 토큰 (Bot Token)</label>
+          <input id="cfgTgToken" type="password" class="field-input" placeholder="123456:ABC..." />
+        </div>
+        <div>
+          <label class="field-label">텔레그램 채팅방 ID (Chat ID)</label>
+          <input id="cfgTgChatId" class="field-input" placeholder="-100... 또는 개인 숫자 ID" />
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+        <button type="button" class="btn btn-primary" onclick="saveTelegramSettings()">💾 설정 저장</button>
+        <button type="button" class="btn btn-emerald" onclick="sendDailySummaryToTelegram()">📤 오늘 할일·아이일정 전송</button>
+        <button type="button" class="btn" onclick="pullTelegramInbox()">📥 텔레그램 보낸 사진/메모 가져오기</button>
+      </div>
+      <div id="tgResultBox" style="margin-top:10px;font-size:12px;color:#334155;"></div>
+    </div>
+  </div>
+
+  <!-- Gemini 4 Carbon AI 비서 모달 -->
+  <div id="carbonModal" class="modal-bg" onclick="if(event.target===this) closeModal('carbonModal')">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:17px;font-weight:900;">💎 Gemini 4 Carbon 일·육아 통합 코파일럿</h3>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('carbonModal')">✕</button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        <button type="button" class="btn" onclick="quickCarbonPreset('이번 주 오라테크 발주·입출고·미수금 마감 주간 점검 체크리스트 6개 만들어줘')">💼 주간 업무 점검</button>
+        <button type="button" class="btn" onclick="quickCarbonPreset('아이 주말 가족 캠핑/나들이 필수 준비물과 안전 체크리스트 만들어줘')">👨‍👧‍👦 가족 나들이 준비물</button>
+        <button type="button" class="btn" onclick="quickCarbonPreset('초등학생 아이 새 학기/방과후 등하원·준비물 주간 루틴 체크리스트 만들어줘')">🎒 아이 등하원·준비물</button>
+        <button type="button" class="btn btn-primary" onclick="runCarbonDailyBriefing()">📊 오늘 하루 브리핑 요약</button>
+      </div>
+      <textarea id="carbonPromptInput" rows="3" class="field-textarea" placeholder="예: 애들 소풍 도시락 준비물하고 오후 거래처 미팅 메모 템플릿 만들어줘"></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:10px;">
+        <button type="button" id="btnRunCarbonBlocks" class="btn btn-primary" onclick="generateCarbonTemplateBlocks()">✨ 현재 페이지에 블록 생성</button>
+      </div>
+      <div id="carbonOutputArea" style="margin-top:12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px;font-size:12.5px;display:none;white-space:pre-wrap;"></div>
+    </div>
+  </div>
+
+  <!-- 프라이버시 잠금 설정 & 화면 -->
+  <div id="lockModal" class="modal-bg" onclick="if(event.target===this) closeModal('lockModal')">
+    <div class="modal-card" style="max-width:400px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:16px;font-weight:900;">🔒 개인·가족 노트 PIN 잠금</h3>
+        <button type="button" class="btn btn-ghost" onclick="closeModal('lockModal')">✕</button>
+      </div>
+      <label class="field-label">4자리 잠금 비밀번호 설정 (비우면 잠금 해제)</label>
+      <input id="pinSetupInput" type="password" maxlength="8" class="field-input" placeholder="예: 0000" />
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button type="button" class="btn btn-primary" onclick="savePinSetting(true)">🔒 저장 후 바로 잠그기</button>
+        <button type="button" class="btn" onclick="savePinSetting(false)">저장만</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pinLockOverlay" style="position:fixed;inset:0;z-index:500;background:#071940;color:#fff;display:none;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#0f2862;border:1px solid #38bdf8;border-radius:18px;padding:28px;max-width:360px;width:100%;text-align:center;">
+      <div style="font-size:34px;margin-bottom:8px;">🔐</div>
+      <h2 style="margin:0 0 6px 0;font-size:19px;">오라테크 노션+ OS 잠금</h2>
+      <p style="margin:0 0 16px 0;font-size:12px;color:#bfdbfe;">일·가족 메모 보호를 위해 비밀번호를 입력하세요.</p>
+      <input id="pinUnlockInput" type="password" class="field-input" style="text-align:center;font-size:18px;letter-spacing:4px;margin-bottom:12px;" onkeydown="if(event.key==='Enter') unlockWithPin()" placeholder="••••" />
+      <button type="button" class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;" onclick="unlockWithPin()">잠금 해제</button>
+    </div>
+  </div>
+
+  <!-- 사진 풀스크린 라이트박스 -->
+  <div id="lightboxModal" class="modal-bg" onclick="if(event.target===this) closeModal('lightboxModal')" style="background:rgba(5,12,30,0.88);">
+    <div style="max-width:920px;width:100%;display:flex;flex-direction:column;gap:10px;align-items:center;">
+      <img id="lightboxImg" src="" style="max-width:100%;max-height:76vh;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,0.5);" />
+      <div style="background:#0f172a;color:#fff;padding:10px 16px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;max-width:680px;flex-wrap:wrap;">
+        <span id="lightboxCaption" style="font-size:13px;font-weight:700;"></span>
+        <div style="display:flex;gap:6px;">
+          <button type="button" id="btnLightboxAnalyze" class="btn btn-primary" style="font-size:11.5px;">✨ Carbon 사진 분석→할일추출</button>
+          <button type="button" class="btn" onclick="closeModal('lightboxModal')">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastBox" class="toast-box"></div>
+
+  <script>
+    // ==================== 0. 환경 & 유틸 ====================
+    const IS_LOCAL_SERVER = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3080';
+    document.querySelectorAll('.eco-pill[data-local]').forEach(a => {
+      if (IS_LOCAL_SERVER) a.href = a.getAttribute('data-local');
+    });
+
+    const DB_NAME = 'OraNotionOS_DB_v1';
+    const DB_VERSION = 1;
+    const ICONS_POOL = ['📝','💼','👨‍👧‍👦','🧸','🎒','📦','🔧','📅','💡','🎂','🏥','🚗','⭐','🔒'];
+    const COVER_THEMES = ['blue','rose','emerald','amber','slate'];
+
+    function todayStr(offsetDays = 0) {
+      const d = new Date(Date.now() + offsetDays * 86400000);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function fmtKorDate(isoDate) {
+      const [y, m, d] = (isoDate || todayStr()).split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      const w = ['일','월','화','수','목','금','토'][dt.getDay()];
+      return `${y}년 ${m}월 ${d}일 (${w})`;
+    }
+
+    function uid(prefix = 'id') {
+      return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
+    }
+
+    function escHtml(s) {
+      return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showToast(msg) {
+      const box = document.getElementById('toastBox');
+      if (!box) return;
+      box.textContent = msg;
+      box.style.display = 'block';
+      clearTimeout(window.__toastT);
+      window.__toastT = setTimeout(() => { box.style.display = 'none'; }, 3200);
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('open');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('open');
+    }
+
+    // ==================== 1. IndexedDB 엔진 (0.01초 즉시저장 + 사진 금고) ====================
+    let idbConn = null;
+    function openIDB() {
+      return new Promise((resolve, reject) => {
+        if (idbConn) return resolve(idbConn);
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (ev) => {
+          const db = ev.target.result;
+          if (!db.objectStoreNames.contains('state')) db.createObjectStore('state', { keyPath: 'id' });
+          if (!db.objectStoreNames.contains('photos')) db.createObjectStore('photos', { keyPath: 'id' });
+        };
+        req.onsuccess = (ev) => { idbConn = ev.target.result; resolve(idbConn); };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbGet(storeName, key) {
+      const db = await openIDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readonly');
+        const req = tx.objectStore(storeName).get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbPut(storeName, val) {
+      const db = await openIDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readwrite');
+        const req = tx.objectStore(storeName).put(val);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbDelete(storeName, key) {
+      const db = await openIDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readwrite');
+        const req = tx.objectStore(storeName).delete(key);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function idbGetAll(storeName) {
+      const db = await openIDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(storeName, 'readonly');
+        const req = tx.objectStore(storeName).getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    // ==================== 2. 전역 상태 & 초기 노션+ 워크스페이스 ====================
+    let APP = null;
+    let PHOTOS = {}; // id -> photo object (in-memory cache backed by IndexedDB 'photos')
+    let activeSlashBlockId = null;
+    let autoSyncDebounce = null;
+    let calCursor = { year: new Date().getFullYear(), month: new Date().getMonth() };
+    let galleryFilterSpace = 'ALL';
+    let gallerySearchText = '';
+    let pomoState = { remaining: 25 * 60, running: false, timer: null, mode: 'FOCUS', completedSessions: 0, targetText: '' };
+
+    function getLocalSecret(key, def = '') {
+      try { return localStorage.getItem(key) || def; } catch (_) { return def; }
+    }
+    function setLocalSecret(key, val) {
+      try {
+        if (val) localStorage.setItem(key, val);
+        else localStorage.removeItem(key);
+      } catch (_) {}
+    }
+
+    function createBlock(type, overrides = {}) {
+      const base = {
+        id: uid('blk'),
+        type,
+        text: '',
+        space: overrides.space || 'WORK',
+        priority: overrides.priority || 'MID',
+        status: overrides.checked ? 'DONE' : (overrides.status || 'TODO'),
+        checked: Boolean(overrides.checked),
+        dueDate: overrides.dueDate || '',
+        childTag: overrides.childTag || '',
+        toggleOpen: overrides.toggleOpen !== undefined ? overrides.toggleOpen : true,
+        toggleBody: overrides.toggleBody || '',
+        calloutTone: overrides.calloutTone || 'blue',
+        photoIds: Array.isArray(overrides.photoIds) ? overrides.photoIds : [],
+        caption: overrides.caption || '',
+        rows: Array.isArray(overrides.rows) ? overrides.rows : [['항목', '구분', '메모'], ['', '', '']],
+        routineId: overrides.routineId || '',
+        pomodoroCount: overrides.pomodoroCount || 0,
+        updatedAt: Date.now()
+      };
+      return Object.assign(base, overrides);
+    }
+
+    function buildInitialSeedState() {
+      const td = todayStr(0);
+      const yd = todayStr(-1);
+      const dailyId = 'page_daily_' + td;
+      const workHubId = 'page_work_hub';
+      const kidsHubId = 'page_kids_hub';
+      const yestId = 'page_daily_' + yd;
+
+      return {
+        id: 'main',
+        activeSpace: 'ALL',
+        activeView: 'TODAY',
+        activePageId: dailyId,
+        vaultRepo: 'oratech-notes-vault',
+        autoSyncMode: 'OFF',
+        lastSyncAt: '',
+        lastCommitSha: '',
+        pinCode: '',
+        focusLogs: { [td]: 2 },
+        historyStats: { [td]: 2 },
+        ddays: [
+          { id: uid('dd'), title: '아이들 주말 가족 나들이', date: todayStr(5), space: 'KIDS', emoji: '⛺' },
+          { id: uid('dd'), title: '월간 재고·매입세금 마감', date: todayStr(12), space: 'WORK', emoji: '🧾' }
+        ],
+        routines: [
+          { id: 'rt_w1', text: '오후 3시 이전 경동화물·택배 당일 출고 마감', space: 'WORK', priority: 'HIGH', freq: 'WEEKDAY', active: true },
+          { id: 'rt_w2', text: 'ERP 미수금 입금 확인 & 전자세금계산서 발행', space: 'WORK', priority: 'HIGH', freq: 'WEEKDAY', active: true },
+          { id: 'rt_k1', text: '아이 등원/등교 가방 · 물통 · 알림장 확인', space: 'KIDS', priority: 'HIGH', freq: 'DAILY', active: true },
+          { id: 'rt_k2', text: '아이 비타민 챙기기 & 내일 준비물 체크', space: 'KIDS', priority: 'MID', freq: 'DAILY', active: true }
+        ],
+        pages: [
+          {
+            id: dailyId,
+            parentId: null,
+            space: 'WORK',
+            icon: '🌅',
+            title: `오늘 데일리 (${td})`,
+            coverTheme: 'blue',
+            pinned: true,
+            isDaily: true,
+            dailyDate: td,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            blocks: [
+              createBlock('callout', { calloutTone: 'blue', text: '💡 팁: 아래 블록에 "/" 를 입력하면 메뉴가 열리며, 사진을 Ctrl+V 로 바로 붙여넣거나 끌어다 놓으면 자동 압축 저장됩니다!' }),
+              createBlock('h2', { text: '💼 오라테크 오늘의 핵심 업무' }),
+              createBlock('todo', { text: '청계천 매장 출고 대기 윈치(PCW-5000 · DU-250) 송장·화물 확인', space: 'WORK', priority: 'HIGH', status: 'DOING', dueDate: td }),
+              createBlock('todo', { text: '거래처 비교견적서 발송 및 네이버 톡톡 문의 답변', space: 'WORK', priority: 'MID', status: 'TODO', dueDate: td }),
+              createBlock('h2', { text: '👨‍👧‍👦 우리 애들 · 가족 체크리스트' }),
+              createBlock('todo', { text: '아이 알림장·가정통신문 사진 찍어 올려두고 준비물 챙기기', space: 'KIDS', priority: 'HIGH', status: 'TODO', childTag: '가족공통', dueDate: td }),
+              createBlock('todo', { text: '하원 후 학원/놀이터 픽업 & 저녁 장보기(우유·과일)', space: 'KIDS', priority: 'MID', status: 'TODO', childTag: '가족공통', dueDate: td }),
+              createBlock('photo', { space: 'KIDS', caption: '📸 오늘 찍은 현장 송장이나 아이 알림장·추억 사진을 여기에 드래그/붙여넣기 하세요' })
+            ]
+          },
+          {
+            id: yestId,
+            parentId: null,
+            space: 'WORK',
+            icon: '📆',
+            title: `어제 데일리 (${yd})`,
+            coverTheme: 'slate',
+            pinned: false,
+            isDaily: true,
+            dailyDate: yd,
+            createdAt: Date.now() - 86400000,
+            updatedAt: Date.now() - 86400000,
+            blocks: [
+              createBlock('todo', { text: '순정 도르래(PCA-1274) 안전재고 파악 및 발주서 정리', space: 'WORK', priority: 'HIGH', checked: false, status: 'TODO', dueDate: yd }),
+              createBlock('todo', { text: '아이 예방접종/병원 수첩 기록 사진 정리', space: 'KIDS', priority: 'MID', checked: false, status: 'TODO', dueDate: yd }),
+              createBlock('todo', { text: '어제 완료한 택배 송장 마감', space: 'WORK', checked: true, status: 'DONE', dueDate: yd })
+            ]
+          },
+          {
+            id: workHubId,
+            parentId: null,
+            space: 'WORK',
+            icon: '💼',
+            title: '오라테크 출고 · A/S · 거래처 메모장',
+            coverTheme: 'blue',
+            pinned: true,
+            isDaily: false,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            blocks: [
+              createBlock('h1', { text: '청계천 본사 정비·출고 운영 매뉴얼' }),
+              createBlock('toggle', { text: '▶ 당일 화물·택배 출고 루틴 (클릭해 펼치기)', toggleOpen: true, toggleBody: '1) 오후 3시 이전 결제건 경동화물/택배 분류\n2) 혼다 4행정 엔진윈치 오일 주입 안내 스티커 동봉\n3) 관공서 비교견적서/세금계산서 ERP에서 즉시 발행' }),
+              createBlock('table', { rows: [['거래처/모델', '작업내용', '담당/연락처'], ['산림조합', 'PCW-5000 + 도르래 세트 견적', '김대리'], ['철탑공사 협력사', 'PCW-3000LI 배터리 2팩 출고', '청계천 본사']] })
+            ]
+          },
+          {
+            id: kidsHubId,
+            parentId: null,
+            space: 'KIDS',
+            icon: '👨‍👧‍👦',
+            title: '우리 애들 성장기록 · 준비물 · 병원 수첩',
+            coverTheme: 'rose',
+            pinned: true,
+            isDaily: false,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            blocks: [
+              createBlock('callout', { calloutTone: 'rose', text: '🧸 애들 학교·어린이집 준비물, 키·몸무게 성장 기록, 예방접종, 상장 사진을 모두 여기 차곡차곡 모아둘 수 있습니다.' }),
+              createBlock('h2', { text: '📅 이번 주 아이 챙길 것' }),
+              createBlock('todo', { text: '여벌 옷 & 물통 가방 체크', space: 'KIDS', priority: 'HIGH', status: 'TODO', dueDate: td }),
+              createBlock('todo', { text: '치과/소아과 정기검진 날짜 캘린더에 적기', space: 'KIDS', priority: 'MID', status: 'TODO' }),
+              createBlock('table', { rows: [['날짜', '아이 이름/구분', '키·몸무게 / 특이사항'], [td, '우리 아이', '알림장·준비물 체크 완료']] }),
+              createBlock('photo', { space: 'KIDS', caption: '📸 아이 활동 사진 · 그림 · 상장 · 알림장 보관함' })
+            ]
+          },
+          {
+            id: 'page_personal_wish',
+            parentId: null,
+            space: 'PERSONAL',
+            icon: '💡',
+            title: '사고 싶은 것 · 가족 여행 위시리스트',
+            coverTheme: 'emerald',
+            pinned: false,
+            isDaily: false,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            blocks: [
+              createBlock('todo', { text: '주말 애들과 갈만한 실내 키즈/체험장 후보 3곳 추리기', space: 'KIDS', priority: 'LOW', status: 'TODO' }),
+              createBlock('todo', { text: '사무실 스탠드/모니터 암 정리', space: 'PERSONAL', priority: 'LOW', status: 'TODO' })
+            ]
+          }
+        ]
+      };
+    }
+
+    async function saveAppState(triggerAutoSync = true) {
+      if (!APP) return;
+      try {
+        await idbPut('state', APP);
+        localStorage.setItem('ora_notion_backup_lite', JSON.stringify({
+          updatedAt: Date.now(),
+          pageCount: APP.pages.length
+        }));
+      } catch (err) {
+        console.warn('IndexedDB save warning:', err);
+      }
+      updateTopStatusMetrics();
+      if (triggerAutoSync && APP.autoSyncMode === '15S' && getLocalSecret('ora_vault_gh_token')) {
+        clearTimeout(autoSyncDebounce);
+        autoSyncDebounce = setTimeout(() => { syncToGithubVault(true); }, 15000);
+      }
+    }
+
+    async function loadAppState() {
+      const saved = await idbGet('state', 'main');
+      const allPhotos = await idbGetAll('photos');
+      PHOTOS = {};
+      allPhotos.forEach(p => { PHOTOS[p.id] = p; });
+
+      if (saved && Array.isArray(saved.pages) && saved.pages.length) {
+        APP = saved;
+      } else {
+        APP = buildInitialSeedState();
+        await saveAppState(false);
+      }
+      ensureTodayDailyPage();
+      applyTodayRoutines(false);
+    }
+
+    function ensureTodayDailyPage() {
+      const td = todayStr(0);
+      let pg = APP.pages.find(p => p.isDaily && p.dailyDate === td && !p.archived);
+      if (!pg) {
+        pg = {
+          id: 'page_daily_' + td,
+          parentId: null,
+          space: 'WORK',
+          icon: '🌅',
+          title: `오늘 데일리 (${td})`,
+          coverTheme: 'blue',
+          pinned: true,
+          isDaily: true,
+          dailyDate: td,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          blocks: [
+            createBlock('h2', { text: '💼 오늘 업무 체크' }),
+            createBlock('h2', { text: '👨‍👧‍👦 오늘 애들·가족 체크' }),
+            createBlock('photo', { space: 'KIDS', caption: '📸 오늘의 기록 사진' })
+          ]
+        };
+        APP.pages.unshift(pg);
+        saveAppState(false);
+      }
+      return pg;
+    }
+
+    // ==================== 3. 반복 루틴 & 어제 할일 자동 이월 ====================
+    window.applyTodayRoutines = function(notify = false) {
+      const todayPage = ensureTodayDailyPage();
+      const td = todayStr(0);
+      const dayOfWeek = new Date().getDay();
+      const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+      let added = 0;
+      (APP.routines || []).forEach(rt => {
+        if (!rt.active) return;
+        if (rt.freq === 'WEEKDAY' && isWeekend) return;
+        if (rt.freq === 'WEEKEND' && !isWeekend) return;
+        const already = todayPage.blocks.some(b => b.routineId === rt.id);
+        if (!already) {
+          todayPage.blocks.push(createBlock('todo', {
+            text: rt.text,
+            space: rt.space || 'WORK',
+            priority: rt.priority || 'MID',
+            dueDate: td,
+            routineId: rt.id,
+            status: 'TODO',
+            checked: false
+          }));
+          added++;
+        }
+      });
+      if (added > 0) {
+        todayPage.updatedAt = Date.now();
+        saveAppState();
+        renderAll();
+      }
+      if (notify) showToast(added > 0 ? `🔁 오늘 반복 루틴 ${added}개를 자동 추가했습니다!` : '이미 오늘의 모든 반복 루틴이 적용되어 있습니다.');
+    };
+
+    window.carryOverYesterdayTodos = function() {
+      const td = todayStr(0);
+      const yd = todayStr(-1);
+      const todayPage = ensureTodayDailyPage();
+      const yestPage = APP.pages.find(p => p.isDaily && p.dailyDate === yd && !p.archived);
+      if (!yestPage) {
+        showToast('어제 날짜 페이지가 없어 이월할 항목이 없습니다.');
+        return;
+      }
+      let moved = 0;
+      yestPage.blocks.forEach(b => {
+        if (b.type === 'todo' && !b.checked && b.status !== 'DONE') {
+          const dup = todayPage.blocks.some(tb => tb.type === 'todo' && tb.text.trim() === b.text.trim());
+          if (!dup) {
+            todayPage.blocks.push(createBlock('todo', {
+              text: b.text,
+              space: b.space,
+              priority: b.priority,
+              dueDate: td,
+              childTag: b.childTag,
+              status: 'TODO',
+              checked: false
+            }));
+            moved++;
+          }
+        }
+      });
+      if (moved > 0) {
+        todayPage.updatedAt = Date.now();
+        saveAppState();
+        renderAll();
+        showToast(`♻️ 어제 미완료 할 일 ${moved}건을 오늘 데일리로 가져왔습니다!`);
+      } else {
+        showToast('어제 미완료 할 일이 모두 이미 반영되어 있습니다.');
+      }
+    };
+
+    // ==================== 4. 사진 자동 압축 · 드래그 · 붙여넣기 · 라이트박스 ====================
+    function compressImageFile(file, maxDim = 1440, quality = 0.84) {
+      return new Promise((resolve, reject) => {
+        if (!file || !file.type.startsWith('image/')) return reject(new Error('이미지 파일만 업로드할 수 있습니다.'));
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            let w = img.naturalWidth;
+            let h = img.naturalHeight;
+            if (w > maxDim || h > maxDim) {
+              const sc = maxDim / Math.max(w, h);
+              w = Math.round(w * sc);
+              h = Math.round(h * sc);
+            }
+            const c = document.createElement('canvas');
+            c.width = w;
+            c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            const dataUrl = c.toDataURL('image/jpeg', quality);
+            resolve({ dataUrl, width: w, height: h });
+          };
+          img.onerror = () => reject(new Error('이미지를 읽을 수 없습니다.'));
+          img.src = reader.result;
+        };
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function addPhotoFilesToBlock(pageId, blockId, files, forceSpace = null) {
+      const page = APP.pages.find(p => p.id === pageId);
+      if (!page) return;
+      let blk = page.blocks.find(b => b.id === blockId);
+      if (!blk) {
+        blk = createBlock('photo', { space: forceSpace || page.space || 'WORK', caption: '📸 첨부 사진' });
+        page.blocks.push(blk);
+      }
+      if (!Array.isArray(blk.photoIds)) blk.photoIds = [];
+
+      const list = Array.from(files || []).filter(f => f && f.type && f.type.startsWith('image/'));
+      if (!list.length) return;
+      let count = 0;
+      for (const f of list) {
+        try {
+          const comp = await compressImageFile(f);
+          const pid = uid('ph');
+          const photoObj = {
+            id: pid,
+            dataUrl: comp.dataUrl,
+            name: f.name || ('photo_' + Date.now() + '.jpg'),
+            space: forceSpace || blk.space || page.space || 'WORK',
+            pageId: page.id,
+            blockId: blk.id,
+            noteDate: page.dailyDate || todayStr(0),
+            caption: blk.caption || page.title,
+            aiSummary: '',
+            createdAt: Date.now(),
+            synced: false
+          };
+          PHOTOS[pid] = photoObj;
+          await idbPut('photos', photoObj);
+          blk.photoIds.push(pid);
+          count++;
+        } catch (err) {
+          console.warn('사진 압축 오류:', err);
+        }
+      }
+      if (count > 0) {
+        page.updatedAt = Date.now();
+        await saveAppState();
+        renderAll();
+        showToast(`🖼️ 사진 ${count}장이 자동 압축되어 금고에 저장되었습니다!`);
+      }
+    }
+
+    window.addPhotoFromDataUrlForTestOrPaste = async function(pageId, blockId, dataUrl, caption = '붙여넣기 사진', space = null) {
+      const page = APP.pages.find(p => p.id === pageId) || ensureTodayDailyPage();
+      let blk = blockId ? page.blocks.find(b => b.id === blockId) : page.blocks.find(b => b.type === 'photo');
+      if (!blk) {
+        blk = createBlock('photo', { space: space || page.space || 'WORK', caption });
+        page.blocks.push(blk);
+      }
+      if (!Array.isArray(blk.photoIds)) blk.photoIds = [];
+      const pid = uid('ph');
+      const photoObj = {
+        id: pid,
+        dataUrl,
+        name: 'image_' + Date.now() + '.jpg',
+        space: space || blk.space || page.space || 'WORK',
+        pageId: page.id,
+        blockId: blk.id,
+        noteDate: page.dailyDate || todayStr(0),
+        caption,
+        aiSummary: '',
+        createdAt: Date.now(),
+        synced: false
+      };
+      PHOTOS[pid] = photoObj;
+      await idbPut('photos', photoObj);
+      blk.photoIds.push(pid);
+      page.updatedAt = Date.now();
+      await saveAppState();
+      renderAll();
+      return pid;
+    };
+
+    window.handlePhotoDrop = async function(ev, pageId, blockId) {
+      ev.preventDefault();
+      ev.currentTarget.classList.remove('dragover');
+      if (ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files.length) {
+        await addPhotoFilesToBlock(pageId, blockId, ev.dataTransfer.files);
+      }
+    };
+
+    document.addEventListener('paste', async (ev) => {
+      const items = ev.clipboardData && ev.clipboardData.items ? Array.from(ev.clipboardData.items) : [];
+      const imgFiles = items.filter(it => it.type.startsWith('image/')).map(it => it.getAsFile()).filter(Boolean);
+      if (!imgFiles.length) return;
+      ev.preventDefault();
+      const targetPage = APP.pages.find(p => p.id === APP.activePageId) || ensureTodayDailyPage();
+      let photoBlk = targetPage.blocks.find(b => b.type === 'photo');
+      if (!photoBlk) {
+        photoBlk = createBlock('photo', { space: targetPage.space || 'WORK', caption: '📸 클립보드 붙여넣기 사진' });
+        targetPage.blocks.push(photoBlk);
+      }
+      await addPhotoFilesToBlock(targetPage.id, photoBlk.id, imgFiles);
+    });
+
+    window.openLightbox = function(photoId) {
+      const ph = PHOTOS[photoId];
+      if (!ph) return;
+      document.getElementById('lightboxImg').src = ph.dataUrl;
+      document.getElementById('lightboxCaption').textContent = `${ph.caption || ph.name} (${ph.noteDate || ''})`;
+      const btn = document.getElementById('btnLightboxAnalyze');
+      if (btn) btn.onclick = () => { closeModal('lightboxModal'); analyzePhotoWithCarbon(photoId); };
+      openModal('lightboxModal');
+    };
+
+    window.removePhotoFromBlock = async function(pageId, blockId, photoId) {
+      const page = APP.pages.find(p => p.id === pageId);
+      if (page) {
+        const blk = page.blocks.find(b => b.id === blockId);
+        if (blk && Array.isArray(blk.photoIds)) blk.photoIds = blk.photoIds.filter(id => id !== photoId);
+        page.updatedAt = Date.now();
+      }
+      delete PHOTOS[photoId];
+      await idbDelete('photos', photoId);
+      await saveAppState();
+      renderAll();
+    };
+
+    // ==================== 5. 사이드바 & 페이지 관리 ====================
+    window.toggleSidebar = function() {
+      const sb = document.getElementById('sidebar');
+      const btn = document.getElementById('btnShowSidebar');
+      sb.classList.toggle('collapsed');
+      if (btn) btn.style.display = sb.classList.contains('collapsed') ? 'inline-flex' : 'none';
+    };
+
+    window.toggleMobileSidebar = function() {
+      document.getElementById('sidebar').classList.toggle('mobile-open');
+    };
+
+    window.setActiveSpace = function(sp) {
+      APP.activeSpace = sp;
+      document.querySelectorAll('.space-chip').forEach(c => c.classList.toggle('active', c.dataset.space === sp));
+      saveAppState(false);
+      renderAll();
+    };
+
+    window.openTodayNoteAndView = function(targetView = 'EDITOR') {
+      const pg = ensureTodayDailyPage();
+      APP.activePageId = pg.id;
+      setMainView(targetView);
+    };
+
+    window.selectPage = function(pageId) {
+      APP.activePageId = pageId;
+      APP.activeView = 'EDITOR';
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      saveAppState(false);
+      renderAll();
+    };
+
+    window.createNewPage = function(spaceOverride = null, parentId = null) {
+      const sp = spaceOverride || (APP.activeSpace === 'ALL' ? 'WORK' : APP.activeSpace);
+      const isKids = sp === 'KIDS';
+      const pg = {
+        id: uid('pg'),
+        parentId: parentId || null,
+        space: sp,
+        icon: isKids ? '🧸' : (sp === 'PERSONAL' ? '🔒' : '📄'),
+        title: isKids ? '새 애들·가족 페이지' : (sp === 'PERSONAL' ? '새 개인 메모' : '새 업무 페이지'),
+        coverTheme: isKids ? 'rose' : (sp === 'PERSONAL' ? 'emerald' : 'blue'),
+        pinned: false,
+        isDaily: false,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        blocks: [
+          createBlock('todo', { text: isKids ? '준비물 / 일정 체크하기' : '오늘 진행할 핵심 할 일 적기', space: sp, priority: 'MID', dueDate: todayStr(0) }),
+          createBlock('text', { text: '' })
+        ]
+      };
+      APP.pages.unshift(pg);
+      APP.activePageId = pg.id;
+      APP.activeView = 'EDITOR';
+      document.getElementById('sidebar').classList.remove('mobile-open');
+      saveAppState();
+      renderAll();
+      showToast('✨ 새 노션 페이지가 생성되었습니다!');
+    };
+
+    window.deleteCurrentPage = function(pageId) {
+      if (APP.pages.filter(p => !p.archived).length <= 1) {
+        showToast('최소 1개 이상의 페이지가 필요합니다.');
+        return;
+      }
+      const pg = APP.pages.find(p => p.id === pageId);
+      if (!pg) return;
+      if (!confirm(`'${pg.title}' 페이지를 삭제(아카이브)할까요?`)) return;
+      pg.archived = true;
+      pg.updatedAt = Date.now();
+      const fallback = APP.pages.find(p => !p.archived);
+      APP.activePageId = fallback ? fallback.id : null;
+      saveAppState();
+      renderAll();
+      showToast('페이지를 휴지통(아카이브)으로 이동했습니다.');
+    };
+
+    function renderSidebar() {
+      const sp = APP.activeSpace || 'ALL';
+      const visiblePages = APP.pages.filter(p => !p.archived && (sp === 'ALL' || p.space === sp));
+      const favEl = document.getElementById('sbFavList');
+      const treeEl = document.getElementById('sbPageTree');
+
+      const spaceBadgeHtml = (s) => s === 'KIDS'
+        ? '<span class="page-nav-badge sp-KIDS">애들</span>'
+        : (s === 'PERSONAL' ? '<span class="page-nav-badge sp-PERSONAL">개인</span>' : '<span class="page-nav-badge sp-WORK">일</span>');
+
+      const favs = visiblePages.filter(p => p.pinned);
+      favEl.innerHTML = favs.length ? favs.map(p => `
+        <div class="page-nav-item ${APP.activePageId === p.id && APP.activeView === 'EDITOR' ? 'active' : ''}" onclick="selectPage('${p.id}')">
+          <div class="page-nav-left"><span>${escHtml(p.icon)}</span><span class="page-nav-title">${escHtml(p.title)}</span></div>
+          ${spaceBadgeHtml(p.space)}
+        </div>
+      `).join('') : '<div style="font-size:11px;color:#94a3b8;padding:4px 8px;">상단 ⭐ 버튼으로 즐겨찾기 추가</div>';
+
+      const roots = visiblePages.filter(p => !p.parentId);
+      const renderBranch = (p, depth = 0) => {
+        const kids = visiblePages.filter(c => c.parentId === p.id);
+        const pad = 8 + depth * 14;
+        return `
+          <div class="page-nav-item ${APP.activePageId === p.id && APP.activeView === 'EDITOR' ? 'active' : ''}" style="padding-left:${pad}px;" onclick="selectPage('${p.id}')">
+            <div class="page-nav-left"><span>${depth > 0 ? '↳ ' : ''}${escHtml(p.icon)}</span><span class="page-nav-title">${escHtml(p.title)}</span></div>
+            ${spaceBadgeHtml(p.space)}
+          </div>
+          ${kids.map(k => renderBranch(k, depth + 1)).join('')}
+        `;
+      };
+      treeEl.innerHTML = roots.map(r => renderBranch(r, 0)).join('') || '<div style="font-size:11px;color:#94a3b8;padding:6px 8px;">선택된 공간에 페이지가 없습니다.</div>';
+
+      // Remaining Today Count
+      const tdPage = ensureTodayDailyPage();
+      const remain = tdPage.blocks.filter(b => b.type === 'todo' && !b.checked).length;
+      const bdg = document.getElementById('sbTodayRemain');
+      if (bdg) bdg.textContent = remain;
+    }
+
+    // ==================== 6. 상단 메트릭 & D-Day 배너 ====================
+    function calcDaysDiff(dateStr) {
+      const [y, m, d] = (dateStr || todayStr()).split('-').map(Number);
+      const target = new Date(y, m - 1, d);
+      const now = new Date();
+      const base = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      return Math.round((target - base) / 86400000);
+    }
+
+    function updateTopStatusMetrics() {
+      const tdPage = APP.pages.find(p => p.isDaily && p.dailyDate === todayStr(0));
+      let done = 0, total = 0;
+      if (tdPage) {
+        const todos = tdPage.blocks.filter(b => b.type === 'todo');
+        total = todos.length;
+        done = todos.filter(b => b.checked).length;
+      }
+      if (!APP.historyStats) APP.historyStats = {};
+      APP.historyStats[todayStr(0)] = done;
+      const sumEl = document.getElementById('todayProgressSummary');
+      if (sumEl) sumEl.textContent = `오늘 할일 ${done} / ${total} 완료 (${total ? Math.round((done / total) * 100) : 0}%)`;
+
+      const strip = document.getElementById('ddayBannerStrip');
+      if (strip) {
+        const chips = (APP.ddays || []).slice(0, 4).map(dd => {
+          const diff = calcDaysDiff(dd.date);
+          const lbl = diff === 0 ? 'D-DAY' : (diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`);
+          return `<span class="dday-badge ${dd.space === 'WORK' ? 'work' : ''}" onclick="setMainView('HABITS')" title="${escHtml(dd.date)}">${escHtml(dd.emoji || '📌')} ${escHtml(dd.title)} <b>${lbl}</b></span>`;
+        }).join('');
+        strip.innerHTML = chips || '<span style="font-size:12px;color:#475569;font-weight:700;">📌 D-Day를 추가해 중요 일정을 고정하세요</span>';
+      }
+
+      const sbSync = document.getElementById('sbSyncBadge');
+      const hdrSync = document.getElementById('hdrVaultStatus');
+      if (APP.lastSyncAt) {
+        const tm = APP.lastSyncAt.slice(11, 16);
+        if (sbSync) sbSync.textContent = `동기화 ${tm}`;
+        if (hdrSync) hdrSync.textContent = `☁️ Git 금고 동기화됨 (${tm})`;
+      }
+    }
+
+    // ==================== 7. 뷰 전환 컨트롤 ====================
+    window.setMainView = function(viewKey) {
+      APP.activeView = viewKey;
+      document.querySelectorAll('#mainViewTabs .view-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.view === viewKey);
+      });
+      saveAppState(false);
+      renderMainView();
+      renderSidebar();
+    };
+
+    function renderAll() {
+      document.querySelectorAll('.space-chip').forEach(c => c.classList.toggle('active', c.dataset.space === APP.activeSpace));
+      document.querySelectorAll('#mainViewTabs .view-pill').forEach(p => p.classList.toggle('active', p.dataset.view === APP.activeView));
+      updateTopStatusMetrics();
+      renderSidebar();
+      renderMainView();
+    }
+
+    function renderMainView() {
+      const v = APP.activeView || 'TODAY';
+      if (v === 'TODAY') return renderTodayView();
+      if (v === 'KANBAN') return renderKanbanView();
+      if (v === 'CALENDAR') return renderCalendarView();
+      if (v === 'GALLERY') return renderGalleryView();
+      if (v === 'HABITS') return renderHabitsView();
+      return renderEditorView();
+    }
+
+    // ==================== 8. VIEW 1: 노션 블록 에디터 ====================
+    function renderEditorView() {
+      const container = document.getElementById('mainViewContainer');
+      const page = APP.pages.find(p => p.id === APP.activePageId && !p.archived) || APP.pages.find(p => !p.archived);
+      if (!page) {
+        container.innerHTML = '<div style="text-align:center;padding:50px;">페이지를 선택하거나 새로 만들어 주세요.</div>';
+        return;
+      }
+      APP.activePageId = page.id;
+      const parentPg = page.parentId ? APP.pages.find(p => p.id === page.parentId) : null;
+
+      const blocksHtml = page.blocks.map((b, idx) => renderSingleBlockHtml(page, b, idx)).join('');
+
+      container.innerHTML = `
+        <div class="editor-wrap">
+          <div class="page-cover cover-${escHtml(page.coverTheme || 'blue')}">
+            <div style="font-size:11.5px;font-weight:800;opacity:0.9;">
+              ${parentPg ? `<span style="cursor:pointer;text-decoration:underline;" onclick="selectPage('${parentPg.id}')">${escHtml(parentPg.title)}</span> / ` : ''}${page.isDaily ? '📅 데일리 워크스페이스' : '📄 노션+ 페이지'}
+            </div>
+            <div style="display:flex;gap:5px;">
+              ${COVER_THEMES.map(c => `<button type="button" onclick="changePageCover('${page.id}','${c}')" style="width:16px;height:16px;border-radius:99px;border:1.5px solid #fff;cursor:pointer;" class="cover-${c}" title="커버 색 변경"></button>`).join('')}
+            </div>
+          </div>
+
+          <div class="page-title-row">
+            <button type="button" class="page-icon-btn" onclick="cyclePageIcon('${page.id}')" title="클릭하여 아이콘 변경">${escHtml(page.icon || '📝')}</button>
+            <input class="page-title-input" value="${escHtml(page.title)}" oninput="updatePageTitle('${page.id}', this.value)" placeholder="제목을 입력하세요..." />
+          </div>
+
+          <div class="page-props-bar">
+            <select class="meta-sel" onchange="updatePageSpace('${page.id}', this.value)">
+              <option value="WORK" ${page.space === 'WORK' ? 'selected' : ''}>💼 일 · 오라테크</option>
+              <option value="KIDS" ${page.space === 'KIDS' ? 'selected' : ''}>👨‍👧‍👦 애들 · 가족</option>
+              <option value="PERSONAL" ${page.space === 'PERSONAL' ? 'selected' : ''}>🔒 개인 · 메모</option>
+            </select>
+            <button type="button" class="btn" style="padding:4px 9px;font-size:11.5px;" onclick="togglePagePin('${page.id}')">${page.pinned ? '⭐ 즐겨찾기 해제' : '☆ 즐겨찾기'}</button>
+            <button type="button" class="btn" style="padding:4px 9px;font-size:11.5px;" onclick="createNewPage('${page.space}', '${page.id}')">↳ + 하위페이지</button>
+            <button type="button" class="btn" style="padding:4px 9px;font-size:11.5px;" onclick="openCarbonAssistantModal()">💎 AI 블록 추가</button>
+            <button type="button" class="btn" style="padding:4px 9px;font-size:11.5px;" onclick="window.print()">🖨️ 인쇄/PDF</button>
+            <button type="button" class="btn" style="padding:4px 9px;font-size:11.5px;color:#dc2626;" onclick="deleteCurrentPage('${page.id}')">🗑️ 삭제</button>
+          </div>
+
+          <div class="blocks-list" id="editorBlocksList">
+            ${blocksHtml}
+          </div>
+
+          <div class="add-block-dock">
+            <span style="font-size:11.5px;font-weight:900;color:#64748b;margin-right:4px;">+ 블록 추가:</span>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','todo')">☑️ 할일</button>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','text')">📝 메모</button>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','h1')">H1 대제목</button>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','h2')">H2 중제목</button>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','toggle')">▶ 토글</button>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','callout')">💡 콜아웃</button>
+            <button type="button" class="btn btn-primary" onclick="appendBlock('${page.id}','photo')">🖼️ 사진 블록</button>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','table')">📊 표</button>
+            <button type="button" class="btn" onclick="appendBlock('${page.id}','divider')">➖ 구분선</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSingleBlockHtml(page, b, idx) {
+      let inner = '';
+      if (b.type === 'divider') {
+        inner = '<hr style="border:none;border-top:2px solid #e2e8f0;margin:8px 0;">';
+      } else if (b.type === 'h1' || b.type === 'h2') {
+        inner = `<input class="blk-input ${b.type === 'h1' ? 'blk-h1' : 'blk-h2'}" value="${escHtml(b.text)}" oninput="updateBlockField('${page.id}','${b.id}','text',this.value)" onkeydown="handleBlockKey(event,'${page.id}','${b.id}')" placeholder="${b.type === 'h1' ? '대제목 입력...' : '중제목 입력...'}" />`;
+      } else if (b.type === 'todo') {
+        const statusIcon = b.status === 'DOING' ? '⚡ 진행중' : (b.checked ? '✅ 완료' : '📥 대기');
+        inner = `
+          <div class="todo-line">
+            <input type="checkbox" class="todo-chk" ${b.checked ? 'checked' : ''} onchange="toggleTodoBlock('${page.id}','${b.id}',this.checked)" />
+            <div style="flex:1;min-width:0;">
+              <input class="blk-input ${b.checked ? 'todo-text-done' : ''}" value="${escHtml(b.text)}" oninput="updateBlockField('${page.id}','${b.id}','text',this.value)" onkeydown="handleBlockKey(event,'${page.id}','${b.id}')" placeholder="할 일 입력 ( / 로 블록 전환 )" />
+              <div class="todo-meta">
+                <select class="meta-sel" onchange="updateBlockField('${page.id}','${b.id}','space',this.value)">
+                  <option value="WORK" ${b.space === 'WORK' ? 'selected' : ''}>💼 일</option>
+                  <option value="KIDS" ${b.space === 'KIDS' ? 'selected' : ''}>👨‍👧‍👦 애들</option>
+                  <option value="PERSONAL" ${b.space === 'PERSONAL' ? 'selected' : ''}>🔒 개인</option>
+                </select>
+                <select class="meta-sel" onchange="updateBlockField('${page.id}','${b.id}','priority',this.value)">
+                  <option value="HIGH" ${b.priority === 'HIGH' ? 'selected' : ''}>🔴 긴급</option>
+                  <option value="MID" ${b.priority === 'MID' ? 'selected' : ''}>🟡 보통</option>
+                  <option value="LOW" ${b.priority === 'LOW' ? 'selected' : ''}>⚪ 여유</option>
+                </select>
+                <input type="date" class="meta-date" value="${escHtml(b.dueDate || '')}" onchange="updateBlockField('${page.id}','${b.id}','dueDate',this.value)" />
+                <button type="button" class="meta-sel" style="cursor:pointer;" onclick="cycleBlockKanbanStatus('${page.id}','${b.id}')">${statusIcon}</button>
+                <button type="button" class="meta-sel" style="cursor:pointer;" onclick="startFocusForTodo('${escHtml(b.text)}')">⏱️ 집중</button>
+              </div>
+            </div>
+          </div>`;
+      } else if (b.type === 'callout') {
+        const tone = b.calloutTone || 'blue';
+        inner = `
+          <div class="callout-box ${tone}">
+            <select class="meta-sel" onchange="updateBlockField('${page.id}','${b.id}','calloutTone',this.value);renderMainView();">
+              <option value="blue" ${tone==='blue'?'selected':''}>💙 파랑</option>
+              <option value="rose" ${tone==='rose'?'selected':''}>🩷 애들/핑크</option>
+              <option value="amber" ${tone==='amber'?'selected':''}>💛 주의/노랑</option>
+              <option value="emerald" ${tone==='emerald'?'selected':''}>💚 완료/초록</option>
+            </select>
+            <textarea class="blk-input" rows="2" oninput="updateBlockField('${page.id}','${b.id}','text',this.value)" placeholder="강조할 핵심 메모 입력...">${escHtml(b.text)}</textarea>
+          </div>`;
+      } else if (b.type === 'toggle') {
+        inner = `
+          <div class="toggle-box">
+            <div class="toggle-head">
+              <button type="button" class="toggle-arrow" onclick="toggleBlockOpen('${page.id}','${b.id}')">${b.toggleOpen ? '▼' : '▶'}</button>
+              <input class="blk-input" style="font-weight:800;" value="${escHtml(b.text)}" oninput="updateBlockField('${page.id}','${b.id}','text',this.value)" placeholder="접기/펼치기 제목..." />
+            </div>
+            ${b.toggleOpen ? `<div class="toggle-inner"><textarea class="blk-input" rows="3" oninput="updateBlockField('${page.id}','${b.id}','toggleBody',this.value)" placeholder="숨겨둘 상세 내용을 입력하세요...">${escHtml(b.toggleBody || '')}</textarea></div>` : ''}
+          </div>`;
+      } else if (b.type === 'photo') {
+        const photosHtml = (b.photoIds || []).map(pid => {
+          const ph = PHOTOS[pid];
+          if (!ph) return '';
+          return `
+            <div class="photo-thumb-wrap">
+              <img src="${ph.dataUrl}" onclick="openLightbox('${pid}')" alt="첨부사진" />
+              <div class="photo-thumb-actions">
+                <button type="button" class="photo-act-btn" onclick="analyzePhotoWithCarbon('${pid}')" title="사진 내용 읽어서 할일 자동 추출">✨ OCR</button>
+                <button type="button" class="photo-act-btn" onclick="removePhotoFromBlock('${page.id}','${b.id}','${pid}')">✕</button>
+              </div>
+            </div>`;
+        }).join('');
+        inner = `
+          <div class="photo-block-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+              <input class="blk-input" style="flex:1;font-size:12.5px;font-weight:800;" value="${escHtml(b.caption || '')}" oninput="updateBlockField('${page.id}','${b.id}','caption',this.value)" placeholder="사진 앨범 설명 입력 (예: 아이 가정통신문 / 청계천 출고사진)" />
+              <select class="meta-sel" onchange="updateBlockField('${page.id}','${b.id}','space',this.value)">
+                <option value="WORK" ${b.space === 'WORK' ? 'selected' : ''}>💼 일 사진</option>
+                <option value="KIDS" ${b.space === 'KIDS' ? 'selected' : ''}>👨‍👧‍👦 애들 사진</option>
+                <option value="PERSONAL" ${b.space === 'PERSONAL' ? 'selected' : ''}>🔒 개인 사진</option>
+              </select>
+            </div>
+            ${photosHtml ? `<div class="photo-grid">${photosHtml}</div>` : ''}
+            <div class="photo-dropzone"
+                 ondragover="event.preventDefault();this.classList.add('dragover')"
+                 ondragleave="this.classList.remove('dragover')"
+                 ondrop="handlePhotoDrop(event,'${page.id}','${b.id}')"
+                 onclick="document.getElementById('file_${b.id}').click()">
+              📷 클릭하여 사진 여러 장 올리기 · 여기에 파일 드래그 · 또는 아무 곳에서 <b>Ctrl+V</b> 바로 붙여넣기!
+              <input id="file_${b.id}" type="file" accept="image/*" multiple style="display:none;" onchange="addPhotoFilesToBlock('${page.id}','${b.id}',this.files)" />
+            </div>
+          </div>`;
+      } else if (b.type === 'table') {
+        const rows = Array.isArray(b.rows) && b.rows.length ? b.rows : [['구분', '내용', '비고'], ['', '', '']];
+        inner = `
+          <div class="table-wrap">
+            <table class="blk-table">
+              ${rows.map((row, rIdx) => `
+                <tr>${row.map((cell, cIdx) => `<td><input value="${escHtml(cell)}" oninput="updateTableCell('${page.id}','${b.id}',${rIdx},${cIdx},this.value)" /></td>`).join('')}</tr>
+              `).join('')}
+            </table>
+            <div style="display:flex;gap:6px;margin-top:6px;">
+              <button type="button" class="btn" style="padding:3px 8px;font-size:11px;" onclick="modifyTableBlock('${page.id}','${b.id}','ADD_ROW')">+ 행 추가</button>
+              <button type="button" class="btn" style="padding:3px 8px;font-size:11px;" onclick="modifyTableBlock('${page.id}','${b.id}','ADD_COL')">+ 열 추가</button>
+              <button type="button" class="btn" style="padding:3px 8px;font-size:11px;" onclick="modifyTableBlock('${page.id}','${b.id}','DEL_ROW')">- 마지막 행</button>
+            </div>
+          </div>`;
+      } else {
+        inner = `<textarea class="blk-input" rows="2" oninput="updateBlockField('${page.id}','${b.id}','text',this.value)" onkeydown="handleBlockKey(event,'${page.id}','${b.id}')" placeholder="글을 쓰거나 '/' 를 입력해 블록 메뉴를 열어보세요...">${escHtml(b.text)}</textarea>`;
+      }
+
+      return `
+        <div class="block-row" data-block-id="${b.id}">
+          <div class="block-tools">
+            <button type="button" class="blk-tool-btn" onclick="moveBlock('${page.id}','${b.id}',-1)" title="위로">↑</button>
+            <button type="button" class="blk-tool-btn" onclick="moveBlock('${page.id}','${b.id}',1)" title="아래로">↓</button>
+            <button type="button" class="blk-tool-btn" onclick="deleteBlock('${page.id}','${b.id}')" title="삭제">✕</button>
+          </div>
+          <div class="block-body">${inner}</div>
+        </div>`;
+    }
+
+    // Editor Actions
+    window.changePageCover = (pid, th) => { const p = APP.pages.find(x => x.id === pid); if (p) { p.coverTheme = th; p.updatedAt = Date.now(); saveAppState(); renderMainView(); } };
+    window.cyclePageIcon = (pid) => {
+      const p = APP.pages.find(x => x.id === pid);
+      if (!p) return;
+      const idx = ICONS_POOL.indexOf(p.icon);
+      p.icon = ICONS_POOL[(idx + 1) % ICONS_POOL.length];
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderAll();
+    };
+    window.updatePageTitle = (pid, val) => { const p = APP.pages.find(x => x.id === pid); if (p) { p.title = val; p.updatedAt = Date.now(); saveAppState(); renderSidebar(); } };
+    window.updatePageSpace = (pid, val) => { const p = APP.pages.find(x => x.id === pid); if (p) { p.space = val; p.updatedAt = Date.now(); saveAppState(); renderAll(); } };
+    window.togglePagePin = (pid) => { const p = APP.pages.find(x => x.id === pid); if (p) { p.pinned = !p.pinned; p.updatedAt = Date.now(); saveAppState(); renderAll(); } };
+
+    window.appendBlock = (pid, type) => {
+      const p = APP.pages.find(x => x.id === pid);
+      if (!p) return;
+      p.blocks.push(createBlock(type, { space: p.space || 'WORK', dueDate: p.dailyDate || todayStr(0) }));
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderAll();
+    };
+
+    window.updateBlockField = (pid, bid, field, val) => {
+      const p = APP.pages.find(x => x.id === pid);
+      const b = p && p.blocks.find(x => x.id === bid);
+      if (!b) return;
+      b[field] = val;
+      b.updatedAt = Date.now();
+      p.updatedAt = Date.now();
+      saveAppState();
+    };
+
+    window.toggleTodoBlock = (pid, bid, chk) => {
+      const p = APP.pages.find(x => x.id === pid);
+      const b = p && p.blocks.find(x => x.id === bid);
+      if (!b) return;
+      b.checked = Boolean(chk);
+      b.status = chk ? 'DONE' : 'TODO';
+      b.updatedAt = Date.now();
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderAll();
+    };
+
+    window.cycleBlockKanbanStatus = (pid, bid) => {
+      const p = APP.pages.find(x => x.id === pid);
+      const b = p && p.blocks.find(x => x.id === bid);
+      if (!b) return;
+      const seq = ['TODO', 'DOING', 'DONE'];
+      const nxt = seq[(seq.indexOf(b.status || 'TODO') + 1) % seq.length];
+      b.status = nxt;
+      b.checked = (nxt === 'DONE');
+      b.updatedAt = Date.now();
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderAll();
+    };
+
+    window.toggleBlockOpen = (pid, bid) => {
+      const p = APP.pages.find(x => x.id === pid);
+      const b = p && p.blocks.find(x => x.id === bid);
+      if (!b) return;
+      b.toggleOpen = !b.toggleOpen;
+      saveAppState(false);
+      renderMainView();
+    };
+
+    window.moveBlock = (pid, bid, dir) => {
+      const p = APP.pages.find(x => x.id === pid);
+      if (!p) return;
+      const i = p.blocks.findIndex(x => x.id === bid);
+      const ni = i + dir;
+      if (i < 0 || ni < 0 || ni >= p.blocks.length) return;
+      const tmp = p.blocks[i];
+      p.blocks[i] = p.blocks[ni];
+      p.blocks[ni] = tmp;
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderMainView();
+    };
+
+    window.deleteBlock = (pid, bid) => {
+      const p = APP.pages.find(x => x.id === pid);
+      if (!p) return;
+      p.blocks = p.blocks.filter(x => x.id !== bid);
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderAll();
+    };
+
+    window.updateTableCell = (pid, bid, rIdx, cIdx, val) => {
+      const p = APP.pages.find(x => x.id === pid);
+      const b = p && p.blocks.find(x => x.id === bid);
+      if (!b || !b.rows || !b.rows[rIdx]) return;
+      b.rows[rIdx][cIdx] = val;
+      b.updatedAt = Date.now();
+      p.updatedAt = Date.now();
+      saveAppState();
+    };
+
+    window.modifyTableBlock = (pid, bid, op) => {
+      const p = APP.pages.find(x => x.id === pid);
+      const b = p && p.blocks.find(x => x.id === bid);
+      if (!b) return;
+      if (!Array.isArray(b.rows)) b.rows = [['항목', '내용']];
+      const cols = b.rows[0]?.length || 2;
+      if (op === 'ADD_ROW') b.rows.push(Array(cols).fill(''));
+      else if (op === 'ADD_COL') b.rows.forEach((r, idx) => r.push(idx === 0 ? '새 열' : ''));
+      else if (op === 'DEL_ROW' && b.rows.length > 2) b.rows.pop();
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderMainView();
+    };
+
+    // Slash Command Menu ('/')
+    window.handleBlockKey = function(ev, pid, bid) {
+      if (ev.key === '/') {
+        const val = ev.target.value || '';
+        if (val.trim() === '' || val.endsWith('\n')) {
+          activeSlashBlockId = { pid, bid };
+          const rect = ev.target.getBoundingClientRect();
+          const menu = document.getElementById('slashMenu');
+          menu.style.left = Math.min(window.innerWidth - 260, rect.left) + 'px';
+          menu.style.top = Math.min(window.innerHeight - 310, rect.bottom + 4) + 'px';
+          menu.style.display = 'block';
+        }
+      } else if (ev.key === 'Escape') {
+        document.getElementById('slashMenu').style.display = 'none';
+      }
+    };
+
+    window.applySlashType = function(newType) {
+      document.getElementById('slashMenu').style.display = 'none';
+      if (!activeSlashBlockId) return;
+      const p = APP.pages.find(x => x.id === activeSlashBlockId.pid);
+      const b = p && p.blocks.find(x => x.id === activeSlashBlockId.bid);
+      if (b) {
+        b.type = newType;
+        if (b.text === '/') b.text = '';
+        b.updatedAt = Date.now();
+        p.updatedAt = Date.now();
+        saveAppState();
+        renderMainView();
+      }
+      activeSlashBlockId = null;
+    };
+
+    document.addEventListener('click', (ev) => {
+      const m = document.getElementById('slashMenu');
+      if (m && m.style.display === 'block' && !m.contains(ev.target)) m.style.display = 'none';
+    });
+
+    // ==================== 9. VIEW 2: 오늘의 브리핑 & 데일리 루틴 ====================
+    function renderTodayView() {
+      const td = todayStr(0);
+      const tdPage = ensureTodayDailyPage();
+      const todos = tdPage.blocks.filter(b => b.type === 'todo');
+      const workTodos = todos.filter(b => b.space !== 'KIDS');
+      const kidsTodos = todos.filter(b => b.space === 'KIDS');
+      const todayPhotoBlocks = tdPage.blocks.filter(b => b.type === 'photo');
+      const todayPhotos = [];
+      todayPhotoBlocks.forEach(pb => (pb.photoIds || []).forEach(id => { if (PHOTOS[id]) todayPhotos.push({ ph: PHOTOS[id], pb }); }));
+
+      const renderList = (arr, emptyTxt) => arr.length ? arr.map(b => `
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid #e2e8f0;border-radius:9px;margin-bottom:6px;background:${b.checked ? '#f8fafc' : '#ffffff'};">
+          <input type="checkbox" class="todo-chk" style="margin:0;" ${b.checked ? 'checked' : ''} onchange="toggleTodoBlock('${tdPage.id}','${b.id}',this.checked)" />
+          <span style="flex:1;font-size:13px;font-weight:700;${b.checked ? 'text-decoration:line-through;color:#94a3b8;' : 'color:#0f172a;'}">${escHtml(b.text || '제목 없는 할일')}</span>
+          <span style="font-size:10.5px;font-weight:800;">${b.priority === 'HIGH' ? '🔴' : (b.priority === 'MID' ? '🟡' : '⚪')}</span>
+          <button type="button" class="btn" style="padding:2px 6px;font-size:10.5px;" onclick="startFocusForTodo('${escHtml(b.text)}')">⏱️</button>
+        </div>
+      `).join('') : `<div style="font-size:12px;color:#94a3b8;padding:12px 4px;">${emptyTxt}</div>`;
+
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div style="max-width:1180px;margin:0 auto;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
+            <div>
+              <h2 style="margin:0;font-size:21px;font-weight:900;">🌅 ${fmtKorDate(td)} — 오늘의 통합 지휘 보드</h2>
+              <p style="margin:3px 0 0 0;font-size:12.5px;color:#64748b;font-weight:600;">오라테크 업무와 우리 애들·가족 일상을 한 화면에서 빠르게 체크하고 사진을 기록하세요.</p>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button type="button" class="btn" onclick="selectPage('${tdPage.id}')">📝 오늘 전체 문서 열기 →</button>
+              <button type="button" class="btn btn-primary" onclick="openCarbonAssistantModal();runCarbonDailyBriefing()">💎 Carbon 오늘 브리핑</button>
+            </div>
+          </div>
+
+          <div class="today-grid">
+            <!-- 좌측: 일/업무 체크보드 -->
+            <div class="panel-card" style="border-top:4px solid var(--blue);">
+              <div class="panel-head">
+                <div class="panel-title">💼 오늘 일 · 오라테크 (${workTodos.filter(x => x.checked).length}/${workTodos.length})</div>
+                <span style="font-size:11px;font-weight:800;color:var(--blue);">업무 집중</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-bottom:12px;">
+                <input id="quickWorkTodoIn" class="field-input" placeholder="+ 새 업무 할 일 입력 후 엔터..." onkeydown="if(event.key==='Enter') addQuickTodayTodo('WORK')" />
+                <button type="button" class="btn btn-primary" onclick="addQuickTodayTodo('WORK')">추가</button>
+              </div>
+              ${renderList(workTodos, '오늘 등록된 업무 할 일이 없습니다.')}
+            </div>
+
+            <!-- 우측: 애들/가족 체크보드 -->
+            <div class="panel-card" style="border-top:4px solid var(--rose);">
+              <div class="panel-head">
+                <div class="panel-title">👨‍👧‍👦 오늘 애들 · 가족 (${kidsTodos.filter(x => x.checked).length}/${kidsTodos.length})</div>
+                <span style="font-size:11px;font-weight:800;color:var(--rose);">가족·육아</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-bottom:12px;">
+                <input id="quickKidsTodoIn" class="field-input" placeholder="+ 아이 준비물 · 하원 · 가족 할 일 추가..." onkeydown="if(event.key==='Enter') addQuickTodayTodo('KIDS')" />
+                <button type="button" class="btn btn-rose" onclick="addQuickTodayTodo('KIDS')">추가</button>
+              </div>
+              ${renderList(kidsTodos, '오늘 등록된 아이·가족 할 일이 없습니다.')}
+            </div>
+          </div>
+
+          <!-- 오늘의 현장·아이 사진 빠른 업로드 스트립 -->
+          <div class="panel-card">
+            <div class="panel-head">
+              <div class="panel-title">📸 오늘의 사진 보드 (${todayPhotos.length}장)</div>
+              <div style="display:flex;gap:6px;">
+                <button type="button" class="btn" onclick="document.getElementById('todayWorkPhotoIn').click()">💼 + 일 사진 올리기</button>
+                <button type="button" class="btn btn-rose" onclick="document.getElementById('todayKidsPhotoIn').click()">👧 + 애들 사진 올리기</button>
+                <input id="todayWorkPhotoIn" type="file" accept="image/*" multiple style="display:none;" onchange="uploadQuickTodayPhoto('WORK',this.files)" />
+                <input id="todayKidsPhotoIn" type="file" accept="image/*" multiple style="display:none;" onchange="uploadQuickTodayPhoto('KIDS',this.files)" />
+              </div>
+            </div>
+            ${todayPhotos.length ? `
+              <div class="photo-grid">
+                ${todayPhotos.map(item => `
+                  <div class="photo-thumb-wrap">
+                    <img src="${item.ph.dataUrl}" onclick="openLightbox('${item.ph.id}')" />
+                    <div class="photo-thumb-actions">
+                      <span class="photo-act-btn">${item.ph.space === 'KIDS' ? '👧 애들' : '💼 일'}</span>
+                      <button type="button" class="photo-act-btn" onclick="analyzePhotoWithCarbon('${item.ph.id}')">✨ OCR</button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : '<div class="photo-dropzone" onclick="document.getElementById(\'todayKidsPhotoIn\').click()">클릭하거나 화면 어디에서든 <b>Ctrl+V</b> 로 사진(출고 송장, 아이 알림장, 추억 사진)을 바로 올리세요!</div>'}
+          </div>
+        </div>
+      `;
+    }
+
+    window.addQuickTodayTodo = function(space) {
+      const inp = document.getElementById(space === 'KIDS' ? 'quickKidsTodoIn' : 'quickWorkTodoIn');
+      const txt = (inp && inp.value || '').trim();
+      if (!txt) return;
+      const tdPage = ensureTodayDailyPage();
+      tdPage.blocks.push(createBlock('todo', { text: txt, space, priority: 'MID', dueDate: todayStr(0) }));
+      tdPage.updatedAt = Date.now();
+      inp.value = '';
+      saveAppState();
+      renderAll();
+    };
+
+    window.uploadQuickTodayPhoto = async function(space, files) {
+      const tdPage = ensureTodayDailyPage();
+      let blk = tdPage.blocks.find(b => b.type === 'photo' && b.space === space) || tdPage.blocks.find(b => b.type === 'photo');
+      if (!blk) {
+        blk = createBlock('photo', { space, caption: space === 'KIDS' ? '📸 오늘 애들·가족 사진' : '📸 오늘 업무·현장 사진' });
+        tdPage.blocks.push(blk);
+      }
+      await addPhotoFilesToBlock(tdPage.id, blk.id, files, space);
+    };
+
+    // ==================== 10. VIEW 3: 칸반 보드 ====================
+    function renderKanbanView() {
+      const sp = APP.activeSpace || 'ALL';
+      const allTodos = [];
+      APP.pages.filter(p => !p.archived).forEach(p => {
+        p.blocks.forEach(b => {
+          if (b.type === 'todo' && (sp === 'ALL' || b.space === sp)) {
+            allTodos.push({ page: p, block: b });
+          }
+        });
+      });
+
+      const cols = [
+        { key: 'TODO', title: '📥 할 일 (TODO)', color: '#1d4ed8' },
+        { key: 'DOING', title: '⚡ 진행 중 (DOING)', color: '#d97706' },
+        { key: 'DONE', title: '✅ 완료 (DONE)', color: '#059669' }
+      ];
+
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div style="max-width:1240px;margin:0 auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div>
+              <h2 style="margin:0;font-size:20px;font-weight:900;">📋 전체 할 일 칸반 보드 (${allTodos.length}건)</h2>
+              <p style="margin:2px 0 0 0;font-size:12px;color:#64748b;">카드를 클릭해 이동하거나 드래그하면 실제 노션 페이지 체크박스에 즉시 반영됩니다.</p>
+            </div>
+          </div>
+          <div class="kanban-grid">
+            ${cols.map(c => {
+              const items = allTodos.filter(it => (it.block.checked ? 'DONE' : (it.block.status || 'TODO')) === c.key);
+              return `
+                <div class="kanban-col" ondragover="event.preventDefault()" ondrop="dropKanbanCard(event,'${c.key}')">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid ${c.color};">
+                    <strong style="font-size:13.5px;color:${c.color};">${c.title}</strong>
+                    <span style="font-size:11.5px;font-weight:900;background:#fff;padding:1px 8px;border-radius:99px;border:1px solid #cbd5e1;">${items.length}</span>
+                  </div>
+                  ${items.map(it => `
+                    <div class="kanban-card" draggable="true" ondragstart="window.__dragKanban={pid:'${it.page.id}',bid:'${it.block.id}'}">
+                      <div style="display:flex;justify-content:space-between;gap:6px;margin-bottom:5px;">
+                        <span class="page-nav-badge ${it.block.space === 'KIDS' ? 'sp-KIDS' : (it.block.space === 'PERSONAL' ? 'sp-PERSONAL' : 'sp-WORK')}">${it.block.space === 'KIDS' ? '👨‍👧‍👦 애들' : (it.block.space === 'PERSONAL' ? '🔒 개인' : '💼 일')}</span>
+                        <span style="font-size:10.5px;color:#64748b;font-weight:700;">${escHtml(it.block.dueDate || '기한없음')}</span>
+                      </div>
+                      <div style="font-size:13px;font-weight:800;margin-bottom:6px;color:#0f172a;${it.block.checked ? 'text-decoration:line-through;color:#94a3b8;' : ''}">${escHtml(it.block.text || '내용 없음')}</div>
+                      <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;">
+                        <span style="font-size:10.5px;color:#64748b;cursor:pointer;" onclick="selectPage('${it.page.id}')">📄 ${escHtml(it.page.title.slice(0, 14))}</span>
+                        <div style="display:flex;gap:3px;">
+                          ${c.key !== 'TODO' ? `<button type="button" class="btn" style="padding:2px 6px;font-size:10.5px;" onclick="setKanbanCardStatus('${it.page.id}','${it.block.id}','TODO')">← 대기</button>` : ''}
+                          ${c.key !== 'DOING' ? `<button type="button" class="btn" style="padding:2px 6px;font-size:10.5px;" onclick="setKanbanCardStatus('${it.page.id}','${it.block.id}','DOING')">⚡ 진행</button>` : ''}
+                          ${c.key !== 'DONE' ? `<button type="button" class="btn btn-emerald" style="padding:2px 6px;font-size:10.5px;" onclick="setKanbanCardStatus('${it.page.id}','${it.block.id}','DONE')">✓ 완료</button>` : ''}
+                        </div>
+                      </div>
+                    </div>
+                  `).join('') || '<div style="font-size:12px;color:#94a3b8;text-align:center;padding:30px 10px;">항목이 없습니다</div>'}
+                </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }
+
+    window.setKanbanCardStatus = function(pid, bid, newStatus) {
+      const p = APP.pages.find(x => x.id === pid);
+      const b = p && p.blocks.find(x => x.id === bid);
+      if (!b) return;
+      b.status = newStatus;
+      b.checked = (newStatus === 'DONE');
+      b.updatedAt = Date.now();
+      p.updatedAt = Date.now();
+      saveAppState();
+      renderAll();
+    };
+
+    window.dropKanbanCard = function(ev, newStatus) {
+      ev.preventDefault();
+      if (window.__dragKanban) {
+        setKanbanCardStatus(window.__dragKanban.pid, window.__dragKanban.bid, newStatus);
+        window.__dragKanban = null;
+      }
+    };
+
+    // ==================== 11. VIEW 4: 통합 캘린더 ====================
+    function renderCalendarView() {
+      const { year, month } = calCursor;
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const td = todayStr(0);
+
+      const cells = [];
+      for (let i = 0; i < firstDay; i++) cells.push({ empty: true });
+      for (let d = 1; d <= daysInMonth; d++) {
+        const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const todos = [];
+        APP.pages.filter(p => !p.archived).forEach(p => {
+          p.blocks.forEach(b => {
+            if (b.type === 'todo' && b.dueDate === iso) todos.push(b);
+          });
+        });
+        const ddays = (APP.ddays || []).filter(dd => dd.date === iso);
+        const dayPhotos = Object.values(PHOTOS).filter(ph => ph.noteDate === iso);
+        cells.push({ day: d, iso, todos, ddays, photoCount: dayPhotos.length });
+      }
+
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div style="max-width:1180px;margin:0 auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <button type="button" class="btn" onclick="shiftCalMonth(-1)">◀ 이전</button>
+              <h2 style="margin:0;font-size:20px;font-weight:900;">📅 ${year}년 ${month + 1}월 일 · 애들 통합 캘린더</h2>
+              <button type="button" class="btn" onclick="shiftCalMonth(1)">다음 ▶</button>
+              <button type="button" class="btn" onclick="calCursor={year:new Date().getFullYear(),month:new Date().getMonth()};renderCalendarView();">오늘</button>
+            </div>
+            <span style="font-size:12px;color:#64748b;font-weight:700;">날짜 칸 클릭 시 해당 날짜의 데일리 노트가 바로 생성/열립니다.</span>
+          </div>
+          <div class="cal-grid">
+            ${['일','월','화','수','목','금','토'].map((w, i) => `<div class="cal-head" style="color:${i === 0 ? '#dc2626' : (i === 6 ? '#1d4ed8' : '#334155')};">${w}</div>`).join('')}
+            ${cells.map(c => {
+              if (c.empty) return '<div class="cal-cell muted"></div>';
+              return `
+                <div class="cal-cell ${c.iso === td ? 'today' : ''}" onclick="openOrCreateDatePage('${c.iso}')">
+                  <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:900;">
+                    <span>${c.day}</span>
+                    ${c.photoCount ? `<span style="font-size:10.5px;color:#059669;">📷 ${c.photoCount}</span>` : ''}
+                  </div>
+                  ${c.ddays.map(dd => `<div class="cal-event-pill" style="background:#fef3c7;color:#92400e;">${escHtml(dd.emoji)} ${escHtml(dd.title)}</div>`).join('')}
+                  ${c.todos.slice(0, 3).map(t => `<div class="cal-event-pill" style="background:${t.space === 'KIDS' ? '#ffe4e6' : '#dbeafe'};color:${t.space === 'KIDS' ? '#9f1239' : '#1e40af'};${t.checked ? 'text-decoration:line-through;opacity:0.65;' : ''}">${t.checked ? '✓' : '•'} ${escHtml(t.text)}</div>`).join('')}
+                  ${c.todos.length > 3 ? `<div style="font-size:10px;color:#64748b;font-weight:800;">+ ${c.todos.length - 3}건 더보기</div>` : ''}
+                </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }
+
+    window.shiftCalMonth = function(delta) {
+      let m = calCursor.month + delta;
+      let y = calCursor.year;
+      if (m < 0) { m = 11; y--; }
+      if (m > 11) { m = 0; y++; }
+      calCursor = { year: y, month: m };
+      renderCalendarView();
+    };
+
+    window.openOrCreateDatePage = function(iso) {
+      let pg = APP.pages.find(p => p.isDaily && p.dailyDate === iso && !p.archived);
+      if (!pg) {
+        pg = {
+          id: 'page_daily_' + iso,
+          parentId: null,
+          space: 'WORK',
+          icon: '📅',
+          title: `데일리 노트 (${iso})`,
+          coverTheme: 'blue',
+          pinned: false,
+          isDaily: true,
+          dailyDate: iso,
+          createdAt: Date.now(),
+          updatedAt: Date.now(),
+          blocks: [
+            createBlock('todo', { text: '이 날의 주요 할 일 적기', space: 'WORK', dueDate: iso }),
+            createBlock('photo', { space: 'KIDS', caption: `📸 ${iso} 기록 사진` })
+          ]
+        };
+        APP.pages.unshift(pg);
+        saveAppState();
+      }
+      selectPage(pg.id);
+    };
+
+    // ==================== 12. VIEW 5: 통합 사진 금고 & 앨범 ====================
+    function renderGalleryView() {
+      const all = Object.values(PHOTOS).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      const filtered = all.filter(ph => {
+        if (galleryFilterSpace !== 'ALL' && ph.space !== galleryFilterSpace) return false;
+        if (gallerySearchText && !(ph.caption || '').toLowerCase().includes(gallerySearchText.toLowerCase()) && !(ph.name || '').toLowerCase().includes(gallerySearchText.toLowerCase())) return false;
+        return true;
+      });
+
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div style="max-width:1240px;margin:0 auto;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+            <div>
+              <h2 style="margin:0;font-size:20px;font-weight:900;">🖼️ 오라테크 · 가족 통합 사진 금고 (${filtered.length}장)</h2>
+              <p style="margin:2px 0 0 0;font-size:12px;color:#64748b;">노트 페이지 어디에든 올린 현장 사진·송장·아이 사진이 날짜·공간별로 한 곳에 자동 정리됩니다.</p>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+              <button type="button" class="btn ${galleryFilterSpace==='ALL'?'btn-primary':''}" onclick="galleryFilterSpace='ALL';renderGalleryView()">전체</button>
+              <button type="button" class="btn ${galleryFilterSpace==='WORK'?'btn-primary':''}" onclick="galleryFilterSpace='WORK';renderGalleryView()">💼 일 사진</button>
+              <button type="button" class="btn ${galleryFilterSpace==='KIDS'?'btn-rose':''}" onclick="galleryFilterSpace='KIDS';renderGalleryView()">👨‍👧‍👦 애들 사진</button>
+              <input class="field-input" style="width:180px;padding:5px 10px;font-size:12px;" value="${escHtml(gallerySearchText)}" oninput="gallerySearchText=this.value;renderGalleryView()" placeholder="사진 설명/날짜 검색..." />
+            </div>
+          </div>
+          ${filtered.length ? `
+            <div class="wall-grid">
+              ${filtered.map(ph => `
+                <div class="wall-card">
+                  <img src="${ph.dataUrl}" onclick="openLightbox('${ph.id}')" />
+                  <div style="padding:10px 12px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                      <span class="page-nav-badge ${ph.space === 'KIDS' ? 'sp-KIDS' : 'sp-WORK'}">${ph.space === 'KIDS' ? '👨‍👧‍👦 애들' : '💼 일'}</span>
+                      <span style="font-size:11px;color:#64748b;font-weight:700;">${escHtml(ph.noteDate || '')}</span>
+                    </div>
+                    <div style="font-size:12.5px;font-weight:800;color:#0f172a;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(ph.caption || ph.name)}</div>
+                    <div style="display:flex;gap:4px;">
+                      <button type="button" class="btn" style="flex:1;justify-content:center;font-size:11px;padding:4px;" onclick="selectPage('${ph.pageId}')">📄 노트 열기</button>
+                      <button type="button" class="btn btn-primary" style="font-size:11px;padding:4px 8px;" onclick="analyzePhotoWithCarbon('${ph.id}')">✨ OCR</button>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : '<div style="text-align:center;padding:54px 20px;border:2px dashed #cbd5e1;border-radius:14px;color:#64748b;">아직 올라온 사진이 없습니다. 오늘 데일리나 노트 페이지에 사진을 끌어다 놓거나 <b>Ctrl+V</b> 해보세요!</div>'}
+        </div>`;
+    }
+
+    // ==================== 13. VIEW 6: 포모도로 집중 · 습관 잔디 · 루틴 · D-Day ====================
+    function renderHabitsView() {
+      const cells = [];
+      for (let i = 27; i >= 0; i--) {
+        const dt = todayStr(-i);
+        const cnt = Number((APP.historyStats && APP.historyStats[dt]) || 0);
+        const bg = cnt >= 5 ? '#059669' : (cnt >= 3 ? '#34d399' : (cnt >= 1 ? '#bbf7d0' : '#f1f5f9'));
+        const clr = cnt >= 5 ? '#ffffff' : '#334155';
+        cells.push(`<div class="heat-cell" style="background:${bg};color:${clr};" title="${dt}: ${cnt}건 완료">${dt.slice(8)}</div>`);
+      }
+
+      const mm = String(Math.floor(pomoState.remaining / 60)).padStart(2, '0');
+      const ss = String(pomoState.remaining % 60).padStart(2, '0');
+
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div style="max-width:1180px;margin:0 auto;display:grid;gap:16px;">
+          <div class="today-grid">
+            <!-- 포모도로 집중 타이머 -->
+            <div class="panel-card">
+              <div class="panel-head">
+                <div class="panel-title">⏱️ 25분 포모도로 집중 타이머</div>
+                <span style="font-size:11.5px;font-weight:800;color:#1d4ed8;">오늘 완료: ${pomoState.completedSessions}세션</span>
+              </div>
+              <div style="text-align:center;padding:12px 0;">
+                <div style="font-size:48px;font-weight:900;font-variant-numeric:tabular-nums;color:#0f172a;letter-spacing:-0.02em;">${mm}:${ss}</div>
+                <div style="font-size:12px;color:#64748b;margin:4px 0 14px 0;">${pomoState.targetText ? `집중 중: ${escHtml(pomoState.targetText)}` : '아래 버튼을 누르거나 할 일 옆 [⏱️ 집중]을 눌러 집중 세션을 시작하세요.'}</div>
+                <div style="display:flex;justify-content:center;gap:8px;">
+                  <button type="button" class="btn btn-primary" onclick="togglePomodoroTimer()">${pomoState.running ? '⏸️ 일시정지' : '▶️ 집중 시작'}</button>
+                  <button type="button" class="btn" onclick="resetPomodoroTimer(25)">25분 리셋</button>
+                  <button type="button" class="btn" onclick="resetPomodoroTimer(5)">5분 휴식</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 28일 습관 잔디 히트맵 -->
+            <div class="panel-card">
+              <div class="panel-head">
+                <div class="panel-title">🟩 최근 28일 실행 잔디 (할 일 완료 스트릭)</div>
+              </div>
+              <div class="heatmap-grid">${cells.join('')}</div>
+              <div style="margin-top:10px;font-size:11.5px;color:#64748b;display:flex;justify-content:space-between;">
+                <span>적음 ⬜ → 🟩 1건 → 🟩 3건 → 🌲 5건+</span>
+                <span>매일 1개 이상 체크 시 스트릭 유지!</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="today-grid">
+            <!-- 매일 반복 루틴 관리 -->
+            <div class="panel-card">
+              <div class="panel-head">
+                <div class="panel-title">🔁 매일/평일 자동 반복 루틴 설정</div>
+                <button type="button" class="btn btn-primary" onclick="applyTodayRoutines(true)">지금 오늘에 적용</button>
+              </div>
+              <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+                <input id="newRtText" class="field-input" style="flex:1;min-width:180px;" placeholder="새 반복 할일 (예: 16시 발주 마감)" />
+                <select id="newRtSpace" class="meta-sel"><option value="WORK">💼 일</option><option value="KIDS">👨‍👧‍👦 애들</option></select>
+                <select id="newRtFreq" class="meta-sel"><option value="DAILY">매일</option><option value="WEEKDAY">평일만</option><option value="WEEKEND">주말만</option></select>
+                <button type="button" class="btn btn-emerald" onclick="addNewRoutine()">추가</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                ${(APP.routines || []).map(r => `
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border:1px solid #e2e8f0;border-radius:8px;">
+                    <div style="font-size:12.5px;font-weight:700;">
+                      <span class="page-nav-badge ${r.space==='KIDS'?'sp-KIDS':'sp-WORK'}">${r.space==='KIDS'?'애들':'일'}</span>
+                      <span style="color:#64748b;font-size:11px;margin:0 4px;">[${r.freq==='DAILY'?'매일':(r.freq==='WEEKDAY'?'평일':'주말')}]</span>
+                      ${escHtml(r.text)}
+                    </div>
+                    <button type="button" class="btn" style="padding:2px 7px;font-size:11px;color:#dc2626;" onclick="deleteRoutine('${r.id}')">삭제</button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- D-Day 관리자 -->
+            <div class="panel-card">
+              <div class="panel-head">
+                <div class="panel-title">📌 중요 D-Day 카운터 (생일 · 행사 · 마감)</div>
+              </div>
+              <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">
+                <input id="newDdayTitle" class="field-input" style="flex:1;min-width:160px;" placeholder="일정명 (예: 첫째 생일 / 소풍)" />
+                <input id="newDdayDate" type="date" class="meta-date" value="${todayStr(7)}" />
+                <select id="newDdaySpace" class="meta-sel"><option value="KIDS">👨‍👧‍👦 애들</option><option value="WORK">💼 일</option></select>
+                <button type="button" class="btn btn-rose" onclick="addNewDday()">등록</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                ${(APP.ddays || []).map(dd => {
+                  const diff = calcDaysDiff(dd.date);
+                  const lbl = diff === 0 ? 'D-DAY' : (diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`);
+                  return `
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border:1px solid #e2e8f0;border-radius:8px;">
+                      <div style="font-size:12.5px;font-weight:800;">${escHtml(dd.emoji||'📌')} ${escHtml(dd.title)} <span style="color:#64748b;font-weight:600;font-size:11.5px;">(${dd.date})</span></div>
+                      <div style="display:flex;align-items:center;gap:6px;">
+                        <span style="font-weight:900;color:${dd.space==='KIDS'?'#e11d48':'#1d4ed8'};font-size:12px;">${lbl}</span>
+                        <button type="button" class="btn" style="padding:2px 7px;font-size:11px;color:#dc2626;" onclick="deleteDday('${dd.id}')">삭제</button>
+                      </div>
+                    </div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    window.startFocusForTodo = function(text) {
+      pomoState.targetText = text || '할 일 집중';
+      resetPomodoroTimer(25);
+      togglePomodoroTimer();
+      showToast(`⏱️ 25분 집중 시작: ${pomoState.targetText.slice(0, 24)}`);
+    };
+
+    window.togglePomodoroTimer = function() {
+      if (pomoState.running) {
+        clearInterval(pomoState.timer);
+        pomoState.running = false;
+      } else {
+        pomoState.running = true;
+        pomoState.timer = setInterval(() => {
+          pomoState.remaining--;
+          if (pomoState.remaining <= 0) {
+            clearInterval(pomoState.timer);
+            pomoState.running = false;
+            pomoState.completedSessions++;
+            showToast('🎉 25분 집중 세션 1회 완료! 잠깐 스트레칭하세요.');
+            pomoState.remaining = 5 * 60;
+          }
+          const mm = String(Math.floor(pomoState.remaining / 60)).padStart(2, '0');
+          const ss = String(pomoState.remaining % 60).padStart(2, '0');
+          const el = document.getElementById('topPomoClock');
+          if (el) el.textContent = `${mm}:${ss}`;
+          if (APP.activeView === 'HABITS') renderHabitsView();
+        }, 1000);
+      }
+      if (APP.activeView === 'HABITS') renderHabitsView();
+    };
+
+    window.resetPomodoroTimer = function(mins) {
+      clearInterval(pomoState.timer);
+      pomoState.running = false;
+      pomoState.remaining = mins * 60;
+      const el = document.getElementById('topPomoClock');
+      if (el) el.textContent = `${String(mins).padStart(2, '0')}:00`;
+      if (APP.activeView === 'HABITS') renderHabitsView();
+    };
+
+    window.addNewRoutine = () => {
+      const txt = (document.getElementById('newRtText')?.value || '').trim();
+      if (!txt) return;
+      APP.routines.push({
+        id: uid('rt'),
+        text: txt,
+        space: document.getElementById('newRtSpace').value,
+        priority: 'MID',
+        freq: document.getElementById('newRtFreq').value,
+        active: true
+      });
+      saveAppState();
+      renderHabitsView();
+      showToast('🔁 새 반복 루틴이 추가되었습니다!');
+    };
+    window.deleteRoutine = (id) => { APP.routines = APP.routines.filter(r => r.id !== id); saveAppState(); renderHabitsView(); };
+
+    window.addNewDday = () => {
+      const title = (document.getElementById('newDdayTitle')?.value || '').trim();
+      const date = document.getElementById('newDdayDate')?.value || todayStr(7);
+      const space = document.getElementById('newDdaySpace')?.value || 'KIDS';
+      if (!title) return;
+      APP.ddays.push({ id: uid('dd'), title, date, space, emoji: space === 'KIDS' ? '🎂' : '🏢' });
+      saveAppState();
+      updateTopStatusMetrics();
+      renderHabitsView();
+      showToast('📌 D-Day가 상단에 고정되었습니다!');
+    };
+    window.deleteDday = (id) => { APP.ddays = APP.ddays.filter(d => d.id !== id); saveAppState(); updateTopStatusMetrics(); renderHabitsView(); };
+
+    // ==================== 14. 검색 (Ctrl+K) & PIN 잠금 ====================
+    window.openSearchModal = function() {
+      openModal('searchModal');
+      setTimeout(() => {
+        const inp = document.getElementById('globalSearchInput');
+        if (inp) { inp.value = ''; inp.focus(); renderSearchResults(''); }
+      }, 60);
+    };
+
+    window.renderSearchResults = function(q) {
+      const box = document.getElementById('globalSearchResults');
+      const kw = (q || '').trim().toLowerCase();
+      const hits = APP.pages.filter(p => !p.archived).filter(p => {
+        if (!kw) return true;
+        if ((p.title || '').toLowerCase().includes(kw)) return true;
+        return p.blocks.some(b => (b.text || '').toLowerCase().includes(kw) || (b.caption || '').toLowerCase().includes(kw));
+      }).slice(0, 12);
+      box.innerHTML = hits.map(p => `
+        <div class="page-nav-item" style="border:1px solid #e2e8f0;padding:8px 10px;" onclick="closeModal('searchModal');selectPage('${p.id}')">
+          <div class="page-nav-left"><span>${escHtml(p.icon)}</span><span class="page-nav-title">${escHtml(p.title)}</span></div>
+          <span class="page-nav-badge ${p.space==='KIDS'?'sp-KIDS':'sp-WORK'}">${p.blocks.length}블록</span>
+        </div>
+      `).join('') || '<div style="text-align:center;color:#94a3b8;padding:20px;">검색 결과가 없습니다.</div>';
+    };
+
+    document.addEventListener('keydown', (ev) => {
+      if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k') {
+        ev.preventDefault();
+        openSearchModal();
+      }
+    });
+
+    window.openLockModal = function() {
+      document.getElementById('pinSetupInput').value = APP.pinCode || '';
+      openModal('lockModal');
+    };
+    window.savePinSetting = function(lockNow) {
+      APP.pinCode = (document.getElementById('pinSetupInput')?.value || '').trim();
+      saveAppState();
+      closeModal('lockModal');
+      if (lockNow && APP.pinCode) {
+        document.getElementById('pinLockOverlay').style.display = 'flex';
+      } else {
+        showToast(APP.pinCode ? '🔒 잠금 비밀번호가 저장되었습니다.' : '잠금이 해제되었습니다.');
+      }
+    };
+    window.unlockWithPin = function() {
+      const val = document.getElementById('pinUnlockInput').value.trim();
+      if (val === APP.pinCode) {
+        document.getElementById('pinLockOverlay').style.display = 'none';
+        document.getElementById('pinUnlockInput').value = '';
+      } else {
+        showToast('❌ 비밀번호가 일치하지 않습니다.');
+      }
+    };
+
+    // ==================== 15. GitHub Private Vault 양방향 동기화 + 버전 히스토리 ====================
+    function b64EncodeUnicode(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+    function b64DecodeUnicode(b64) {
+      return decodeURIComponent(escape(atob(String(b64).replace(/\s/g, ''))));
+    }
+
+    async function ghApiCall(token, method, endpoint, body = null) {
+      const res = await fetch(`https://api.github.com${endpoint}`, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json'
+        },
+        body: body ? JSON.stringify(body) : null
+      });
+      const txt = await res.text();
+      let data = {};
+      try { data = txt ? JSON.parse(txt) : {}; } catch (_) { data = { raw: txt }; }
+      return { ok: res.ok, status: res.status, data };
+    }
+
+    window.openSyncModal = function() {
+      document.getElementById('cfgGithubToken').value = getLocalSecret('ora_vault_gh_token', '');
+      document.getElementById('cfgVaultRepo').value = APP.vaultRepo || 'oratech-notes-vault';
+      document.getElementById('cfgAutoSyncMode').value = APP.autoSyncMode || 'OFF';
+      document.getElementById('cfgGeminiKey').value = getLocalSecret('ora_gemini_api_key', '');
+      openModal('syncModal');
+    };
+
+    window.saveSyncSettings = function() {
+      const ghTok = (document.getElementById('cfgGithubToken')?.value || '').trim();
+      const repo = (document.getElementById('cfgVaultRepo')?.value || 'oratech-notes-vault').trim().replace(/[^a-zA-Z0-9._-]/g, '-');
+      const autoMode = document.getElementById('cfgAutoSyncMode')?.value || 'OFF';
+      const gemKey = (document.getElementById('cfgGeminiKey')?.value || '').trim();
+      setLocalSecret('ora_vault_gh_token', ghTok);
+      setLocalSecret('ora_gemini_api_key', gemKey);
+      APP.vaultRepo = repo;
+      APP.autoSyncMode = autoMode;
+      saveAppState(false);
+    };
+
+    async function ensurePrivateVaultRepo(token, repoName) {
+      const u = await ghApiCall(token, 'GET', '/user');
+      if (!u.ok) throw new Error(`GitHub 인증 실패 (${u.status}) — 토큰을 확인하세요.`);
+      const owner = u.data.login;
+
+      let repo = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}`);
+      if (repo.status === 404) {
+        const cr = await ghApiCall(token, 'POST', '/user/repos', {
+          name: repoName,
+          description: 'Oratech Life & Work Notion+ Private encrypted-safe vault',
+          private: true,
+          auto_init: true
+        });
+        if (!cr.ok) throw new Error(`비공개 저장소 생성 실패 (${cr.status})`);
+        await new Promise(r => setTimeout(r, 1500));
+        repo = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}`);
+      }
+      if (repo.data && repo.data.private === false) {
+        await ghApiCall(token, 'PATCH', `/repos/${owner}/${repoName}`, { private: true });
+      }
+      const branch = (repo.data && repo.data.default_branch) || 'main';
+      return { owner, branch };
+    }
+
+    window.syncToGithubVault = async function(silent = false) {
+      const token = getLocalSecret('ora_vault_gh_token', '');
+      const dbg = document.getElementById('syncDebugMsg');
+      if (!token) {
+        if (!silent) { openSyncModal(); showToast('GitHub 토큰을 먼저 입력해 주세요.'); }
+        return;
+      }
+      try {
+        if (!silent) showToast('☁️ GitHub Private 저장소에 일괄 동기화 중...');
+        const repoName = APP.vaultRepo || 'oratech-notes-vault';
+        const { owner, branch } = await ensurePrivateVaultRepo(token, repoName);
+
+        const refRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/ref/heads/${branch}`);
+        const baseCommitSha = refRes.data.object.sha;
+        const commitInfo = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/commits/${baseCommitSha}`);
+        const baseTreeSha = commitInfo.data.tree.sha;
+
+        const treeItems = [];
+
+        // 1) 미전송 사진만 증분 업로드
+        const unsyncedPhotos = Object.values(PHOTOS).filter(p => !p.synced && p.dataUrl);
+        for (const ph of unsyncedPhotos) {
+          const b64 = ph.dataUrl.split(',')[1];
+          const blob = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/blobs`, {
+            content: b64,
+            encoding: 'base64'
+          });
+          if (blob.ok && blob.data.sha) {
+            treeItems.push({ path: `vault/photos/${ph.id}.jpg`, mode: '100644', type: 'blob', sha: blob.data.sha });
+            ph.synced = true;
+            await idbPut('photos', ph);
+          }
+        }
+
+        // 2) 전체 워크스페이스 메타 + 페이지 + 사진 인덱스 저장
+        const photoIndex = {};
+        Object.values(PHOTOS).forEach(ph => {
+          photoIndex[ph.id] = { id: ph.id, name: ph.name, space: ph.space, pageId: ph.pageId, blockId: ph.blockId, noteDate: ph.noteDate, caption: ph.caption, aiSummary: ph.aiSummary, createdAt: ph.createdAt };
+        });
+        const payloadJson = JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), app: APP, photoIndex }, null, 2);
+        const wsBlob = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/blobs`, {
+          content: b64EncodeUnicode(payloadJson),
+          encoding: 'base64'
+        });
+        if (!wsBlob.ok) throw new Error('워크스페이스 Blob 업로드 실패');
+        treeItems.push({ path: 'vault/workspace.json', mode: '100644', type: 'blob', sha: wsBlob.data.sha });
+
+        const treeRes = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/trees`, {
+          base_tree: baseTreeSha,
+          tree: treeItems
+        });
+        if (!treeRes.ok) throw new Error('Git Tree 생성 실패');
+
+        const newCommit = await ghApiCall(token, 'POST', `/repos/${owner}/${repoName}/git/commits`, {
+          message: `📝 Sync Notion+ (${APP.pages.length} pages, +${unsyncedPhotos.length} photos) @ ${new Date().toLocaleString('ko-KR')}`,
+          tree: treeRes.data.sha,
+          parents: [baseCommitSha]
+        });
+        if (!newCommit.ok) throw new Error('Git Commit 실패');
+
+        await ghApiCall(token, 'PATCH', `/repos/${owner}/${repoName}/git/refs/heads/${branch}`, {
+          sha: newCommit.data.sha,
+          force: true
+        });
+
+        APP.lastSyncAt = new Date().toISOString();
+        APP.lastCommitSha = newCommit.data.sha;
+        await saveAppState(false);
+        if (dbg) dbg.textContent = `✅ 비공개 저장소 (${owner}/${repoName}) 동기화 완료! (+사진 ${unsyncedPhotos.length}장)`;
+        if (!silent) showToast(`✅ Git 비공개 금고 저장 완료! (+사진 ${unsyncedPhotos.length}장)`);
+      } catch (err) {
+        if (dbg) dbg.textContent = '❌ 오류: ' + err.message;
+        if (!silent) showToast('❌ Git 동기화 실패: ' + err.message);
+      }
+    };
+
+    window.pullFromGithubVault = async function(specificCommitSha = null) {
+      const token = getLocalSecret('ora_vault_gh_token', '');
+      if (!token) { openSyncModal(); showToast('GitHub 토큰을 먼저 입력해 주세요.'); return; }
+      try {
+        showToast('⬇️ GitHub 비공개 저장소에서 불러오는 중...');
+        const repoName = APP.vaultRepo || 'oratech-notes-vault';
+        const { owner, branch } = await ensurePrivateVaultRepo(token, repoName);
+        const refQuery = specificCommitSha ? `?ref=${specificCommitSha}` : `?ref=${branch}`;
+        const wsRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/contents/vault/workspace.json${refQuery}`);
+        if (!wsRes.ok || !wsRes.data.content) throw new Error('저장소에 아직 백업본이 없습니다.');
+        const parsed = JSON.parse(b64DecodeUnicode(wsRes.data.content));
+        if (!parsed.app || !Array.isArray(parsed.app.pages)) throw new Error('유효한 워크스페이스 데이터가 아닙니다.');
+
+        // 누락 사진 내려받기
+        const photoMetaList = Object.values(parsed.photoIndex || {});
+        for (const meta of photoMetaList) {
+          if (!PHOTOS[meta.id]) {
+            const pRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/contents/vault/photos/${meta.id}.jpg${refQuery}`);
+            if (pRes.ok && pRes.data.content) {
+              const phObj = { ...meta, dataUrl: 'data:image/jpeg;base64,' + pRes.data.content.replace(/\s/g, ''), synced: true };
+              PHOTOS[phObj.id] = phObj;
+              await idbPut('photos', phObj);
+            }
+          }
+        }
+
+        APP = parsed.app;
+        APP.lastSyncAt = new Date().toISOString();
+        await saveAppState(false);
+        renderAll();
+        closeModal('historyModal');
+        showToast(specificCommitSha ? '🕰️ 선택한 과거 버전으로 완벽 복원되었습니다!' : '✅ GitHub 최신 노션 데이터를 모두 불러왔습니다!');
+      } catch (err) {
+        showToast('❌ 불러오기 실패: ' + err.message);
+      }
+    };
+
+    window.openHistoryModal = async function() {
+      openModal('historyModal');
+      const box = document.getElementById('historyCommitList');
+      const token = getLocalSecret('ora_vault_gh_token', '');
+      if (!token) {
+        box.innerHTML = '<div style="padding:16px;text-align:center;color:#64748b;">⚙️ 먼저 [설정/Git]에서 GitHub 토큰을 연결하면 모든 저장 시점의 버전을 무료로 복원할 수 있습니다.</div>';
+        return;
+      }
+      box.innerHTML = '<div style="padding:14px;">⏳ 커밋 이력을 조회 중입니다...</div>';
+      try {
+        const repoName = APP.vaultRepo || 'oratech-notes-vault';
+        const { owner } = await ensurePrivateVaultRepo(token, repoName);
+        const commits = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/commits?per_page=15`);
+        if (!commits.ok || !Array.isArray(commits.data)) throw new Error('커밋 이력이 없습니다.');
+        box.innerHTML = commits.data.map(c => `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border:1px solid #e2e8f0;border-radius:10px;">
+            <div style="min-width:0;">
+              <div style="font-size:12.5px;font-weight:800;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(c.commit.message)}</div>
+              <div style="font-size:11px;color:#64748b;">${new Date(c.commit.author.date).toLocaleString('ko-KR')} · ${c.sha.slice(0, 7)}</div>
+            </div>
+            <button type="button" class="btn btn-primary" style="font-size:11px;padding:5px 10px;" onclick="pullFromGithubVault('${c.sha}')">이 시점 복원</button>
+          </div>
+        `).join('');
+      } catch (err) {
+        box.innerHTML = `<div style="color:#dc2626;padding:12px;">이력 조회 실패: ${escHtml(err.message)}</div>`;
+      }
+    };
+
+    // JSON 파일 로컬 백업 & 복원
+    window.exportBackupJson = function() {
+      const blob = new Blob([JSON.stringify({ version: 1, app: APP, photos: PHOTOS }, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `오라테크_노션플러스_백업_${todayStr(0)}.json`;
+      a.click();
+      showToast('💾 사진 포함 전체 JSON 파일 백업을 다운로드했습니다.');
+    };
+
+    window.importBackupJson = function(file) {
+      if (!file) return;
+      const r = new FileReader();
+      r.onload = async () => {
+        try {
+          const parsed = JSON.parse(r.result);
+          if (!parsed.app || !Array.isArray(parsed.app.pages)) throw new Error('유효한 백업 파일이 아닙니다.');
+          if (parsed.photos) {
+            for (const ph of Object.values(parsed.photos)) {
+              PHOTOS[ph.id] = ph;
+              await idbPut('photos', ph);
+            }
+          }
+          APP = parsed.app;
+          await saveAppState(false);
+          renderAll();
+          closeModal('syncModal');
+          showToast('✅ JSON 백업 복원이 완료되었습니다!');
+        } catch (err) {
+          showToast('❌ 복원 실패: ' + err.message);
+        }
+      };
+      r.readAsText(file);
+    };
+
+    // ==================== 16. 텔레그램 알림 & 인박스 가져오기 ====================
+    window.openTelegramModal = function() {
+      document.getElementById('cfgTgToken').value = getLocalSecret('ora_notion_tg_token', '');
+      document.getElementById('cfgTgChatId').value = getLocalSecret('ora_notion_tg_chat', '');
+      openModal('telegramModal');
+    };
+    window.saveTelegramSettings = function() {
+      setLocalSecret('ora_notion_tg_token', (document.getElementById('cfgTgToken')?.value || '').trim());
+      setLocalSecret('ora_notion_tg_chat', (document.getElementById('cfgTgChatId')?.value || '').trim());
+      showToast('💾 텔레그램 알림 설정을 저장했습니다.');
+    };
+
+    window.sendDailySummaryToTelegram = async function() {
+      const tok = getLocalSecret('ora_notion_tg_token', '');
+      const chat = getLocalSecret('ora_notion_tg_chat', '');
+      const out = document.getElementById('tgResultBox');
+      if (!tok || !chat) { if (out) out.textContent = '봇 토큰과 채팅 ID를 입력해 주세요.'; return; }
+      const tdPage = ensureTodayDailyPage();
+      const todos = tdPage.blocks.filter(b => b.type === 'todo');
+      const lines = todos.map(t => `${t.checked ? '✅' : '⬜'} [${t.space === 'KIDS' ? '애들' : '일'}] ${t.text}`);
+      const msg = `🌅 [오라테크 노션+ 오늘 할일 (${todayStr(0)})]\n\n` + (lines.join('\n') || '등록된 할 일이 없습니다.');
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${tok}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: chat, text: msg })
+        });
+        const j = await res.json();
+        if (!j.ok) throw new Error(j.description || '전송 실패');
+        if (out) out.textContent = '✅ 텔레그램으로 오늘 할일 브리핑을 보냈습니다!';
+      } catch (err) {
+        if (out) out.textContent = '❌ 오류: ' + err.message;
+      }
+    };
+
+    window.pullTelegramInbox = async function() {
+      const tok = getLocalSecret('ora_notion_tg_token', '');
+      const out = document.getElementById('tgResultBox');
+      if (!tok) { if (out) out.textContent = '봇 토큰을 먼저 입력하세요.'; return; }
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${tok}/getUpdates?limit=10`);
+        const j = await res.json();
+        if (!j.ok) throw new Error(j.description || '조회 실패');
+        const tdPage = ensureTodayDailyPage();
+        const lastUpdateId = Number(getLocalSecret('ora_tg_last_uid', '0'));
+        let imported = 0;
+        let maxUid = lastUpdateId;
+        for (const u of (j.result || [])) {
+          if (u.update_id <= lastUpdateId || !u.message) continue;
+          maxUid = Math.max(maxUid, u.update_id);
+          const txt = u.message.caption || u.message.text;
+          if (txt) {
+            tdPage.blocks.push(createBlock('todo', { text: `[텔레그램] ${txt}`, space: txt.includes('애') || txt.includes('아이') || txt.includes('준비물') ? 'KIDS' : 'WORK', dueDate: todayStr(0) }));
+            imported++;
+          }
+        }
+        setLocalSecret('ora_tg_last_uid', String(maxUid));
+        if (imported > 0) { saveAppState(); renderAll(); }
+        if (out) out.textContent = `📥 새 텔레그램 메시지 ${imported}건을 오늘 할일로 가져왔습니다!`;
+      } catch (err) {
+        if (out) out.textContent = '❌ 오류: ' + err.message;
+      }
+    };
+
+    // ==================== 17. Gemini 4 Carbon AI 코파일럿 & 사진 OCR 할일 추출 ====================
+    window.openCarbonAssistantModal = function() {
+      openModal('carbonModal');
+    };
+    window.quickCarbonPreset = function(txt) {
+      document.getElementById('carbonPromptInput').value = txt;
+    };
+
+    async function callCarbonJson(promptText, imageObj = null) {
+      const apiKey = getLocalSecret('ora_gemini_api_key', '');
+      if (IS_LOCAL_SERVER) {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'gemini-4-carbon',
+            apiKey,
+            prompt: promptText,
+            imageBase64: imageObj ? imageObj.base64 : undefined,
+            imageMimeType: imageObj ? imageObj.mimeType : undefined,
+            refine: false
+          })
+        });
+        if (res.ok) {
+          const j = await res.json();
+          if (j.data) return j.data;
+        }
+      }
+      if (!apiKey) return null;
+      const parts = [{ text: promptText }];
+      if (imageObj && imageObj.base64) {
+        parts.push({ inlineData: { mimeType: imageObj.mimeType || 'image/jpeg', data: imageObj.base64 } });
+      }
+      const r2 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-4-carbon:generateContent?key=${encodeURIComponent(apiKey)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts }], generationConfig: { responseMimeType: 'application/json', temperature: 0.35 } })
+      });
+      if (!r2.ok) return null;
+      const j2 = await r2.json();
+      const raw = j2.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      return raw ? JSON.parse(raw) : null;
+    }
+
+    window.generateCarbonTemplateBlocks = async function() {
+      const q = (document.getElementById('carbonPromptInput')?.value || '').trim();
+      const out = document.getElementById('carbonOutputArea');
+      if (!q) return;
+      if (out) { out.style.display = 'block'; out.textContent = '💎 Gemini 4 Carbon이 블록을 설계 중입니다...'; }
+
+      const page = APP.pages.find(p => p.id === APP.activePageId) || ensureTodayDailyPage();
+      let parsed = null;
+      try {
+        const prompt = `당신은 (주)오라테크 대표님의 업무·가족 통합 노션 비서입니다.
+요청: "${q}"
+반드시 JSON만 반환:
+{"heading":"소제목 한줄","space":"WORK 또는 KIDS","callout":"핵심 요약 한문장","todos":["체크리스트1","체크리스트2","체크리스트3","체크리스트4"]}`;
+        parsed = await callCarbonJson(prompt);
+      } catch (_) {}
+
+      if (!parsed || !Array.isArray(parsed.todos)) {
+        const isKids = /애들|아이|육아|소풍|준비물|학교|캠핑|가족|병원/.test(q);
+        parsed = {
+          heading: isKids ? `🧸 ${q.slice(0, 24)} 체크리스트` : `💼 ${q.slice(0, 24)} 실행 계획`,
+          space: isKids ? 'KIDS' : 'WORK',
+          callout: `요청하신 '${q}' 기준 즉시 실행 블록 세트입니다.`,
+          todos: isKids
+            ? ['준비물 · 여벌옷 · 물통 챙기기', '일정 시간·장소 및 준비 비용 확인', '관련 안내장/사진 찍어 앨범 보관', '출발 전 안전 및 비상약 점검']
+            : ['핵심 거래처/모델 스펙 및 재고 확인', '오후 3시 이전 출고/서류 마감 체크', '관련 송장/제품 사진 블록에 첨부', '고객/팀 회신 및 다음 액션 기록']
+        };
+      }
+
+      page.blocks.push(createBlock('h2', { text: parsed.heading }));
+      if (parsed.callout) page.blocks.push(createBlock('callout', { calloutTone: parsed.space === 'KIDS' ? 'rose' : 'blue', text: parsed.callout }));
+      parsed.todos.forEach(t => page.blocks.push(createBlock('todo', { text: t, space: parsed.space || 'WORK', dueDate: page.dailyDate || todayStr(0) })));
+      page.updatedAt = Date.now();
+      await saveAppState();
+      APP.activeView = 'EDITOR';
+      APP.activePageId = page.id;
+      renderAll();
+      if (out) out.textContent = `✅ '${page.title}' 페이지에 제목 + 체크리스트 ${parsed.todos.length}개를 삽입했습니다!`;
+    };
+
+    window.runCarbonDailyBriefing = async function() {
+      const tdPage = ensureTodayDailyPage();
+      const todos = tdPage.blocks.filter(b => b.type === 'todo');
+      const doneList = todos.filter(b => b.checked).map(b => b.text);
+      const todoList = todos.filter(b => !b.checked).map(b => `[${b.space === 'KIDS' ? '애들' : '일'}] ${b.text}`);
+      const out = document.getElementById('carbonOutputArea');
+      if (out) { out.style.display = 'block'; out.textContent = '💎 Carbon이 오늘 하루 일·가족 일정을 분석 중입니다...'; }
+
+      let brief = null;
+      try {
+        const p = `오늘 날짜 ${todayStr(0)}. 완료(${doneList.length}건): ${doneList.join(', ')}. 미완료(${todoList.length}건): ${todoList.join(', ')}.
+대표님께 짧고 명쾌한 하루 브리핑 JSON만 반환: {"summary":"상황 요약 3문장","topPriority":"지금 제일 먼저 끝낼 1순위","eveningTip":"저녁·가족 마무리 한마디"}`;
+        brief = await callCarbonJson(p);
+      } catch (_) {}
+
+      if (!brief || !brief.summary) {
+        brief = {
+          summary: `오늘 총 ${todos.length}건 중 ${doneList.length}건 완료, ${todoList.length}건이 남아 있습니다.`,
+          topPriority: todoList[0] || '오늘 남은 핵심 업무부터 먼저 마무리하세요.',
+          eveningTip: '퇴근 후에는 애들 체크리스트와 사진 기록을 확인하고 하루를 가볍게 마감해 보세요.'
+        };
+      }
+      if (out) {
+        out.textContent = `📊 [오늘 브리핑]\n${brief.summary}\n\n🎯 1순위 액션: ${brief.topPriority}\n🌙 마무리 팁: ${brief.eveningTip}`;
+      }
+    };
+
+    window.analyzePhotoWithCarbon = async function(photoId) {
+      const ph = PHOTOS[photoId];
+      if (!ph || !ph.dataUrl) return;
+      showToast('✨ Gemini 4 Carbon이 사진 내용을 읽고 있습니다...');
+      const b64 = ph.dataUrl.split(',')[1];
+      let parsed = null;
+      try {
+        const prompt = `이 이미지를 자세히 읽고(가정통신문, 안내문, 송장, 거래명세표, 제품 사진 등) 핵심 요약과 바로 실행할 체크리스트를 JSON으로 추출하세요:
+{"summary":"이미지 내용 1~2줄 요약","space":"WORK 또는 KIDS","todos":["할일1","할일2","할일3"]}`;
+        parsed = await callCarbonJson(prompt, { base64: b64, mimeType: 'image/jpeg' });
+      } catch (_) {}
+
+      const page = APP.pages.find(p => p.id === ph.pageId) || ensureTodayDailyPage();
+      if (parsed && Array.isArray(parsed.todos) && parsed.todos.length) {
+        ph.caption = parsed.summary || ph.caption;
+        await idbPut('photos', ph);
+        page.blocks.push(createBlock('callout', { calloutTone: parsed.space === 'KIDS' ? 'rose' : 'blue', text: `📷 사진 자동 판독: ${parsed.summary}` }));
+        parsed.todos.forEach(t => page.blocks.push(createBlock('todo', { text: t, space: parsed.space || ph.space || 'WORK', dueDate: page.dailyDate || todayStr(0) })));
+        await saveAppState();
+        renderAll();
+        showToast(`✨ 사진에서 할 일 ${parsed.todos.length}개를 자동 추출해 노트에 추가했습니다!`);
+      } else {
+        showToast('💡 사진 OCR을 사용하려면 [설정/Git]에 Carbon 키를 연결하거나 로컬 서버(:3080)에서 실행하세요.');
+      }
+    };
+
+    // ==================== 18. 부팅 시퀀스 ====================
+    (async function bootNotionOS() {
+      try {
+        await loadAppState();
+        if (APP.pinCode) {
+          // PIN이 설정된 경우 첫 진입 시 보호 표시 가능 (기본 빈 값)
+          document.getElementById('btnTopPinLock').textContent = '🔒 잠금설정됨';
+        }
+        renderAll();
+      } catch (err) {
+        console.error('Boot error:', err);
+        APP = buildInitialSeedState();
+        renderAll();
+      }
+    })();
+  </script>
+</body>
+</html>
