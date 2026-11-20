@@ -2,8 +2,19 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>오라테크 노션+ · 일 · 애들 · 프로젝트 · 사진 · Git 비공개 워크스페이스</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="오라테크 노션+" />
+  <meta id="metaThemeColor" name="theme-color" content="#f7f6f3" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232563eb'/%3E%3Cstop offset='1' stop-color='%234f46e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='43' font-size='32' font-weight='800' text-anchor='middle' fill='white' font-family='sans-serif'%3EO%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232563eb'/%3E%3Cstop offset='1' stop-color='%234f46e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='42' fill='url(%23g)'/%3E%3Ctext x='90' y='118' font-size='92' font-weight='800' text-anchor='middle' fill='white' font-family='sans-serif'%3EO%3C/text%3E%3C/svg%3E" />
+  <title>오라테크 노션+ OS v5.0 · 회사·가족 알람·기록·프로젝트 올인원</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       /* Authentic Notion Warm Paper Palette */
@@ -574,6 +585,7 @@
     .cover-ocean { background: linear-gradient(125deg, #dbe9f4 0%, #bfd8ec 55%, #e9f2f9 100%); }
     .cover-terracotta { background: linear-gradient(125deg, #c97b63 0%, #dfb08e 55%, #eed2b9 100%); }
     .cover-ink { background: linear-gradient(125deg, #2f3437 0%, #44494d 60%, #5c6166 100%); }
+    .cover-aurora { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #ec4899 100%); }
     .cover-photo { background-size: cover; background-position: center; }
 
     .cover-controls {
@@ -1405,6 +1417,43 @@
     }
 
     .mobile-menu-btn { display: none; }
+    .mobile-sidebar-scrim {
+      position: fixed;
+      inset: 30px 0 0 0;
+      background: rgba(15, 23, 42, 0.42);
+      backdrop-filter: blur(2px);
+      z-index: 95;
+      display: none;
+    }
+    .mobile-sidebar-scrim.open { display: block; }
+    .ora-live-strip {
+      background: linear-gradient(135deg, #f0f7ff 0%, #f8fbff 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 8px 11px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .ora-live-strip-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+      color: #1e40af;
+    }
+    .ora-live-strip-body {
+      margin-top: 7px;
+      padding-top: 7px;
+      border-top: 1px dashed #bfdbfe;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      color: var(--ink-2);
+    }
     @media (max-width: 920px) {
       .mobile-menu-btn { display: inline-flex; }
       .sidebar {
@@ -1412,6 +1461,7 @@
         top: 30px; bottom: 0; left: 0;
         transform: translateX(-100%);
         box-shadow: var(--shadow-pop);
+        z-index: 120;
       }
       .sidebar.mobile-open { transform: translateX(0); width: 264px; min-width: 264px; }
       .ws-canvas { padding: 0 14px 0 46px; }
@@ -1421,11 +1471,11 @@
       .page-title-input { font-size: 25px; }
       .side-peek-body { padding: 16px 18px 50px 40px; }
     }
-    @media (max-width: 640px) {
-      .ws-topbar { padding: 4px 8px; gap: 3px; height: auto; min-height: 42px; flex-wrap: wrap; overflow-x: hidden; max-width: 100%; box-sizing: border-box; }
-      .ws-topbar .n-btn, .ws-topbar .tb-pill-btn { padding: 3px 6px; font-size: 11.5px; }
-      #topPomodoroBtn { display: none; }
-      .crumb-btn { max-width: 96px; font-size: 12px; }
+    @media (max-width: 768px) {
+      .ws-topbar { padding: 4px 8px; gap: 4px; height: auto; min-height: 42px; flex-wrap: nowrap; overflow-x: hidden; max-width: 100%; box-sizing: border-box; }
+      .ws-topbar .n-btn-ghost, .ws-topbar .icon-btn { padding: 4px 7px; font-size: 12px; }
+      .ws-topbar .mobile-hide-top { display: none !important; }
+      .crumb-btn { max-width: 112px; font-size: 12px; }
     }
     @media print {
       .eco-bar, .sidebar, .ws-topbar, .view-switcher-strip, .block-gutter, .page-controls-hover, .cover-controls, .split-pane { display: none !important; }
@@ -1660,6 +1710,404 @@
       .app-shell, .workspace-main, .ws-content, .ws-canvas { height: auto !important; overflow: visible !important; margin: 0 !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
       body { background: #ffffff !important; }
     }
+
+    /* ==================== v5.0 Flagship Paid-SaaS Design System (4 Themes + Mobile Native UX) ==================== */
+    :root {
+      --surface-card: #ffffff;
+      --surface-elevated: #ffffff;
+      --surface-glass: rgba(255, 255, 255, 0.84);
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.11);
+      --accent-grad: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      --kids-accent: #ea580c;
+      --kids-soft: rgba(234, 88, 12, 0.11);
+      --ok-accent: #059669;
+      --danger-accent: #dc2626;
+      --hero-grad: linear-gradient(135deg, #ffffff 0%, #f4f7ff 55%, #fff7ed 100%);
+      --shadow-elev: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -6px rgba(15, 23, 42, 0.07);
+    }
+
+    /* Theme 2: Midnight Obsidian (Linear / Notion Dark) */
+    [data-theme="midnight"] {
+      --bg-page: #0b0f19;
+      --bg-sidebar: #0f1524;
+      --bg-subtle: #131b2e;
+      --bg-sand: #1a243b;
+      --bg-hover: rgba(148, 163, 184, 0.12);
+      --bg-active: rgba(96, 165, 250, 0.18);
+      --ink: #f1f5f9;
+      --ink-2: rgba(226, 232, 240, 0.78);
+      --ink-3: rgba(148, 163, 184, 0.72);
+      --ink-4: rgba(148, 163, 184, 0.42);
+      --border: rgba(148, 163, 184, 0.16);
+      --border-strong: rgba(148, 163, 184, 0.28);
+      --blue: #60a5fa;
+      --blue-hover: #3b82f6;
+      --blue-soft: rgba(59, 130, 246, 0.22);
+      --surface-card: #111827;
+      --surface-elevated: #172033;
+      --surface-glass: rgba(15, 21, 36, 0.86);
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.16);
+      --accent-grad: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+      --hero-grad: linear-gradient(135deg, #111827 0%, #0f1d38 55%, #1f172a 100%);
+      --tag-gray-bg: rgba(148, 163, 184, 0.18); --tag-gray-ink: #e2e8f0;
+      --tag-blue-bg: rgba(56, 189, 248, 0.18); --tag-blue-ink: #7dd3fc;
+      --tag-orange-bg: rgba(251, 146, 60, 0.20); --tag-orange-ink: #fdba74;
+      --tag-yellow-bg: rgba(250, 204, 21, 0.18); --tag-yellow-ink: #fde047;
+      --tag-green-bg: rgba(52, 211, 153, 0.18); --tag-green-ink: #6ee7b7;
+      --tag-pink-bg: rgba(244, 114, 182, 0.18); --tag-pink-ink: #f9a8d4;
+      --tag-purple-bg: rgba(167, 139, 250, 0.20); --tag-purple-ink: #c4b5fd;
+      --tag-red-bg: rgba(248, 113, 113, 0.20); --tag-red-ink: #fca5a5;
+      --shadow-pop: 0 0 0 1px rgba(148,163,184,0.18), 0 14px 38px rgba(0,0,0,0.62);
+      --shadow-card: 0 0 0 1px rgba(148,163,184,0.14), 0 4px 16px rgba(0,0,0,0.35);
+      --shadow-elev: 0 0 0 1px rgba(148,163,184,0.15), 0 10px 30px rgba(0,0,0,0.45);
+    }
+    [data-theme="midnight"] .eco-bar { background: #070b14; border-bottom-color: var(--border); }
+    [data-theme="midnight"] .eco-pill.active { background: #1e293b; color: #f8fafc; border-color: rgba(96,165,250,0.4); }
+    [data-theme="midnight"] .notion-lane-card,
+    [data-theme="midnight"] .todo-card-item,
+    [data-theme="midnight"] .modal-card,
+    [data-theme="midnight"] .cal-cell,
+    [data-theme="midnight"] .wall-card,
+    [data-theme="midnight"] .kanban-card,
+    [data-theme="midnight"] .split-pane,
+    [data-theme="midnight"] .blk-bookmark-card,
+    [data-theme="midnight"] .blk-chart-card,
+    [data-theme="midnight"] .blk-gdrive-card,
+    [data-theme="midnight"] .blk-quote-card,
+    [data-theme="midnight"] .blk-quote-card table,
+    [data-theme="midnight"] .tb-timeline-card,
+    [data-theme="midnight"] .tb-event-pill,
+    [data-theme="midnight"] .canvas-card,
+    [data-theme="midnight"] .proj-form-card,
+    [data-theme="midnight"] .popover-menu,
+    [data-theme="midnight"] .side-peek,
+    [data-theme="midnight"] .field-input,
+    [data-theme="midnight"] .field-textarea,
+    [data-theme="midnight"] .field-select,
+    [data-theme="midnight"] .n-btn,
+    [data-theme="midnight"] .sunsama-plan-bar,
+    [data-theme="midnight"] .supertag-fields-box,
+    [data-theme="midnight"] .timeline-scroll {
+      background: var(--surface-card) !important;
+      color: var(--ink) !important;
+      border-color: var(--border) !important;
+    }
+    [data-theme="midnight"] .ora-live-strip { background: linear-gradient(135deg, #0f1d38 0%, #172554 100%) !important; border-color: rgba(96,165,250,0.35) !important; }
+    [data-theme="midnight"] .ora-live-strip-head { color: #93c5fd !important; }
+    [data-theme="midnight"] .cal-cell.today { background: rgba(59,130,246,0.16) !important; }
+    [data-theme="midnight"] .graph-stage, [data-theme="midnight"] .canvas-stage { background-color: #0e1525 !important; }
+    [data-theme="midnight"] .ws-topbar, [data-theme="midnight"] .view-switcher-strip { background: var(--surface-glass) !important; }
+    [data-theme="midnight"] .space-chip.active { background: #1e293b !important; color: #f8fafc !important; }
+    [data-theme="midnight"] .view-pill.active { background: #1e293b !important; color: #7dd3fc !important; border-color: rgba(56,189,248,0.4) !important; }
+    [data-theme="midnight"] #pinLockOverlay { background: #0b0f19 !important; }
+    [data-theme="midnight"] #pinLockOverlay > div { background: #111827 !important; color: #f1f5f9 !important; }
+
+    /* Theme 3: Royal Executive (Navy Sidebar + Ice White) */
+    [data-theme="executive"] {
+      --bg-page: #f8fafc;
+      --bg-sidebar: #0c1932;
+      --bg-subtle: #f1f5f9;
+      --bg-sand: #e2e8f0;
+      --border: #e2e8f0;
+      --accent: #1d4ed8;
+      --hero-grad: linear-gradient(135deg, #ffffff 0%, #eff6ff 60%, #e0f2fe 100%);
+    }
+    [data-theme="executive"] .sidebar { color: #cbd5e1; border-right-color: #1e293b; }
+    [data-theme="executive"] .sidebar .sb-ws-name,
+    [data-theme="executive"] .sidebar .sb-item { color: #e2e8f0; }
+    [data-theme="executive"] .sidebar .sb-item:hover { background: rgba(255,255,255,0.08); }
+    [data-theme="executive"] .sidebar .sb-item.active { background: rgba(56,189,248,0.22); color: #ffffff; }
+    [data-theme="executive"] .sidebar .sb-sec-label,
+    [data-theme="executive"] .sidebar .sb-item-count { color: #94a3b8; }
+    [data-theme="executive"] .sidebar .space-seg { background: rgba(255,255,255,0.06); }
+    [data-theme="executive"] .sidebar .space-chip { color: #cbd5e1; }
+    [data-theme="executive"] .sidebar .space-chip.active { background: #2563eb; color: #ffffff; }
+    [data-theme="executive"] .sidebar .n-btn-ghost { color: #cbd5e1; }
+    [data-theme="executive"] .sidebar .sb-bottom { border-top-color: rgba(148,163,184,0.2); }
+    [data-theme="executive"] .eco-bar { background: #071226; border-bottom-color: #1e293b; }
+    [data-theme="executive"] .eco-bar .eco-brand { color: #7dd3fc; }
+    [data-theme="executive"] .eco-bar .eco-pill { color: #cbd5e1; }
+    [data-theme="executive"] .eco-bar .eco-pill.active { background: #1d4ed8; color: #fff; border-color: #60a5fa; }
+
+    /* Theme 4: Sage Morning (Calm Botanical) */
+    [data-theme="sage"] {
+      --bg-page: #f9fbf9;
+      --bg-sidebar: #eff5f0;
+      --bg-subtle: #f3f7f4;
+      --bg-sand: #e3ece5;
+      --border: #dce7de;
+      --blue: #0f766e;
+      --blue-hover: #0d5d57;
+      --blue-soft: rgba(15, 118, 110, 0.13);
+      --accent: #0f766e;
+      --accent-grad: linear-gradient(135deg, #0f766e 0%, #059669 100%);
+      --hero-grad: linear-gradient(135deg, #ffffff 0%, #ecfdf5 58%, #f0fdf4 100%);
+    }
+
+    /* Elevated Glass & Craft Polish */
+    .ws-topbar {
+      background: var(--surface-glass);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .notion-lane-card {
+      border-radius: 14px !important;
+      box-shadow: var(--shadow-elev);
+      border: 1px solid var(--border) !important;
+    }
+    .todo-card-item {
+      border-radius: 10px !important;
+      transition: transform 0.12s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+    }
+    .todo-card-item:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.05);
+    }
+
+    /* Theme Picker Pills */
+    .theme-dot-group {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 6px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--bg-subtle);
+    }
+    .theme-dot {
+      width: 15px; height: 15px; border-radius: 999px; border: 1.5px solid rgba(15,23,42,0.2);
+      cursor: pointer; padding: 0; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .theme-dot:hover { transform: scale(1.18); }
+    .theme-dot.active { box-shadow: 0 0 0 2px var(--accent); transform: scale(1.12); }
+
+    /* v5 Hero Executive Card */
+    .v5-hero-card {
+      background: var(--hero-grad);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-elev);
+      position: relative;
+      overflow: hidden;
+    }
+    .v5-hero-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .v5-hero-clock {
+      font-family: var(--font-mono);
+      font-size: 12px; font-weight: 700;
+      padding: 3px 9px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--accent);
+      display: inline-flex; align-items: center; gap: 5px;
+      font-variant-numeric: tabular-nums;
+    }
+    .v5-hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .v5-stat-pill {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex; flex-direction: column; gap: 2px;
+      cursor: pointer; transition: transform 0.12s, border-color 0.12s;
+    }
+    .v5-stat-pill:hover { transform: translateY(-1px); border-color: var(--accent); }
+    .v5-stat-lbl { font-size: 11px; color: var(--ink-3); font-weight: 600; }
+    .v5-stat-val { font-size: 17px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .v5-stat-sub { font-size: 11px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .v5-quick-bar {
+      display: flex; gap: 7px; flex-wrap: wrap; margin-top: 13px;
+    }
+    .v5-action-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 999px;
+      font-size: 12px; font-weight: 600;
+      border: 1px solid var(--border); background: var(--surface-card); color: var(--ink);
+      cursor: pointer; transition: all 0.14s;
+    }
+    .v5-action-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+    .v5-action-chip.primary { background: var(--accent-grad); color: #ffffff; border-color: transparent; box-shadow: 0 4px 12px rgba(37,99,235,0.24); }
+    .v5-action-chip.primary:hover { filter: brightness(1.06); color: #ffffff; }
+
+    /* v5 Generic Cards, Subtabs & Grids */
+    .v5-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-elev);
+    }
+    .v5-subtabs {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      background: var(--bg-sidebar); padding: 5px; border-radius: 12px;
+      border: 1px solid var(--border); margin-bottom: 16px;
+    }
+    .v5-subtab {
+      flex: 1; min-width: 110px;
+      padding: 8px 12px; border-radius: 9px; border: none;
+      background: transparent; color: var(--ink-2);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.14s; text-align: center;
+    }
+    .v5-subtab.active {
+      background: var(--surface-card); color: var(--ink);
+      box-shadow: 0 2px 8px rgba(15,23,42,0.08);
+    }
+
+    /* Alarm Hub Cards */
+    .alarm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 12px; }
+    .alarm-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 13px;
+      padding: 14px 15px;
+      display: flex; flex-direction: column; gap: 8px;
+      box-shadow: var(--shadow-elev);
+      transition: transform 0.12s, box-shadow 0.14s;
+    }
+    .alarm-card.space-KIDS { border-left-color: #ea580c; }
+    .alarm-card.space-PERSONAL { border-left-color: #7c3aed; }
+    .alarm-card.muted { opacity: 0.55; filter: grayscale(0.4); }
+    .alarm-time-big {
+      font-family: var(--font-mono);
+      font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
+      color: var(--ink); font-variant-numeric: tabular-nums;
+    }
+    .alarm-countdown-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700;
+      background: var(--accent-soft); color: var(--accent);
+    }
+    .alarm-countdown-badge.urgent { background: rgba(220,38,38,0.14); color: #dc2626; }
+    .switch-pill {
+      position: relative; width: 38px; height: 22px; border-radius: 999px;
+      background: var(--border-strong); border: none; cursor: pointer; transition: background 0.18s; flex-shrink: 0;
+    }
+    .switch-pill::after {
+      content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+      border-radius: 999px; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.25); transition: transform 0.18s;
+    }
+    .switch-pill.on { background: #10b981; }
+    .switch-pill.on::after { transform: translateX(16px); }
+    .wd-chip {
+      padding: 4px 9px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--bg-subtle); font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .wd-chip.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* Journal, Kids Growth, Vault & Ledger */
+    .journal-entry-card {
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 18px; box-shadow: var(--shadow-elev); display: grid; gap: 9px;
+    }
+    .on-this-day-card {
+      background: linear-gradient(135deg, rgba(251,191,36,0.14) 0%, rgba(249,115,22,0.10) 100%);
+      border: 1px solid rgba(245,158,11,0.38); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px;
+    }
+    .kid-profile-card {
+      background: var(--hero-grad); border: 1px solid var(--border); border-radius: 15px;
+      padding: 15px 16px; cursor: pointer; transition: all 0.14s;
+    }
+    .kid-profile-card.active { border-color: #ea580c; box-shadow: 0 0 0 2px rgba(234,88,12,0.18); }
+    .vault-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(265px, 1fr)); gap: 11px; }
+    .vault-card {
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 13px;
+      padding: 13px 15px; display: flex; flex-direction: column; gap: 6px;
+      box-shadow: var(--shadow-elev);
+    }
+    .vault-secret-val {
+      font-family: var(--font-mono); font-size: 13.5px; font-weight: 700;
+      padding: 7px 10px; border-radius: 8px; background: var(--bg-subtle);
+      border: 1px dashed var(--border-strong); word-break: break-all;
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+
+    /* Calendar Day Detail Drawer */
+    .cal-day-detail {
+      margin-top: 14px; background: var(--surface-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 15px 17px; box-shadow: var(--shadow-elev);
+    }
+    .cal-cell.selected { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+    /* Mobile Native Bottom Navigation + Floating Action Button */
+    .mobile-bottom-nav { display: none; }
+    .mobile-fab { display: none; }
+    .fab-sheet-bg {
+      position: fixed; inset: 0; z-index: 480; background: rgba(15,23,42,0.48);
+      backdrop-filter: blur(4px); display: none; align-items: flex-end; justify-content: center;
+    }
+    .fab-sheet-bg.open { display: flex; }
+    .fab-sheet {
+      width: 100%; max-width: 480px; background: var(--surface-card); color: var(--ink);
+      border-radius: 22px 22px 0 0; padding: 16px 18px calc(22px + env(safe-area-inset-bottom, 0px));
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.22); border-top: 1px solid var(--border);
+      display: grid; gap: 8px;
+    }
+    .fab-sheet-btn {
+      display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+      padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: var(--bg-subtle); color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .fab-sheet-btn:active { transform: scale(0.98); }
+
+    @media (max-width: 768px) {
+      .app-shell { height: calc(100dvh - 30px); }
+      .view-switcher-strip { display: none !important; }
+      .ws-content { padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important; }
+      .v5-hero-card { padding: 15px 15px; border-radius: 15px; }
+      .v5-hero-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .v5-stat-val { font-size: 15.5px; }
+      .alarm-grid { grid-template-columns: 1fr; }
+      .vault-grid { grid-template-columns: 1fr; }
+      .v5-subtab { font-size: 12px; padding: 7px 6px; min-width: 72px; }
+      .ledger-in-row { grid-template-columns: 1fr 1fr !important; }
+      .cal-cell { min-height: 62px !important; padding: 4px !important; }
+      .cal-pill { font-size: 9.5px !important; padding: 1px 3px !important; }
+      .modal-bg { align-items: flex-end !important; padding: 0 !important; }
+      .modal-card { border-radius: 20px 20px 0 0 !important; max-width: 100% !important; max-height: 88dvh !important; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important; }
+
+      .mobile-bottom-nav {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 340;
+        display: grid; grid-template-columns: repeat(5, 1fr);
+        background: var(--surface-glass);
+        backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+        border-top: 1px solid var(--border);
+        padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+        box-shadow: 0 -6px 24px rgba(15,23,42,0.08);
+      }
+      .mob-tab-btn {
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+        border: none; background: transparent; color: var(--ink-3);
+        font-size: 10.5px; font-weight: 600; padding: 4px 2px; cursor: pointer; position: relative;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .mob-tab-btn .mob-ico { font-size: 19px; line-height: 1.1; }
+      .mob-tab-btn.active { color: var(--accent); font-weight: 800; }
+      .mob-tab-badge {
+        position: absolute; top: 1px; right: 16%;
+        min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px;
+        background: #ef4444; color: #fff; font-size: 9.5px; font-weight: 800;
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .mobile-fab {
+        position: fixed; right: 16px; bottom: calc(72px + env(safe-area-inset-bottom, 0px)); z-index: 350;
+        width: 52px; height: 52px; border-radius: 999px; border: none;
+        background: var(--accent-grad); color: #ffffff; font-size: 26px; font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 10px 26px rgba(37, 99, 235, 0.42); cursor: pointer;
+      }
+      .mobile-fab:active { transform: scale(0.94); }
+      .rem-nag-banner { top: 10px !important; right: 10px !important; left: 10px !important; width: auto !important; max-width: none !important; }
+    }
+    @media print {
+      .mobile-bottom-nav, .mobile-fab, .fab-sheet-bg, .theme-dot-group { display: none !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -1670,16 +2118,19 @@
       <span class="eco-brand">ORATECH 7 APPS</span>
       <a href="https://igan3w.github.io/erp/" target="_blank" class="eco-pill">🏢 ERP</a>
       <a href="https://igan3w.github.io/orawinch/" data-local="/orawinch" target="_blank" class="eco-pill">🌐 공식홈</a>
-      <a href="https://igan3w.github.io/studio/" data-local="/studio" target="_blank" class="eco-pill">🎨 상세스튜디오</a>
-      <a href="https://naver-store-ai-manager-production.up.railway.app/" data-local="/" target="_blank" class="eco-pill">📣 김대리</a>
-      <a href="https://igan3w.github.io/sourcing/" data-local="/sourcing" target="_blank" class="eco-pill">🌏 소싱랩</a>
-      <a href="https://igan3w.github.io/strategy/" data-local="/strategy" target="_blank" class="eco-pill">📈 시장전략</a>
-      <span class="eco-pill active">📝 노션+</span>
+      <a href="https://igan3w.github.io/studio/" data-local="/studio" target="_blank" class="eco-pill">🛠️ 상세 스튜디오</a>
+      <a href="https://naver-store-ai-manager-production.up.railway.app/" data-local="/" target="_blank" class="eco-pill">📊 스토어AI 김대리</a>
+      <a href="https://igan3w.github.io/sourcing/" data-local="/sourcing" target="_blank" class="eco-pill">🌏 1688 소싱랩</a>
+      <a href="https://igan3w.github.io/strategy/" data-local="/strategy" target="_blank" class="eco-pill">📈 시장전략 AI</a>
+      <a href="https://igan3w.github.io/notes/" data-local="/notes" class="eco-pill active">📝 노션+ 데일리</a>
     </div>
     <div class="eco-right">
       <span id="hdrVaultStatus" class="eco-pill" onclick="openSyncModal()">☁️ 로컬 자동저장 · Git 금고</span>
     </div>
   </div>
+
+  <!-- 모바일 사이드바 백드롭 스크림 -->
+  <div id="mobileSidebarScrim" class="mobile-sidebar-scrim" onclick="closeMobileSidebar()"></div>
 
   <!-- 노션 앱 셸 -->
   <div class="app-shell">
@@ -1703,6 +2154,14 @@
         <button type="button" class="sb-item" id="sbNavHome" onclick="setMainView('TODAY')">
           <span class="sb-item-left"><span class="sb-item-icon">🏠</span><span class="sb-item-title">홈 · 오늘 보드</span></span>
           <span id="sbTodayRemain" class="sb-item-count">0</span>
+        </button>
+        <button type="button" class="sb-item" id="sbNavAlarms" onclick="setMainView('ALARMS')">
+          <span class="sb-item-left"><span class="sb-item-icon">🔔</span><span class="sb-item-title">알람 · 반복 리마인더</span></span>
+          <span id="sbAlarmCount" class="sb-item-count" style="background:rgba(239,68,68,0.14);color:#dc2626;padding:1px 6px;border-radius:999px;font-weight:700;">0</span>
+        </button>
+        <button type="button" class="sb-item" id="sbNavJournal" onclick="setMainView('JOURNAL')">
+          <span class="sb-item-left"><span class="sb-item-icon">📓</span><span class="sb-item-title">가족·일기·금고·가계부</span></span>
+          <span id="sbJournalCount" class="sb-item-count">0</span>
         </button>
         <button type="button" class="sb-item" id="sbNavInbox" onclick="setMainView('KANBAN')">
           <span class="sb-item-left"><span class="sb-item-icon">📋</span><span class="sb-item-title">전체 보드 · 캘린더</span></span>
@@ -1780,17 +2239,24 @@
           <div class="breadcrumb-bar" id="breadcrumbBar"></div>
         </div>
         <div class="ws-topbar-right">
+          <div class="theme-dot-group" title="4종 프리미엄 테마 전환">
+            <button type="button" class="theme-dot" data-theme-pick="craft" style="background:#f7f6f3;" onclick="setWorkspaceTheme('craft')" title="☀️ 웜 크래프트"></button>
+            <button type="button" class="theme-dot" data-theme-pick="midnight" style="background:#0f172a;" onclick="setWorkspaceTheme('midnight')" title="🌙 미드나잇 다크"></button>
+            <button type="button" class="theme-dot" data-theme-pick="executive" style="background:#1d4ed8;" onclick="setWorkspaceTheme('executive')" title="🌊 로열 네이비"></button>
+            <button type="button" class="theme-dot" data-theme-pick="sage" style="background:#059669;" onclick="setWorkspaceTheme('sage')" title="🌿 세이지 모닝"></button>
+          </div>
+          <button type="button" class="n-btn-ghost" onclick="openAlarmModal()" title="회사·가족 알람 1초 추가">🔔</button>
           <button type="button" class="n-btn-ghost" onclick="openQuickCaptureModal()" title="자연어 · 음성 빠른 캡처 (Ctrl+Shift+Space)">⚡ 캡처</button>
-          <button type="button" id="topSplitBtn" class="n-btn-ghost" onclick="toggleSplitPane()" title="2개 문서 나란히 보기">◫ 분할</button>
-          <button type="button" id="topPomodoroBtn" class="n-btn-ghost" onclick="togglePomodoroTimer()" title="포모도로 25분 집중 타이머">⏱️ <span id="topPomoClock">25:00</span></button>
-          <button type="button" id="btnFocusNoise" class="n-btn-ghost" onclick="cycleAmbientFocusSound()" title="집중 백색소음·빗소리 (Web Audio)">🎧 OFF</button>
-          <button type="button" class="icon-btn" onclick="speakTodayDailyBriefing()" title="오늘 할일 한국어 음성 브리핑 (TTS)">🗣️</button>
-          <button type="button" id="btnPrivacyBlur" class="icon-btn" onclick="togglePrivacyBlurMode()" title="프라이버시 블러 모드 (금액/개인 가림)">🙈</button>
+          <button type="button" id="topSplitBtn" class="n-btn-ghost mobile-hide-top" onclick="toggleSplitPane()" title="2개 문서 나란히 보기">◫ 분할</button>
+          <button type="button" id="topPomodoroBtn" class="n-btn-ghost mobile-hide-top" onclick="togglePomodoroTimer()" title="포모도로 25분 집중 타이머">⏱️ <span id="topPomoClock">25:00</span></button>
+          <button type="button" id="btnFocusNoise" class="n-btn-ghost mobile-hide-top" onclick="cycleAmbientFocusSound()" title="집중 백색소음·빗소리 (Web Audio)">🎧 OFF</button>
+          <button type="button" id="btnTopTts" class="icon-btn mobile-hide-top" onclick="speakTodayDailyBriefing()" title="오늘 할일 한국어 음성 브리핑 (TTS)">🗣️</button>
+          <button type="button" id="btnPrivacyBlur" class="icon-btn mobile-hide-top" onclick="togglePrivacyBlurMode()" title="프라이버시 블러 모드 (금액/개인 가림)">🙈</button>
           <button type="button" class="n-btn-ghost" onclick="openCarbonAssistantModal()">💎 Carbon</button>
-          <button type="button" class="n-btn-ghost" onclick="openSyncModal()">Share / Git</button>
-          <button type="button" class="icon-btn" id="btnTopFav" onclick="toggleActiveItemPin()" title="즐겨찾기">☆</button>
-          <button type="button" class="icon-btn" onclick="openHistoryModal()" title="Git 버전 히스토리 복원">🕒</button>
-          <button type="button" class="icon-btn" onclick="openLockModal()" id="btnTopPinLock" title="PIN 잠금">🔓</button>
+          <button type="button" class="n-btn-ghost mobile-hide-top" onclick="openSyncModal()">Share / Git</button>
+          <button type="button" class="icon-btn mobile-hide-top" id="btnTopFav" onclick="toggleActiveItemPin()" title="즐겨찾기">☆</button>
+          <button type="button" id="btnTopHistory" class="icon-btn mobile-hide-top" onclick="openHistoryModal()" title="Git 버전 히스토리 복원">🕒</button>
+          <button type="button" class="icon-btn mobile-hide-top" onclick="openLockModal()" id="btnTopPinLock" title="PIN 잠금">🔓</button>
           <button type="button" class="icon-btn" onclick="openPageMoreMenu(event)" title="페이지 스타일 및 설정">•••</button>
         </div>
       </header>
@@ -1799,13 +2265,15 @@
       <div class="view-switcher-strip">
         <div class="view-pills" id="mainViewTabs">
           <button type="button" class="view-pill" data-view="TODAY" onclick="setMainView('TODAY')">🏠 홈 · 오늘</button>
+          <button type="button" class="view-pill" data-view="ALARMS" onclick="setMainView('ALARMS')">🔔 알람센터</button>
+          <button type="button" class="view-pill" data-view="JOURNAL" onclick="setMainView('JOURNAL')">📓 가족·기록·금고</button>
+          <button type="button" class="view-pill" data-view="CALENDAR" onclick="setMainView('CALENDAR')">📅 캘린더</button>
           <button type="button" class="view-pill" data-view="EDITOR" onclick="setMainView('EDITOR')">📝 페이지</button>
           <button type="button" class="view-pill" data-view="PROJECT" onclick="setMainView('PROJECT')">📁 프로젝트</button>
-          <button type="button" class="view-pill" data-view="KANBAN" onclick="setMainView('KANBAN')">📋 보드·타임블록</button>
-          <button type="button" class="view-pill" data-view="CALENDAR" onclick="setMainView('CALENDAR')">📅 캘린더</button>
-          <button type="button" class="view-pill" data-view="GRAPH" onclick="setMainView('GRAPH')">🕸️ 그래프·캔버스</button>
-          <button type="button" class="view-pill" data-view="GALLERY" onclick="setMainView('GALLERY')">🖼️ 사진금고</button>
-          <button type="button" class="view-pill" data-view="HABITS" onclick="setMainView('HABITS')">⏱️ 집중·루틴</button>
+          <button type="button" class="view-pill" data-view="KANBAN" onclick="setMainView('KANBAN')">📋 보드</button>
+          <button type="button" class="view-pill" data-view="GRAPH" onclick="setMainView('GRAPH')">🕸️ 그래프</button>
+          <button type="button" class="view-pill" data-view="GALLERY" onclick="setMainView('GALLERY')">🖼️ 사진</button>
+          <button type="button" class="view-pill" data-view="HABITS" onclick="setMainView('HABITS')">⏱️ 집중</button>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
           <span id="todayProgressSummary" style="font-size:12px;color:var(--ink-2);"></span>
@@ -2229,18 +2697,246 @@
     </div>
   </div>
 
-  <!-- TickTick / Todoist Pro 지속(Nag) 리마인더 배너 -->
+  <!-- v5.0 Pro 스마트 알람 & 지속(Nag) 리마인더 배너 -->
   <div id="remNagBanner" class="rem-nag-banner">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-      <div>
-        <div style="font-size:11px;color:#fbbf24;font-weight:700;margin-bottom:2px;">🔔 예약 리마인더 알림 (Pro Nag Alert)</div>
-        <div id="remNagText" style="font-size:13.5px;font-weight:600;line-height:1.4;"></div>
+      <div style="min-width:0;">
+        <div id="remNagBadge" style="font-size:11px;color:#fbbf24;font-weight:800;margin-bottom:3px;">🔔 오라테크 노션+ 프로 알람</div>
+        <div id="remNagText" style="font-size:14px;font-weight:700;line-height:1.45;"></div>
+        <div id="remNagSub" style="font-size:11.5px;color:#cbd5e1;margin-top:3px;"></div>
       </div>
-      <button type="button" class="icon-btn" style="color:#fff;" onclick="dismissNagReminder()">✕</button>
+      <button type="button" class="icon-btn" style="color:#fff;flex-shrink:0;" onclick="dismissNagReminder()">✕</button>
     </div>
-    <div style="display:flex;gap:6px;margin-top:10px;">
-      <button type="button" class="n-btn-primary" style="font-size:12px;padding:4px 10px;" onclick="completeNagReminderTodo()">✅ 완료 처리</button>
-      <button type="button" class="n-btn" style="font-size:12px;padding:4px 10px;" onclick="snoozeNagReminder(10)">⏰ 10분 뒤 다시 알림</button>
+    <div style="display:flex;gap:5px;margin-top:11px;flex-wrap:wrap;">
+      <button type="button" class="n-btn-primary" style="font-size:11.5px;padding:5px 10px;" onclick="completeNagReminderTodo()">✅ 완료 확인</button>
+      <button type="button" class="n-btn" style="font-size:11.5px;padding:5px 8px;background:#1e293b;color:#fff;border-color:#475569;" onclick="snoozeNagReminder(5)">5분</button>
+      <button type="button" class="n-btn" style="font-size:11.5px;padding:5px 8px;background:#1e293b;color:#fff;border-color:#475569;" onclick="snoozeNagReminder(15)">15분</button>
+      <button type="button" class="n-btn" style="font-size:11.5px;padding:5px 8px;background:#1e293b;color:#fff;border-color:#475569;" onclick="snoozeNagReminder(60)">1시간</button>
+      <button type="button" class="n-btn" style="font-size:11.5px;padding:5px 8px;background:#1e293b;color:#fff;border-color:#475569;" onclick="snoozeNagReminder('TOMORROW')">내일 9시</button>
+      <button type="button" class="n-btn" style="font-size:11.5px;padding:5px 8px;background:#1e293b;color:#fde047;border-color:#475569;" onclick="speakCurrentNagAlarm()" title="한국어 음성으로 다시 듣기">🗣️</button>
+    </div>
+  </div>
+
+  <!-- [v5.0] 프로 알람 등록/수정 모달 -->
+  <div id="alarmModal" class="modal-bg" onclick="if(event.target===this) closeModal('alarmModal')">
+    <div class="modal-card" style="max-width:540px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 id="alarmModalTitle" style="margin:0;font-size:16.5px;font-weight:800;">🔔 회사·가족 프로 알람 등록</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('alarmModal')">✕</button>
+      </div>
+      <input type="hidden" id="almEditId" value="" />
+      <div style="display:grid;gap:10px;">
+        <div>
+          <label class="field-label">알람 제목</label>
+          <input id="almTitle" class="field-input" placeholder="예: 오후 3시 경동화물 당일 출고 마감 / 선유 치과 정기검진" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <label class="field-label">영역 구분</label>
+            <select id="almSpace" class="field-select">
+              <option value="WORK">🏢 회사 · 오라테크</option>
+              <option value="KIDS">👨‍👧‍👦 가족 · 애들</option>
+              <option value="PERSONAL">🔒 개인 · 건강</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">카테고리</label>
+            <select id="almCategory" class="field-select">
+              <option value="출고/마감">🚚 출고/마감</option>
+              <option value="세무/결제">🧾 세무/결제</option>
+              <option value="거래처/미팅">🤝 거래처/미팅</option>
+              <option value="등하원/학원">🎒 등하원/학원</option>
+              <option value="병원/접종">🏥 병원/접종</option>
+              <option value="기념일/가족">🎂 기념일/가족</option>
+              <option value="개인/기타">✨ 개인/기타</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div>
+            <label class="field-label">기준 날짜</label>
+            <input id="almDate" type="date" class="field-input" />
+          </div>
+          <div>
+            <label class="field-label">알람 시각</label>
+            <input id="almTime" type="time" class="field-input" value="09:00" />
+          </div>
+          <div>
+            <label class="field-label">반복 규칙</label>
+            <select id="almRepeat" class="field-select" onchange="toggleAlarmRepeatExtra()">
+              <option value="NONE">1회성</option>
+              <option value="DAILY">매일</option>
+              <option value="WEEKDAYS">평일 (월~금)</option>
+              <option value="WEEKEND">주말 (토~일)</option>
+              <option value="WEEKLY">매주 요일 지정</option>
+              <option value="MONTHLY">매월 N일 (세금/급여)</option>
+              <option value="YEARLY">매년 (생일/보험/기념일)</option>
+            </select>
+          </div>
+        </div>
+        <div id="almWeekdaysRow" style="display:none;">
+          <label class="field-label">반복 요일 선택</label>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;" id="almWeekdaysBox">
+            <button type="button" class="wd-chip" data-wd="1" onclick="this.classList.toggle('on')">월</button>
+            <button type="button" class="wd-chip" data-wd="2" onclick="this.classList.toggle('on')">화</button>
+            <button type="button" class="wd-chip" data-wd="3" onclick="this.classList.toggle('on')">수</button>
+            <button type="button" class="wd-chip" data-wd="4" onclick="this.classList.toggle('on')">목</button>
+            <button type="button" class="wd-chip" data-wd="5" onclick="this.classList.toggle('on')">금</button>
+            <button type="button" class="wd-chip" data-wd="6" onclick="this.classList.toggle('on')">토</button>
+            <button type="button" class="wd-chip" data-wd="0" onclick="this.classList.toggle('on')">일</button>
+          </div>
+        </div>
+        <div id="almMonthDayRow" style="display:none;">
+          <label class="field-label">매월 며칠 (1~31)</label>
+          <input id="almDayOfMonth" type="number" min="1" max="31" value="10" class="field-input" style="max-width:140px;" />
+        </div>
+        <div>
+          <label class="field-label">사전 경보 (놓치면 안 되는 일정 미리 알림)</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;">
+            <label style="display:inline-flex;align-items:center;gap:4px;"><input type="checkbox" id="almPre7" /> D-7일 전</label>
+            <label style="display:inline-flex;align-items:center;gap:4px;"><input type="checkbox" id="almPre3" /> D-3일 전</label>
+            <label style="display:inline-flex;align-items:center;gap:4px;"><input type="checkbox" id="almPre1" checked /> D-1일 전</label>
+            <label style="display:inline-flex;align-items:center;gap:4px;"><input type="checkbox" id="almPre30m" checked /> 30분 전</label>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center;">
+          <div>
+            <label class="field-label">알람 소리 방식</label>
+            <select id="almSound" class="field-select">
+              <option value="CHIME">🎵 부드러운 차임벨</option>
+              <option value="VOICE">🗣️ 한국어 음성으로 읽어주기 (TTS)</option>
+              <option value="URGENT">🚨 긴급 강조 비프음</option>
+              <option value="SILENT">🔕 무음 (배너+푸시만)</option>
+            </select>
+          </div>
+          <div style="display:grid;gap:5px;padding-top:14px;font-size:12.5px;">
+            <label style="display:inline-flex;align-items:center;gap:5px;font-weight:600;"><input type="checkbox" id="almSendTg" checked /> ✈️ 텔레그램 폰 자동 푸시</label>
+            <label style="display:inline-flex;align-items:center;gap:5px;font-weight:600;"><input type="checkbox" id="almSendPush" checked /> 📲 브라우저·OS 푸시 알림</label>
+          </div>
+        </div>
+        <div>
+          <label class="field-label">메모 / 준비물 / 연락처</label>
+          <textarea id="almNote" rows="2" class="field-textarea" placeholder="예: 건강보험증 챙기기, 경동화물 영업소 확인 등..."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;">
+        <button type="button" class="n-btn" onclick="closeModal('alarmModal')">취소</button>
+        <button type="button" class="n-btn-primary" onclick="saveProAlarm()">🔔 알람 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [v5.0] Sunsama 스타일 이브닝 셧다운 (하루 마감 리추얼) 모달 -->
+  <div id="shutdownModal" class="modal-bg" onclick="if(event.target===this) closeModal('shutdownModal')">
+    <div class="modal-card" style="max-width:520px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:17px;font-weight:800;">🌙 하루 마감 리추얼 (Evening Shutdown)</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('shutdownModal')">✕</button>
+      </div>
+      <div id="shutdownStatsBox" style="margin-bottom:12px;"></div>
+      <div style="display:grid;gap:9px;">
+        <div>
+          <label class="field-label">✨ 오늘 가장 잘한 일 / 감사한 순간 (가족·회사)</label>
+          <textarea id="sdWinText" rows="2" class="field-textarea" placeholder="예: 대형 건 견적 깔끔하게 발송 완료, 저녁에 선유·은유와 책 읽기!"></textarea>
+        </div>
+        <div>
+          <label class="field-label">🎯 내일 가장 먼저 끝낼 핵심 1가지 (자동으로 내일 보드 상단 등록)</label>
+          <input id="sdTomorrowTop" class="field-input" placeholder="예: 오전 9시 산림조합 PCW-5000 출고 확인" />
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;">
+          <label style="display:inline-flex;align-items:center;gap:5px;font-weight:600;"><input type="checkbox" id="sdCarryOver" checked /> ♻️ 오늘 미완료 할일 내일로 자동 이월</label>
+          <label style="display:inline-flex;align-items:center;gap:5px;font-weight:600;"><input type="checkbox" id="sdSendTg" /> ✈️ 텔레그램으로 마감 리포트 전송</label>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;">
+        <button type="button" class="n-btn" onclick="closeModal('shutdownModal')">닫기</button>
+        <button type="button" class="n-btn-primary" onclick="completeEveningShutdown()">🌙 하루 마감 &amp; 일기 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [v5.0] 아이 프로필 추가/수정 모달 -->
+  <div id="kidProfileModal" class="modal-bg" onclick="if(event.target===this) closeModal('kidProfileModal')">
+    <div class="modal-card" style="max-width:440px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:16px;font-weight:800;">👶 우리 아이 프로필 관리</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('kidProfileModal')">✕</button>
+      </div>
+      <input type="hidden" id="kidEditId" value="" />
+      <div style="display:grid;gap:9px;">
+        <div style="display:grid;grid-template-columns:1fr 90px;gap:8px;">
+          <div><label class="field-label">이름 / 애칭</label><input id="kidNameIn" class="field-input" placeholder="예: 선유" /></div>
+          <div><label class="field-label">아이콘</label><input id="kidEmojiIn" class="field-input" value="👧" /></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div><label class="field-label">생년월일</label><input id="kidDobIn" type="date" class="field-input" /></div>
+          <div><label class="field-label">혈액형 / 알레르기</label><input id="kidBloodIn" class="field-input" placeholder="예: A형 / 없음" /></div>
+        </div>
+        <div><label class="field-label">어린이집 / 학교 / 반</label><input id="kidSchoolIn" class="field-input" placeholder="예: 햇살반 (담임 선생님 010-...)" /></div>
+        <div><label class="field-label">단골 소아과 / 치과</label><input id="kidClinicIn" class="field-input" placeholder="예: 연세소아과 (02-...)" /></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:8px;margin-top:14px;">
+        <button type="button" id="btnDeleteKid" class="n-btn" style="color:#dc2626;display:none;" onclick="deleteKidProfile()">삭제</button>
+        <div style="display:flex;gap:8px;margin-left:auto;">
+          <button type="button" class="n-btn" onclick="closeModal('kidProfileModal')">취소</button>
+          <button type="button" class="n-btn-primary" onclick="saveKidProfile()">저장</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [v5.0] 회사·가족 1초 복사 중요정보 금고 추가/수정 모달 -->
+  <div id="vaultCardModal" class="modal-bg" onclick="if(event.target===this) closeModal('vaultCardModal')">
+    <div class="modal-card" style="max-width:460px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:16px;font-weight:800;">🔐 중요 정보 카드 저장</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('vaultCardModal')">✕</button>
+      </div>
+      <input type="hidden" id="vcEditId" value="" />
+      <div style="display:grid;gap:9px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <label class="field-label">구분</label>
+            <select id="vcSpace" class="field-select">
+              <option value="WORK">🏢 회사·세무·화물</option>
+              <option value="KIDS">👨‍👧‍👦 가족·학교·병원</option>
+              <option value="PERSONAL">🚗 차량·보험·집</option>
+            </select>
+          </div>
+          <div><label class="field-label">아이콘</label><input id="vcIcon" class="field-input" value="🔑" /></div>
+        </div>
+        <div><label class="field-label">제목</label><input id="vcTitle" class="field-input" placeholder="예: (주)오라테크 사업자등록번호 / 경동화물 코드" /></div>
+        <div><label class="field-label">핵심 복사 값 (계좌·번호·코드·주소)</label><input id="vcValue" class="field-input" placeholder="원클릭 복사될 값 입력" /></div>
+        <div><label class="field-label">보조 메모</label><input id="vcNote" class="field-input" placeholder="예: 세금계산서 발행용 메일 orawinch@naver.com" /></div>
+        <label style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;"><input type="checkbox" id="vcSensitive" checked /> 🙈 프라이버시 블러 모드 시 자동 가림</label>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px;">
+        <button type="button" class="n-btn" onclick="closeModal('vaultCardModal')">취소</button>
+        <button type="button" class="n-btn-primary" onclick="saveVaultCard()">🔐 금고에 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [v5.0] 모바일 하단 네이티브 5탭 네비게이션 + 플로팅 빠른입력 FAB -->
+  <nav class="mobile-bottom-nav" id="mobileBottomNav">
+    <button type="button" class="mob-tab-btn" data-mview="TODAY" onclick="setMainView('TODAY')"><span class="mob-ico">🏠</span><span>오늘</span></button>
+    <button type="button" class="mob-tab-btn" data-mview="ALARMS" onclick="setMainView('ALARMS')"><span class="mob-ico">🔔</span><span>알람</span><span id="mobAlarmBadge" class="mob-tab-badge" style="display:none;">0</span></button>
+    <button type="button" class="mob-tab-btn" data-mview="JOURNAL" onclick="setMainView('JOURNAL')"><span class="mob-ico">📓</span><span>가족·기록</span></button>
+    <button type="button" class="mob-tab-btn" data-mview="CALENDAR" onclick="setMainView('CALENDAR')"><span class="mob-ico">📅</span><span>캘린더</span></button>
+    <button type="button" class="mob-tab-btn" data-mview="EDITOR" onclick="setMainView('EDITOR')"><span class="mob-ico">📝</span><span>페이지</span></button>
+  </nav>
+  <button type="button" class="mobile-fab" onclick="toggleMobileFabSheet(true)" title="빠른 알람·기록·캡처">＋</button>
+  <div id="mobileFabSheetBg" class="fab-sheet-bg" onclick="if(event.target===this) toggleMobileFabSheet(false)">
+    <div class="fab-sheet">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <strong style="font-size:15px;">⚡ 빠른 알람 · 기록 추가</strong>
+        <button type="button" class="icon-btn" onclick="toggleMobileFabSheet(false)">✕</button>
+      </div>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openAlarmModal()">🔔 <span><strong>회사·가족 알람 예약</strong><div style="font-size:11.5px;color:var(--ink-3);">반복·사전경보·음성·텔레그램 푸시</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 <span><strong>오늘 1줄 일기 · 가족 기록</strong><div style="font-size:11.5px;color:var(--ink-3);">기분·사진·음성 메모 바로 남기기</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openQuickCaptureModal()">⚡ <span><strong>자연어 · 음성 할일 캡처</strong><div style="font-size:11.5px;color:var(--ink-3);">말하면 일/애들 보드로 자동 분류</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);setMainView('JOURNAL');setJournalSubTab('LEDGER')">💰 <span><strong>1초 회사경비 · 가족지출 기록</strong><div style="font-size:11.5px;color:var(--ink-3);">화물비·법인카드·육아/외식 즉시 기록</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openEveningShutdownModal()">🌙 <span><strong>하루 마감 리추얼</strong><div style="font-size:11.5px;color:var(--ink-3);">미완료 이월 + 3줄 회고 + 텔레그램 보고</div></span></button>
     </div>
   </div>
 
@@ -2288,9 +2984,14 @@
 
   <script>
     // ==================== 0. 환경 & 유틸 ====================
-    const IS_LOCAL_SERVER = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && location.port === '3080';
+    const IS_APP_SERVER = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.up.railway.app'));
+    const IS_LOCAL_SERVER = IS_APP_SERVER;
+    let VAULT_BRIDGE_AVAILABLE = false;
+    let LIVE_ORATECH_STATE = null;
+    let LIVE_ORATECH_STRIP_OPEN = true;
+
     document.querySelectorAll('.eco-pill[data-local]').forEach(a => {
-      if (IS_LOCAL_SERVER) a.href = a.getAttribute('data-local');
+      if (IS_APP_SERVER) a.href = a.getAttribute('data-local');
     });
 
     const DB_NAME = 'OraNotionOS_DB_v1';
@@ -2302,9 +3003,10 @@
       { id: 'sage', label: '차분한 세이지' },
       { id: 'ocean', label: '소프트 오션' },
       { id: 'terracotta', label: '테라코타' },
-      { id: 'ink', label: '미드나잇 잉크' }
+      { id: 'ink', label: '미드나잇 잉크' },
+      { id: 'aurora', label: '오로라' }
     ];
-    const COVER_ALIAS = { blue: 'ocean', rose: 'sunrise', emerald: 'sage', amber: 'terracotta', slate: 'ink' };
+    const COVER_ALIAS = { blue: 'ocean', rose: 'sunrise', emerald: 'sage', amber: 'terracotta', slate: 'ink', aurora: 'aurora' };
 
     const DRAG_SVG = `<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><circle cx="3.5" cy="2.5" r="1.2"/><circle cx="8.5" cy="2.5" r="1.2"/><circle cx="3.5" cy="7" r="1.2"/><circle cx="8.5" cy="7" r="1.2"/><circle cx="3.5" cy="11.5" r="1.2"/><circle cx="8.5" cy="11.5" r="1.2"/></svg>`;
     const PLUS_SVG = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v10M3 8h10" stroke-linecap="round"/></svg>`;
@@ -2958,6 +3660,96 @@
         }
       });
       if (!APP.activeProjectId && APP.projects[0]) APP.activeProjectId = APP.projects[0].id;
+      if (!APP.theme) APP.theme = 'craft';
+      if (!APP.journalSubTab) APP.journalSubTab = 'DIARY';
+      if (!APP.alarmFilterSpace) APP.alarmFilterSpace = 'ALL';
+      if (!Array.isArray(APP.alarms)) {
+        APP.alarms = [
+          {
+            id: 'alm_seed_ship', title: '경동화물 · 택배 당일 출고 마감 20분 전 체크', space: 'WORK', category: '출고/마감',
+            date: todayStr(0), time: '14:40', repeat: 'WEEKDAYS', weekdays: [1,2,3,4,5], dayOfMonth: 1,
+            preAlerts: ['30m'], sound: 'VOICE', sendTelegram: true, sendPush: true, active: true,
+            note: '오후 3시 이전 결제건 당일 화물 출고 및 송장 입력', lastFiredKey: '', completedHistory: []
+          },
+          {
+            id: 'alm_seed_tax', title: '매월 10일 전자세금계산서 발행 최종 마감 (가산세 방지)', space: 'WORK', category: '세무/결제',
+            date: todayStr(0), time: '09:30', repeat: 'MONTHLY', weekdays: [], dayOfMonth: 10,
+            preAlerts: ['3', '1'], sound: 'URGENT', sendTelegram: true, sendPush: true, active: true,
+            note: '홈택스 매출 세금계산서 미발행 전표 ERP 대사 확인', lastFiredKey: '', completedHistory: []
+          },
+          {
+            id: 'alm_seed_kids_am', title: '아이 등원 준비물 · 물통 · 알림장 최종 체크', space: 'KIDS', category: '등하원/학원',
+            date: todayStr(0), time: '08:15', repeat: 'WEEKDAYS', weekdays: [1,2,3,4,5], dayOfMonth: 1,
+            preAlerts: [], sound: 'CHIME', sendTelegram: false, sendPush: true, active: true,
+            note: '여벌옷, 물통, 손수건, 알림장 사인 확인', lastFiredKey: '', completedHistory: []
+          },
+          {
+            id: 'alm_seed_kids_pm', title: '하원 · 학원 픽업 & 저녁 장보기 체크', space: 'KIDS', category: '등하원/학원',
+            date: todayStr(0), time: '16:30', repeat: 'WEEKDAYS', weekdays: [1,2,3,4,5], dayOfMonth: 1,
+            preAlerts: ['30m'], sound: 'VOICE', sendTelegram: true, sendPush: true, active: true,
+            note: '아이 픽업 시간 30분 전 알림', lastFiredKey: '', completedHistory: []
+          }
+        ];
+      }
+      if (!Array.isArray(APP.journal)) {
+        APP.journal = [
+          {
+            id: 'jrn_seed_1', date: todayStr(0), time: '09:00', space: 'WORK', mood: '🔥', weather: '☀️',
+            kidId: '', title: '오라테크 노션+ OS v5.0 업그레이드 시작',
+            body: '회사 알람(경동화물 3시 마감·매월 10일 세금계산서)과 가족/육아 기록·중요금고까지 한 번에 관리할 수 있게 정리 완료!',
+            tags: ['오라테크', '업무시스템'], photoIds: [], createdAt: Date.now() - 3600000
+          },
+          {
+            id: 'jrn_seed_2', date: todayStr(-1), time: '20:30', space: 'KIDS', mood: '❤️', weather: '⛅',
+            kidId: 'kid_1', title: '저녁에 애들과 웃음 가득했던 하루',
+            body: '아이들 귀여운 말과 성장 순간, 병원/예방접종 기록까지 사진과 함께 차곡차곡 쌓아두는 가족 타임라인입니다.',
+            tags: ['가족', '성장기록'], photoIds: [], createdAt: Date.now() - 86400000
+          }
+        ];
+      }
+      if (!Array.isArray(APP.kidsProfiles)) {
+        APP.kidsProfiles = [
+          {
+            id: 'kid_1', name: '선유', emoji: '👧', dob: '2021-08-04', blood: '확인 후 수정',
+            school: '어린이집/유치원 정보 입력', clinic: '단골 소아과/치과 입력',
+            growthLogs: [
+              { id: 'gl_1', date: todayStr(-60), height: 106.5, weight: 17.8, foot: 170, note: '건강검진 정상 성장' },
+              { id: 'gl_2', date: todayStr(0), height: 108.0, weight: 18.2, foot: 175, note: '키가 쑥 컸음!' }
+            ],
+            healthLogs: [
+              { id: 'hl_1', date: todayStr(-14), kind: '어록', title: '아빠 회사 윈치 멋져요!', detail: '귀여운 한마디 기록 예시 — 자유롭게 추가하세요.', nextDate: '' }
+            ]
+          },
+          {
+            id: 'kid_2', name: '은유', emoji: '🧒', dob: '2024-03-15', blood: '확인 후 수정',
+            school: '어린이집 정보 입력', clinic: '단골 소아과 입력',
+            growthLogs: [
+              { id: 'gl_3', date: todayStr(-60), height: 87.0, weight: 12.1, foot: 140, note: '영유아 검진 완료' },
+              { id: 'gl_4', date: todayStr(0), height: 89.2, weight: 12.6, foot: 145, note: '밥 잘 먹고 씩씩함' }
+            ],
+            healthLogs: [
+              { id: 'hl_2', date: todayStr(-7), kind: '예방접종', title: '정기 예방접종 체크', detail: '접종 후 열 체크 완료', nextDate: todayStr(30) }
+            ]
+          }
+        ];
+      }
+      if (!APP.activeKidId && APP.kidsProfiles[0]) APP.activeKidId = APP.kidsProfiles[0].id;
+      if (!Array.isArray(APP.vaultCards)) {
+        APP.vaultCards = [
+          { id: 'vc_1', space: 'WORK', icon: '🏢', title: '(주)오라테크 대표번호 · 팩스 · 이메일', value: '1600-5157 / FAX 02-2264-8272 / orawinch@naver.com', note: '세금계산서·견적서·관공서 안내용', sensitive: false },
+          { id: 'vc_2', space: 'WORK', icon: '🚛', title: '경동화물 · 택배 출고 담당 연락처', value: '직통 010-8931-7788 (오후 3시 당일 마감)', note: '화물 송장 문의 시 1초 복사', sensitive: false },
+          { id: 'vc_3', space: 'WORK', icon: '🏦', title: '법인 입금 계좌번호 (수정해서 사용)', value: '은행명 · 계좌번호를 수정 버튼으로 입력하세요', note: '거래처 카톡 입금안내 1초 복사용', sensitive: true },
+          { id: 'vc_4', space: 'KIDS', icon: '🏥', title: '우리 아이 단골 소아과 · 야간 응급실', value: '병원명 / 전화번호 입력 (수정 버튼)', note: '급할 때 1초 만에 확인', sensitive: false },
+          { id: 'vc_5', space: 'PERSONAL', icon: '🚗', title: '가족 차량번호 · 보험사 긴급출동', value: '차량번호 / 보험사 콜센터 입력', note: '주차 등록·사고 접수 시 1초 복사', sensitive: true }
+        ];
+      }
+      if (!Array.isArray(APP.quickLedger)) {
+        APP.quickLedger = [
+          { id: 'lg_1', date: todayStr(0), space: 'WORK', category: '화물/택배비', title: '경동화물 출고 선불 정산', amount: 35000, method: '법인카드' },
+          { id: 'lg_2', date: todayStr(0), space: 'KIDS', category: '식비/간식', title: '아이들 과일·우유 장보기', amount: 28500, method: '개인카드' }
+        ];
+      }
+      if (!APP.selectedCalDate) APP.selectedCalDate = todayStr(0);
       (APP.pages || []).forEach(p => {
         if (p.coverTheme && COVER_ALIAS[p.coverTheme]) p.coverTheme = COVER_ALIAS[p.coverTheme];
         if (!p.font) p.font = 'sans';
@@ -3093,7 +3885,8 @@
           showToast(`⚡ 자동화 실행: 마감일 오늘(${todayStr(0)}) 자동 지정`);
         } else if (rule.action === 'TG_NOTIFY') {
           logActivity('DB 자동화(텔레그램)', `${proj.title} - ${row.title} 알림 준비`, proj.id);
-          const tok = getLocalSecret('ora_tg_token', ''), chatId = getLocalSecret('ora_tg_chat', '');
+          const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
+          const chatId = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
           if (tok && chatId) {
             fetch(`https://api.telegram.org/bot${tok}/sendMessage`, {
               method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -3159,13 +3952,20 @@
     }
 
     let currentNagRef = null;
-    window.triggerNagBanner = function(pageId, blockId, labelText) {
-      currentNagRef = { pageId, blockId };
+    window.triggerNagBanner = function(pageId, blockId, labelText, opts = {}) {
+      currentNagRef = { pageId, blockId, alarmId: opts.alarmId || '', labelText, subText: opts.subText || '' };
       const b = document.getElementById('remNagBanner');
+      const bdg = document.getElementById('remNagBadge');
       const tx = document.getElementById('remNagText');
+      const sub = document.getElementById('remNagSub');
+      if (bdg) bdg.textContent = opts.badge || '🔔 오라테크 노션+ 프로 알람';
       if (tx) tx.textContent = labelText;
+      if (sub) sub.textContent = opts.subText || '';
       if (b) b.classList.add('open');
-      playSoftChime();
+      const sound = opts.sound || 'CHIME';
+      if (sound === 'URGENT') playUrgentBeep();
+      else if (sound === 'VOICE') { playSoftChime(); speakAlarmText(labelText); }
+      else if (sound !== 'SILENT') playSoftChime();
     };
     window.checkScheduledReminders = function(forcePageId = '', forceBlockId = '') {
       if (forcePageId && forceBlockId) {
@@ -3198,21 +3998,45 @@
     };
     window.snoozeNagReminder = (mins = 10) => {
       if (currentNagRef) {
-        const ctxObj = getContextObj(currentNagRef.pageId);
-        const found = ctxObj ? findBlockDeep(ctxObj, currentNagRef.blockId) : null;
-        if (found) {
-          const d = new Date(Date.now() + mins * 60000);
-          found.block.remindAt = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-          found.block.remFiredDate = '';
-          saveAppState(false);
-          showToast(`⏰ ${mins}분 뒤(${found.block.remindAt}) 다시 알립니다.`);
+        if (currentNagRef.alarmId) {
+          const alm = (APP.alarms || []).find(a => a.id === currentNagRef.alarmId);
+          if (alm) {
+            if (mins === 'TOMORROW') {
+              alm.snoozeUntil = new Date(new Date().setHours(24 + 9, 0, 0, 0)).getTime();
+              showToast('⏰ 내일 오전 9시에 다시 알립니다.');
+            } else {
+              alm.snoozeUntil = Date.now() + Number(mins || 10) * 60000;
+              showToast(`⏰ ${mins}분 뒤 다시 알립니다.`);
+            }
+            saveAppState(false);
+          }
+        } else if (currentNagRef.pageId && currentNagRef.blockId) {
+          const ctxObj = getContextObj(currentNagRef.pageId);
+          const found = ctxObj ? findBlockDeep(ctxObj, currentNagRef.blockId) : null;
+          if (found) {
+            const addMs = mins === 'TOMORROW' ? (12 * 3600000) : (Number(mins || 10) * 60000);
+            const d = new Date(Date.now() + addMs);
+            found.block.remindAt = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+            found.block.remFiredDate = '';
+            saveAppState(false);
+            showToast(`⏰ ${mins === 'TOMORROW' ? '내일' : mins + '분 뒤'}(${found.block.remindAt}) 다시 알립니다.`);
+          }
         }
       }
       window.dismissNagReminder();
     };
     window.completeNagReminderTodo = () => {
-      if (currentNagRef) toggleTodoBlock(currentNagRef.pageId, currentNagRef.blockId, true);
+      if (currentNagRef) {
+        if (currentNagRef.alarmId) {
+          markProAlarmDone(currentNagRef.alarmId);
+        } else if (currentNagRef.pageId && currentNagRef.blockId) {
+          toggleTodoBlock(currentNagRef.pageId, currentNagRef.blockId, true);
+        }
+      }
       window.dismissNagReminder();
+    };
+    window.speakCurrentNagAlarm = () => {
+      if (currentNagRef && currentNagRef.labelText) speakAlarmText(currentNagRef.labelText);
     };
     window.setTodoRemindTime = (ctxKey, bid, hhmm) => {
       const ctxObj = getContextObj(ctxKey);
@@ -3297,7 +4121,7 @@
         });
       }
     }, 1000);
-    setInterval(() => { if (APP) checkScheduledReminders(); }, 20000);
+    setInterval(() => { if (APP) { checkScheduledReminders(); checkProAlarms(); } }, 20000);
 
     async function saveAppState(triggerAutoSync = true) {
       if (!APP) return;
@@ -3308,7 +4132,7 @@
         console.warn('IndexedDB save:', err);
       }
       updateTopStatusMetrics();
-      if (triggerAutoSync && APP.autoSyncMode === '15S' && getLocalSecret('ora_vault_gh_token')) {
+      if (triggerAutoSync && APP.autoSyncMode === '15S' && (getLocalSecret('ora_vault_gh_token') || VAULT_BRIDGE_AVAILABLE || IS_APP_SERVER)) {
         clearTimeout(autoSyncDebounce);
         autoSyncDebounce = setTimeout(() => { syncToGithubVault(true); }, 15000);
       }
@@ -3953,7 +4777,15 @@
       const btn = document.getElementById('btnShowSidebar');
       if (btn) btn.style.display = sb.classList.contains('collapsed') ? 'inline-flex' : 'none';
     };
-    window.toggleMobileSidebar = function() { document.getElementById('sidebar').classList.toggle('mobile-open'); };
+    window.toggleMobileSidebar = function() {
+      const sb = document.getElementById('sidebar');
+      const isOpen = sb.classList.toggle('mobile-open');
+      document.getElementById('mobileSidebarScrim')?.classList.toggle('open', isOpen);
+    };
+    window.closeMobileSidebar = function() {
+      document.getElementById('sidebar')?.classList.remove('mobile-open');
+      document.getElementById('mobileSidebarScrim')?.classList.remove('open');
+    };
 
     window.setActiveSpace = function(sp) {
       APP.activeSpace = sp;
@@ -3963,7 +4795,7 @@
 
     window.setMainView = function(viewKey) {
       APP.activeView = viewKey;
-      document.getElementById('sidebar').classList.remove('mobile-open');
+      closeMobileSidebar();
       saveAppState(false);
       renderAll();
     };
@@ -3976,7 +4808,7 @@
       if (nextPg) nextPg.viewCount = Number(nextPg.viewCount || 0) + 1;
       APP.activePageId = pageId;
       APP.activeView = 'EDITOR';
-      document.getElementById('sidebar').classList.remove('mobile-open');
+      closeMobileSidebar();
       saveAppState(false);
       renderAll();
     };
@@ -3985,7 +4817,7 @@
       if (dndState.justDragged) return;
       APP.activeProjectId = projectId;
       APP.activeView = 'PROJECT';
-      document.getElementById('sidebar').classList.remove('mobile-open');
+      closeMobileSidebar();
       saveAppState(false);
       renderAll();
     };
@@ -4258,9 +5090,16 @@
 
       // Active highlight on quick nav
       document.getElementById('sbNavHome')?.classList.toggle('active', APP.activeView === 'TODAY' && !APP.activeFilterId);
+      document.getElementById('sbNavAlarms')?.classList.toggle('active', APP.activeView === 'ALARMS');
+      document.getElementById('sbNavJournal')?.classList.toggle('active', APP.activeView === 'JOURNAL');
       document.getElementById('sbNavInbox')?.classList.toggle('active', APP.activeView === 'KANBAN' || APP.activeView === 'CALENDAR');
       document.getElementById('sbNavPhotos')?.classList.toggle('active', APP.activeView === 'GALLERY');
       document.getElementById('sbNavHabits')?.classList.toggle('active', APP.activeView === 'HABITS');
+      const almCnt = (APP.alarms || []).filter(a => a.active !== false).length;
+      const sbAlm = document.getElementById('sbAlarmCount'); if (sbAlm) sbAlm.textContent = almCnt;
+      const sbJrn = document.getElementById('sbJournalCount'); if (sbJrn) sbJrn.textContent = (APP.journal || []).length;
+      const mobBdg = document.getElementById('mobAlarmBadge');
+      if (mobBdg) { mobBdg.textContent = almCnt; mobBdg.style.display = almCnt > 0 ? 'inline-flex' : 'none'; }
 
       // Todoist Pro Smart Filters
       const fltEl = document.getElementById('sbFiltersList');
@@ -4399,7 +5238,15 @@
         bc.innerHTML = chain.map((p, i) => `${i > 0 ? '<span class="crumb-sep">/</span>' : ''}<button class="crumb-btn" onclick="selectPage('${p.id}')">${escHtml(p.icon)} ${escHtml(p.title || '제목 없음')}</button>`).join('');
         if (favBtn && pg) favBtn.textContent = pg.pinned ? '★' : '☆';
       } else {
-        const map = { KANBAN: '📋 전체 칸반 보드', CALENDAR: '📅 통합 캘린더', GALLERY: '🖼️ 사진 금고', HABITS: '⏱️ 집중 · 루틴 · D-Day' };
+        const map = {
+          ALARMS: '🔔 알람 · 반복 리마인더 센터',
+          JOURNAL: '📓 가족 성장 · 일기 · 중요금고 · 가계부',
+          KANBAN: '📋 전체 칸반 보드',
+          CALENDAR: '📅 회사 · 가족 통합 캘린더',
+          GRAPH: '🕸️ 지식 그래프 · 공간 캔버스',
+          GALLERY: '🖼️ 사진 금고',
+          HABITS: '⏱️ 집중 · 루틴 · D-Day'
+        };
         bc.innerHTML = `<button class="crumb-btn">${map[v] || '워크스페이스'}</button>`;
         if (favBtn) favBtn.textContent = '☆';
       }
@@ -4416,11 +5263,13 @@
     };
 
     function renderAll() {
+      applyWorkspaceThemeDom(APP.theme || 'craft');
       document.body.classList.toggle('privacy-blur', !!APP.privacyBlur);
       const pBtn = document.getElementById('btnPrivacyBlur');
       if (pBtn) pBtn.textContent = APP.privacyBlur ? '🔒' : '🙈';
       document.querySelectorAll('.space-chip').forEach(c => c.classList.toggle('active', c.dataset.space === APP.activeSpace));
       document.querySelectorAll('#mainViewTabs .view-pill').forEach(p => p.classList.toggle('active', p.dataset.view === APP.activeView));
+      document.querySelectorAll('#mobileBottomNav .mob-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.mview === APP.activeView));
       updateTopStatusMetrics();
       renderBreadcrumbs();
       renderSidebar();
@@ -4432,6 +5281,8 @@
       const v = APP.activeView || 'TODAY';
       let res;
       if (v === 'TODAY') res = renderTodayView();
+      else if (v === 'ALARMS') res = renderAlarmsView();
+      else if (v === 'JOURNAL') res = renderJournalHubView();
       else if (v === 'PROJECT') res = renderProjectView();
       else if (v === 'KANBAN') res = renderKanbanView();
       else if (v === 'CALENDAR') res = renderCalendarView();
@@ -4691,8 +5542,9 @@
                   <span class="ntag ntag-blue">🧮 퀵 견적 · 예산 계산기</span>
                   <input class="field-input" style="max-width:220px;padding:3px 8px;font-size:12.5px;" value="${escHtml(b.quoteCustomer || '')}" oninput="updateBlockFieldSilent('${ctxKey}','${b.id}','quoteCustomer',this.value)" placeholder="거래처명 또는 행사명 (선택)..." />
                 </div>
-                <div style="display:flex;gap:5px;">
+                <div style="display:flex;gap:5px;flex-wrap:wrap;">
                   <button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="addQuoteCalcRow('${ctxKey}','${b.id}')">+ 품목 추가</button>
+                  <button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;border-color:#93c5fd;color:#1d4ed8;" onclick="sendQuoteCalcToErp('${ctxKey}','${b.id}')">📥 ERP·김대리 견적함 전송</button>
                   <button type="button" class="n-btn-primary" style="font-size:11.5px;padding:3px 8px;" onclick="copyQuoteCalcText('${ctxKey}','${b.id}')">📋 견적 요약 복사</button>
                 </div>
               </div>
@@ -5717,6 +6569,47 @@
       showToast('📋 견적 요약이 클립보드에 복사되었습니다!');
     };
 
+    window.sendQuoteCalcToErp = async (ctxKey, bid) => {
+      const f = findBlockDeep(getContextObj(ctxKey), bid); if (!f) return;
+      const items = (f.block.quoteItems || []).filter(it => (it.name || '').trim() || Number(it.price || 0) > 0);
+      if (!items.length) { showToast('전송할 견적 품목을 먼저 입력해 주세요.'); return; }
+      const customer = (f.block.quoteCustomer || '').trim() || '노션+ 퀵견적 고객';
+      const sub = items.reduce((s, it) => s + Number(it.price || 0) * Number(it.qty || 0), 0);
+      const payload = {
+        id: Date.now(),
+        date: todayStr(0),
+        source: 'notes-quote-calc',
+        client: customer,
+        memo: `[오라테크 노션+ 견적블록 전송] 총 ${items.length}개 항목 (공급가 ₩${sub.toLocaleString('ko-KR')})`,
+        lines: items.map((it, idx) => ({
+          code: `NT-${idx + 1}`,
+          name: it.name || '품목',
+          qty: Math.max(1, Number(it.qty || 1)),
+          price: Number(it.price || 0)
+        })),
+        totalAmount: sub,
+        status: '신규접수'
+      };
+      try {
+        const stored = JSON.parse(localStorage.getItem('ora_web_quotes') || '[]');
+        stored.unshift(payload);
+        localStorage.setItem('ora_web_quotes', JSON.stringify(stored.slice(0, 50)));
+      } catch (_) {}
+      let sentServer = false;
+      try {
+        const r = await fetch(`${VAULT_BRIDGE_BASE}/api/public/quote-inquiry`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (r.ok) sentServer = true;
+      } catch (_) {}
+      logActivity('견적블록 ERP 전송', `${customer} (₩${sub.toLocaleString('ko-KR')})`);
+      showToast(sentServer
+        ? `✅ [${customer}] ERP 견적함 + 김대리 서버 전송 완료!`
+        : `✅ [${customer}] 로컬 ERP 견적함(ora_web_quotes)에 저장되었습니다!`);
+    };
+
     window.openBlockActionMenu = function(ev, ctxKey, bid) {
       ev.stopPropagation();
       closeAllPopovers();
@@ -5760,12 +6653,23 @@
       ev.stopPropagation();
       closeAllPopovers();
       const menu = document.getElementById('pageMoreMenu');
+      const mobileToolsHtml = `
+        <div class="pop-sec-hdr" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">빠른 도구 · 보안 · 동기화</div>
+        <button class="pop-item" onclick="togglePomodoroTimer();closeAllPopovers()"><span>⏱️ 뽀모도로 타이머</span></button>
+        <button class="pop-item" onclick="cycleAmbientFocusSound();closeAllPopovers()"><span>🎧 집중 백색소음 전환</span></button>
+        <button class="pop-item" onclick="speakTodayDailyBriefing();closeAllPopovers()"><span>🗣️ 오늘 할일 음성 브리핑</span></button>
+        <button class="pop-item" onclick="togglePrivacyBlurMode();closeAllPopovers()"><span>${APP.privacyBlur ? '🔓 프라이버시 블러 끄기' : '🙈 프라이버시 블러 켜기'}</span></button>
+        <button class="pop-item" onclick="toggleActiveItemPin();closeAllPopovers()"><span>⭐ 즐겨찾기 토글</span></button>
+        <button class="pop-item" onclick="openSyncModal();closeAllPopovers()"><span>☁️ Share / Git 금고 설정</span></button>
+        <button class="pop-item" onclick="openLockModal();closeAllPopovers()"><span>${APP.pinCode ? '🔒 PIN 잠금 설정/잠그기' : '🔓 PIN 잠금 설정'}</span></button>
+      `;
       if (APP.activeView === 'PROJECT') {
         const proj = APP.projects.find(p => p.id === APP.activeProjectId);
         if (!proj) return;
         menu.innerHTML = `
           <div class="pop-sec-hdr">프로젝트 설정</div>
-          <button class="pop-item" onclick="moveProjectToTrash('${proj.id}')"><span style="color:#c93b3b;">🗑️ 휴지통으로 이동</span></button>`;
+          <button class="pop-item" onclick="moveProjectToTrash('${proj.id}')"><span style="color:#c93b3b;">🗑️ 휴지통으로 이동</span></button>
+          ${mobileToolsHtml}`;
       } else {
         const pg = APP.pages.find(p => p.id === APP.activePageId);
         if (!pg) return;
@@ -5789,9 +6693,10 @@
           <button class="pop-item" onclick="document.getElementById('mdImportInput').click();closeAllPopovers()"><span>⬆️ Markdown(.md) 가져오기</span></button>
           <button class="pop-item" onclick="duplicatePage('${pg.id}');closeAllPopovers()"><span>📄 페이지 복제</span></button>
           <button class="pop-item" onclick="window.print();closeAllPopovers()"><span>🖨️ 인쇄 / 깔끔한 PDF 저장</span></button>
-          <button class="pop-item" style="color:#c93b3b;" onclick="movePageToTrash('${pg.id}')"><span>🗑️ 휴지통으로 이동</span></button>`;
+          <button class="pop-item" style="color:#c93b3b;" onclick="movePageToTrash('${pg.id}')"><span>🗑️ 휴지통으로 이동</span></button>
+          ${mobileToolsHtml}`;
       }
-      menu.style.left = Math.min(window.innerWidth - 260, ev.clientX - 200) + 'px';
+      menu.style.left = Math.max(8, Math.min(window.innerWidth - 260, (ev.clientX || window.innerWidth) - 200)) + 'px';
       menu.style.top = '48px';
       menu.classList.add('open');
     };
@@ -5940,6 +6845,61 @@
       }
     });
 
+    function renderOratechLiveStripHtml() {
+      const kimHref = IS_APP_SERVER ? '/' : 'https://naver-store-ai-manager-production.up.railway.app/';
+      if (!LIVE_ORATECH_STATE) {
+        return IS_APP_SERVER ? `
+          <div class="ora-live-strip">
+            <div class="ora-live-strip-head" onclick="toggleLiveOratechStrip()">
+              <span>📊 오라테크 라이브 현황 (김대리·결재함)</span>
+              <span style="font-size:11px;color:var(--ink-3);">연결 확인 중… ${LIVE_ORATECH_STRIP_OPEN ? '▾' : '▸'}</span>
+            </div>
+          </div>` : '';
+      }
+      const st = LIVE_ORATECH_STATE;
+      return `
+        <div class="ora-live-strip">
+          <div class="ora-live-strip-head" onclick="toggleLiveOratechStrip()">
+            <span>📊 오라테크 라이브 현황 (김대리·결재함)</span>
+            <span style="font-size:11px;color:#1d4ed8;">${LIVE_ORATECH_STRIP_OPEN ? '접기 ▾' : `결재 ${st.pendingApprovals} · CS ${st.openInquiries} ▸`}</span>
+          </div>
+          ${LIVE_ORATECH_STRIP_OPEN ? `
+            <div class="ora-live-strip-body">
+              <span class="ntag ${st.pendingApprovals > 0 ? 'ntag-orange' : 'ntag-green'}">결재대기 <b>${st.pendingApprovals}건</b></span>
+              <span class="ntag ${st.openInquiries > 0 ? 'ntag-pink' : 'ntag-gray'}">미답변 CS <b>${st.openInquiries}건</b></span>
+              <span class="ntag ntag-blue">평균 ROAS <b>${st.avgRoas}%</b></span>
+              ${st.lowStockCount > 0 ? `<span class="ntag ntag-red">저재고 <b>${st.lowStockCount}종</b></span>` : ''}
+              <a href="${kimHref}" target="_blank" style="margin-left:auto;font-size:11.5px;font-weight:700;color:#1d4ed8;text-decoration:none;">김대리 열기 ↗</a>
+            </div>` : ''}
+        </div>`;
+    }
+
+    window.toggleLiveOratechStrip = () => {
+      LIVE_ORATECH_STRIP_OPEN = !LIVE_ORATECH_STRIP_OPEN;
+      if (APP?.activeView === 'TODAY') renderTodayView();
+    };
+
+    async function fetchLiveOratechSummary() {
+      try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 3500);
+        const r = await fetch(`${VAULT_BRIDGE_BASE}/api/state`, { signal: ctrl.signal });
+        clearTimeout(tid);
+        if (!r.ok) return;
+        const db = await r.json();
+        const kws = db.keywords || [];
+        const rev = kws.reduce((s, k) => s + Number(k.revenue || 0), 0);
+        const cost = kws.reduce((s, k) => s + Number(k.cost || 0), 0);
+        LIVE_ORATECH_STATE = {
+          pendingApprovals: (db.approvals || []).filter(a => a.status === 'PENDING').length,
+          openInquiries: (db.inquiries || []).filter(i => i.status !== 'ANSWERED').length,
+          avgRoas: cost > 0 ? Math.round((rev / cost) * 100) : 0,
+          lowStockCount: (db.products || []).filter(p => Number(p.stock ?? 99) <= 5).length
+        };
+        if (APP?.activeView === 'TODAY') renderTodayView();
+      } catch (_) {}
+    }
+
     // ==================== 12. VIEW: 홈 · 오늘 보드 (드래그 위아래 & 일↔애들 이동!) ====================
     function renderTodayView() {
       const td = todayStr(0);
@@ -6029,21 +6989,7 @@
 
       document.getElementById('mainViewContainer').innerHTML = `
         <div class="ws-canvas wide-view">
-          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:14px;flex-wrap:wrap;">
-            <div>
-              <div style="font-size:12.5px;color:var(--ink-3);margin-bottom:4px;">${fmtKorDate(td)}</div>
-              <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;">오늘의 워크스페이스 · 일 &amp; 애들</h1>
-            </div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-              ${(APP.ddays || []).slice(0, 3).map(dd => {
-                const diff = calcDaysDiff(dd.date);
-                const lbl = diff === 0 ? 'D-DAY' : (diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`);
-                return `<span class="ntag ${dd.space === 'KIDS' ? 'ntag-orange' : 'ntag-blue'}" style="cursor:pointer;" onclick="setMainView('HABITS')">${escHtml(dd.emoji || '📌')} ${escHtml(dd.title)} <b>${lbl}</b></span>`;
-              }).join('')}
-              <button type="button" class="n-btn" onclick="selectPage('${tdPage.id}')">📝 오늘 문서 전체 열기</button>
-              <button type="button" class="n-btn-primary" onclick="openCarbonAssistantModal();runCarbonDailyBriefing()">💎 Carbon 브리핑</button>
-            </div>
-          </div>
+          ${renderV5TodayHeroHtml(td, tdPage, todos, workTodos, kidsTodos)}
 
           ${activeFilterObj ? `
             <div id="activeFilterPanel" style="background:#f4f8fd;border:1px solid #bfdbfe;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
@@ -6075,6 +7021,7 @@
                 </span>
                 <span style="font-size:11.5px;color:var(--ink-3);">⋮⋮ 끌어 순서/칸 이동</span>
               </div>
+              ${renderOratechLiveStripHtml()}
               <div style="display:flex;gap:6px;margin-bottom:6px;">
                 <input id="quickWorkTodoIn" class="field-input" style="background:#fff;" placeholder="+ 자연어 입력 (예: 내일 오후 3시 견적서 발송 !긴급)" oninput="previewQuickInlineNlp('WORK',this.value)" onkeydown="if(event.key==='Enter') addQuickTodayTodo('WORK')" />
                 <button type="button" class="n-btn" onclick="addQuickTodayTodo('WORK')">추가</button>
@@ -7665,6 +8612,7 @@
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const td = todayStr(0);
+      const selIso = APP.selectedCalDate || td;
       const cells = [];
       for (let i = 0; i < firstDay; i++) cells.push({ empty: true });
       for (let d = 1; d <= daysInMonth; d++) {
@@ -7678,35 +8626,77 @@
           (p.rows || []).forEach(r => { if (r.dueDate === iso) pRows.push({ projId: p.id, r }); });
         });
         const ddays = (APP.ddays || []).filter(dd => dd.date === iso);
+        const dayAlarms = getAlarmsOccurringOnDate(iso);
+        const dayJournals = (APP.journal || []).filter(j => j.date === iso);
         const dayPhotos = Object.values(PHOTOS).filter(ph => ph.noteDate === iso);
-        cells.push({ day: d, iso, todos, pRows, ddays, photoCount: dayPhotos.length });
+        cells.push({ day: d, iso, todos, pRows, ddays, dayAlarms, dayJournals, photoCount: dayPhotos.length });
       }
+      const selCell = cells.find(c => !c.empty && c.iso === selIso) || cells.find(c => !c.empty && c.iso === td) || cells.find(c => !c.empty);
       document.getElementById('mainViewContainer').innerHTML = `
         <div class="ws-canvas wide-view">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
               <button class="n-btn" onclick="shiftCalMonth(-1)">◀</button>
-              <h2 style="margin:0;font-size:20px;font-weight:700;">📅 ${year}년 ${month + 1}월 일 · 애들 통합 캘린더</h2>
+              <h2 style="margin:0;font-size:20px;font-weight:800;">📅 ${year}년 ${month + 1}월 회사 · 가족 통합 캘린더</h2>
               <button class="n-btn" onclick="shiftCalMonth(1)">▶</button>
-              <button class="n-btn" onclick="calCursor={year:new Date().getFullYear(),month:new Date().getMonth()};renderCalendarView()">오늘</button>
+              <button class="n-btn" onclick="calCursor={year:new Date().getFullYear(),month:new Date().getMonth()};APP.selectedCalDate=todayStr(0);renderCalendarView()">오늘</button>
             </div>
-            <span style="font-size:12px;color:var(--ink-3);">일정을 다른 날짜 칸으로 드래그하여 날짜 변경 · 날짜 클릭 시 데일리 노트 생성</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="n-btn" onclick="openAlarmModal('', APP.selectedCalDate || todayStr(0))">🔔 이 날 알람</button>
+              <button class="n-btn-primary" onclick="exportAlarmsToIcs()">📥 .ics 폰 캘린더 동기화</button>
+            </div>
           </div>
           <div class="cal-grid">
             ${['일','월','화','수','목','금','토'].map((w, i) => `<div class="cal-head" style="color:${i === 0 ? '#eb5757' : (i === 6 ? '#2383e2' : 'var(--ink-2)')};">${w}</div>`).join('')}
             ${cells.map(c => c.empty ? '<div class="cal-cell" style="background:var(--bg-subtle);"></div>' : `
-              <div class="cal-cell ${c.iso === td ? 'today' : ''}" data-cal-date="${c.iso}" onclick="openOrCreateDatePage('${c.iso}')">
+              <div class="cal-cell ${c.iso === td ? 'today' : ''} ${c.iso === selIso ? 'selected' : ''}" data-cal-date="${c.iso}" onclick="selectCalDay('${c.iso}')">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
-                  <span class="cal-day-num" style="font-size:12px;font-weight:500;">${c.day}</span>
-                  ${c.photoCount ? `<span style="font-size:11px;color:var(--ink-3);">📷 ${c.photoCount}</span>` : ''}
+                  <span class="cal-day-num" style="font-size:12px;font-weight:700;">${c.day}</span>
+                  <span style="font-size:10.5px;color:var(--ink-3);">${c.dayJournals.length ? '📓' : ''}${c.photoCount ? `📷${c.photoCount}` : ''}</span>
                 </div>
                 ${c.ddays.map(dd => `<div class="cal-pill ntag-yellow">${escHtml(dd.emoji)} ${escHtml(dd.title)}</div>`).join('')}
-                ${c.pRows.slice(0, 2).map(x => `<div class="cal-pill ntag-purple" data-drag-handle="1" onpointerdown="startNotionDrag(event,'cal-item',{calKind:'project-row',projectId:'${x.projId}',rowId:'${x.r.id}'},'${escJsStr(x.r.title)}')" onclick="event.stopPropagation();openSidePeek('${x.projId}','${x.r.id}')">📁 ${escHtml(x.r.title)}</div>`).join('')}
-                ${c.todos.slice(0, 3).map(x => `<div class="cal-pill ${x.b.space==='KIDS'?'ntag-orange':'ntag-blue'}" data-drag-handle="1" onpointerdown="startNotionDrag(event,'cal-item',{calKind:'page-todo',pageId:'${x.pageId}',blockId:'${x.b.id}'},'${escJsStr(x.b.text)}')" onclick="event.stopPropagation();selectPage('${x.pageId}')" style="${x.b.checked?'text-decoration:line-through;opacity:0.6;':''}">${escHtml(x.b.text)}</div>`).join('')}
+                ${c.dayAlarms.slice(0, 2).map(al => `<div class="cal-pill ${al.space==='KIDS'?'ntag-orange':'ntag-red'}" onclick="event.stopPropagation();openAlarmModal('${al.id}')">🔔 ${escHtml(al.time)} ${escHtml(al.title)}</div>`).join('')}
+                ${c.pRows.slice(0, 1).map(x => `<div class="cal-pill ntag-purple" data-drag-handle="1" onpointerdown="startNotionDrag(event,'cal-item',{calKind:'project-row',projectId:'${x.projId}',rowId:'${x.r.id}'},'${escJsStr(x.r.title)}')" onclick="event.stopPropagation();openSidePeek('${x.projId}','${x.r.id}')">📁 ${escHtml(x.r.title)}</div>`).join('')}
+                ${c.todos.slice(0, 2).map(x => `<div class="cal-pill ${x.b.space==='KIDS'?'ntag-orange':'ntag-blue'}" data-drag-handle="1" onpointerdown="startNotionDrag(event,'cal-item',{calKind:'page-todo',pageId:'${x.pageId}',blockId:'${x.b.id}'},'${escJsStr(x.b.text)}')" onclick="event.stopPropagation();selectPage('${x.pageId}')" style="${x.b.checked?'text-decoration:line-through;opacity:0.6;':''}">${escHtml(x.b.text)}</div>`).join('')}
               </div>`).join('')}
           </div>
+          ${selCell ? `
+            <div class="cal-day-detail">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                <strong style="font-size:15.5px;">📌 ${fmtKorDate(selCell.iso)} 상세 일정 · 기록</strong>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <button class="n-btn" style="font-size:12px;" onclick="openAlarmModal('', '${selCell.iso}')">🔔 알람 추가</button>
+                  <button class="n-btn" style="font-size:12px;" onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 일기 작성</button>
+                  <button class="n-btn-primary" style="font-size:12px;" onclick="openOrCreateDatePage('${selCell.iso}')">📝 데일리 노트 열기</button>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;">
+                <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
+                  <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px;">🔔 예정 알람 (${selCell.dayAlarms.length}건)</div>
+                  ${selCell.dayAlarms.length ? selCell.dayAlarms.map(a => `<div onclick="openAlarmModal('${a.id}')" style="cursor:pointer;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border);display:flex;justify-content:space-between;gap:6px;"><span><b>${escHtml(a.time)}</b> ${escHtml(a.title)}</span><span class="ntag ${a.space==='KIDS'?'ntag-orange':'ntag-blue'}">${a.space==='KIDS'?'가족':'회사'}</span></div>`).join('') : '<div style="font-size:12px;color:var(--ink-3);">예정된 알람이 없습니다.</div>'}
+                </div>
+                <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
+                  <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px;">☑️ 할 일 · 프로젝트 (${selCell.todos.length + selCell.pRows.length}건)</div>
+                  ${(selCell.todos.length + selCell.pRows.length) ? [
+                    ...selCell.pRows.map(x => `<div onclick="openSidePeek('${x.projId}','${x.r.id}')" style="cursor:pointer;font-size:12.5px;padding:4px 0;border-bottom:1px dashed var(--border);">📁 ${escHtml(x.r.title)}</div>`),
+                    ...selCell.todos.map(x => `<div onclick="selectPage('${x.pageId}')" style="cursor:pointer;font-size:12.5px;padding:4px 0;border-bottom:1px dashed var(--border);${x.b.checked?'text-decoration:line-through;opacity:0.6;':''}">${x.b.checked?'✅':'⬜'} ${escHtml(x.b.text)}</div>`)
+                  ].join('') : '<div style="font-size:12px;color:var(--ink-3);">등록된 할 일이 없습니다.</div>'}
+                </div>
+                <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
+                  <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px;">📓 일기 · D-Day (${selCell.dayJournals.length + selCell.ddays.length}건)</div>
+                  ${(selCell.dayJournals.length + selCell.ddays.length) ? [
+                    ...selCell.ddays.map(dd => `<div style="font-size:12.5px;padding:4px 0;font-weight:700;">${escHtml(dd.emoji||'📌')} ${escHtml(dd.title)}</div>`),
+                    ...selCell.dayJournals.map(j => `<div onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')" style="cursor:pointer;font-size:12.5px;padding:4px 0;border-bottom:1px dashed var(--border);">${escHtml(j.mood||'📓')} <b>${escHtml(j.title)}</b><div style="font-size:11.5px;color:var(--ink-3);">${escHtml((j.body||'').slice(0,55))}</div></div>`)
+                  ].join('') : '<div style="font-size:12px;color:var(--ink-3);">이 날의 기록이 없습니다.</div>'}
+                </div>
+              </div>
+            </div>` : ''}
         </div>`;
     }
+    window.selectCalDay = (iso) => {
+      APP.selectedCalDate = iso;
+      renderCalendarView();
+    };
     window.shiftCalMonth = (delta) => {
       let m = calCursor.month + delta, y = calCursor.year;
       if (m < 0) { m = 11; y--; } if (m > 11) { m = 0; y++; }
@@ -7897,6 +8887,13 @@
 
     // ==================== 17. 검색·커맨드 팔레트 (Ctrl+K) · PIN · GitHub Private 동기화 · 텔레그램 · Carbon AI ====================
     const COMMAND_PALETTE_ACTIONS = [
+      { id: 'cmd_alarm_new', icon: '🔔', title: '> 새 회사·가족 프로 알람 등록하기', run: () => openAlarmModal() },
+      { id: 'cmd_alarm_view', icon: '⏰', title: '> 알람 · 반복 리마인더 센터 열기', run: () => setMainView('ALARMS') },
+      { id: 'cmd_journal', icon: '📓', title: '> 가족 성장 · 일기 · 중요금고 · 가계부 열기', run: () => setMainView('JOURNAL') },
+      { id: 'cmd_shutdown', icon: '🌙', title: '> 하루 마감 리추얼 (Evening Shutdown)', run: () => openEveningShutdownModal() },
+      { id: 'cmd_weekly', icon: '📰', title: '> Gemini 4 Carbon 주간 매거진 리포트 생성', run: () => runCarbonWeeklyReview() },
+      { id: 'cmd_ics', icon: '📥', title: '> 알람·기념일 .ics 폰 캘린더 파일 내보내기', run: () => exportAlarmsToIcs() },
+      { id: 'cmd_dark', icon: '🎨', title: '> 미드나잇 다크 ↔ 웜 크래프트 테마 전환', run: () => setWorkspaceTheme(APP.theme === 'midnight' ? 'craft' : 'midnight') },
       { id: 'cmd_qc', icon: '⚡', title: '> 빠른 자연어 캡처 열기 (Ctrl+Shift+Space)', run: () => openQuickCaptureModal() },
       { id: 'cmd_split', icon: '◫', title: '> 좌우 분할 화면 (Split View) 토글', run: () => toggleSplitPane() },
       { id: 'cmd_zen', icon: '🧘', title: '> 집중 쓰기 모드 (Zen Focus) 토글', run: () => toggleZenFocusMode() },
@@ -7953,12 +8950,38 @@
     });
 
     window.openLockModal = () => { document.getElementById('pinSetupInput').value = APP.pinCode || ''; openModal('lockModal'); };
-    window.savePinSetting = (now) => { APP.pinCode = (document.getElementById('pinSetupInput')?.value || '').trim(); saveAppState(); closeModal('lockModal'); if (now && APP.pinCode) document.getElementById('pinLockOverlay').style.display = 'flex'; };
-    window.unlockWithPin = () => { if (document.getElementById('pinUnlockInput').value.trim() === APP.pinCode) { document.getElementById('pinLockOverlay').style.display = 'none'; document.getElementById('pinUnlockInput').value = ''; } else showToast('❌ 비밀번호가 다릅니다.'); };
+    window.savePinSetting = (now) => {
+      APP.pinCode = (document.getElementById('pinSetupInput')?.value || '').trim();
+      const lockBtn = document.getElementById('btnTopPinLock');
+      if (lockBtn) lockBtn.textContent = APP.pinCode ? '🔒' : '🔓';
+      if (!APP.pinCode) {
+        try { sessionStorage.removeItem('ora_notes_pin_unlocked'); } catch (_) {}
+      } else if (now) {
+        try { sessionStorage.removeItem('ora_notes_pin_unlocked'); } catch (_) {}
+      } else {
+        try { sessionStorage.setItem('ora_notes_pin_unlocked', '1'); } catch (_) {}
+      }
+      saveAppState();
+      closeModal('lockModal');
+      if (now && APP.pinCode) {
+        document.getElementById('pinLockOverlay').style.display = 'flex';
+        setTimeout(() => document.getElementById('pinUnlockInput')?.focus(), 60);
+      }
+    };
+    window.unlockWithPin = () => {
+      if (document.getElementById('pinUnlockInput').value.trim() === APP.pinCode) {
+        try { sessionStorage.setItem('ora_notes_pin_unlocked', '1'); } catch (_) {}
+        document.getElementById('pinLockOverlay').style.display = 'none';
+        document.getElementById('pinUnlockInput').value = '';
+        showToast('🔓 잠금이 해제되었습니다.');
+      } else {
+        showToast('❌ 비밀번호가 다릅니다.');
+      }
+    };
 
     function b64EncodeUnicode(str) { return btoa(unescape(encodeURIComponent(str))); }
     function b64DecodeUnicode(b64) { return decodeURIComponent(escape(atob(String(b64).replace(/\s/g, '')))); }
-    const VAULT_BRIDGE_BASE = IS_LOCAL_SERVER ? '' : 'http://localhost:3080';
+    const VAULT_BRIDGE_BASE = IS_APP_SERVER ? '' : 'https://naver-store-ai-manager-production.up.railway.app';
 
     function normalizeGithubToken(raw) {
       return String(raw || '')
@@ -8017,12 +9040,15 @@
     async function probeLocalErpVaultBridge() {
       try {
         const ctrl = new AbortController();
-        const tid = setTimeout(() => ctrl.abort(), 1600);
+        const tid = setTimeout(() => ctrl.abort(), 2200);
         const res = await fetch(`${VAULT_BRIDGE_BASE}/api/notes-vault/status`, { signal: ctrl.signal });
         clearTimeout(tid);
-        if (!res.ok) return { available: false };
-        return await res.json();
+        if (!res.ok) { VAULT_BRIDGE_AVAILABLE = false; return { available: false }; }
+        const st = await res.json();
+        VAULT_BRIDGE_AVAILABLE = Boolean(st?.available);
+        return st;
       } catch (_) {
+        VAULT_BRIDGE_AVAILABLE = false;
         return { available: false };
       }
     }
@@ -8060,7 +9086,7 @@
       updateGhPatHint(savedPat);
       document.getElementById('cfgVaultRepo').value = APP.vaultRepo || 'oratech-notes-vault';
       document.getElementById('cfgAutoSyncMode').value = APP.autoSyncMode || 'OFF';
-      document.getElementById('cfgGeminiKey').value = getLocalSecret('ora_gemini_api_key', '');
+      document.getElementById('cfgGeminiKey').value = getLocalSecret('ora_gemini_key', '') || getLocalSecret('ora_gemini_api_key', '');
       const gCid = document.getElementById('cfgGdriveClientId');
       const gTok = document.getElementById('cfgGdriveToken');
       const gTokVal = getLocalSecret('ora_gdrive_token', '');
@@ -8081,7 +9107,9 @@
       if (patInput && patInput.value !== cleanPat) patInput.value = cleanPat;
       setLocalSecret('ora_vault_gh_token', cleanPat);
       updateGhPatHint(cleanPat);
-      setLocalSecret('ora_gemini_api_key', (document.getElementById('cfgGeminiKey')?.value || '').trim());
+      const gemKeyVal = (document.getElementById('cfgGeminiKey')?.value || '').trim();
+      setLocalSecret('ora_gemini_key', gemKeyVal);
+      setLocalSecret('ora_gemini_api_key', gemKeyVal);
       const gCidEl = document.getElementById('cfgGdriveClientId');
       const gTokEl = document.getElementById('cfgGdriveToken');
       if (gCidEl) setLocalSecret('ora_gdrive_client_id', gCidEl.value.trim());
@@ -8607,10 +9635,23 @@
       }; r.readAsText(file);
     };
 
-    window.openTelegramModal = () => { document.getElementById('cfgTgToken').value = getLocalSecret('ora_notion_tg_token', ''); document.getElementById('cfgTgChatId').value = getLocalSecret('ora_notion_tg_chat', ''); openModal('telegramModal'); };
-    window.saveTelegramSettings = () => { setLocalSecret('ora_notion_tg_token', document.getElementById('cfgTgToken').value.trim()); setLocalSecret('ora_notion_tg_chat', document.getElementById('cfgTgChatId').value.trim()); showToast('💾 저장되었습니다.'); };
+    window.openTelegramModal = () => {
+      document.getElementById('cfgTgToken').value = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
+      document.getElementById('cfgTgChatId').value = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
+      openModal('telegramModal');
+    };
+    window.saveTelegramSettings = () => {
+      const tok = document.getElementById('cfgTgToken').value.trim();
+      const chat = document.getElementById('cfgTgChatId').value.trim();
+      setLocalSecret('ora_notion_tg_token', tok);
+      setLocalSecret('ora_tg_token', tok);
+      setLocalSecret('ora_notion_tg_chat', chat);
+      setLocalSecret('ora_tg_chat', chat);
+      showToast('💾 텔레그램 설정이 저장되었습니다.');
+    };
     window.sendDailySummaryToTelegram = async () => {
-      const tok = getLocalSecret('ora_notion_tg_token', ''), chat = getLocalSecret('ora_notion_tg_chat', '');
+      const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
+      const chat = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
       const out = document.getElementById('tgResultBox');
       if (!tok || !chat) { if (out) out.textContent = '봇 토큰과 채팅 ID를 입력하세요.'; return; }
       const todos = ensureTodayDailyPage().blocks.filter(b => b.type === 'todo');
@@ -8619,7 +9660,7 @@
       const j = await r.json(); if (out) out.textContent = j.ok ? '✅ 전송 완료!' : '❌ ' + j.description;
     };
     window.pullTelegramInbox = async () => {
-      const tok = getLocalSecret('ora_notion_tg_token', ''), out = document.getElementById('tgResultBox');
+      const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', ''), out = document.getElementById('tgResultBox');
       if (!tok) return;
       const r = await fetch(`https://api.telegram.org/bot${tok}/getUpdates?limit=10`), j = await r.json();
       const tdPage = ensureTodayDailyPage(); let lastId = Number(getLocalSecret('ora_tg_last_uid', '0')), cnt = 0;
@@ -8635,17 +9676,46 @@
     // Gemini 4 Carbon AI
     window.openCarbonAssistantModal = () => openModal('carbonModal');
     window.quickCarbonPreset = (t) => { document.getElementById('carbonPromptInput').value = t; };
+    function parseCarbonJsonSafe(rawText) {
+      let cleaned = String(rawText || '').trim();
+      cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+      try { return JSON.parse(cleaned); } catch (_) {}
+      const s = cleaned.indexOf('{'), e = cleaned.lastIndexOf('}');
+      if (s !== -1 && e > s) return JSON.parse(cleaned.slice(s, e + 1));
+      return null;
+    }
     async function callCarbonJson(promptText, imageObj = null) {
-      const apiKey = getLocalSecret('ora_gemini_api_key', '');
-      if (IS_LOCAL_SERVER) {
-        const res = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'gemini-4-carbon', apiKey, prompt: promptText, imageBase64: imageObj?.base64, imageMimeType: imageObj?.mimeType, refine: false }) });
-        if (res.ok) { const j = await res.json(); if (j.data) return j.data; }
+      const apiKey = (getLocalSecret('ora_gemini_key', '') || getLocalSecret('ora_gemini_api_key', '')).trim();
+      if (IS_APP_SERVER) {
+        try {
+          const res = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: 'gemini-4-carbon', apiKey, prompt: promptText, imageBase64: imageObj?.base64, imageMimeType: imageObj?.mimeType, refine: false })
+          });
+          if (res.ok) {
+            const j = await res.json();
+            if (j.data && typeof j.data === 'object') return j.data;
+            if (typeof j.data === 'string') return parseCarbonJsonSafe(j.data);
+          }
+        } catch (_) {}
       }
       if (!apiKey) return null;
-      const parts = [{ text: promptText }]; if (imageObj?.base64) parts.push({ inlineData: { mimeType: imageObj.mimeType || 'image/jpeg', data: imageObj.base64 } });
-      const r2 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-4-carbon:generateContent?key=${encodeURIComponent(apiKey)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts }], generationConfig: { responseMimeType: 'application/json', temperature: 0.35 } }) });
-      if (!r2.ok) return null; const j2 = await r2.json(); const raw = j2.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      return raw ? JSON.parse(raw) : null;
+      const parts = [{ text: promptText }];
+      if (imageObj?.base64) parts.push({ inlineData: { mimeType: imageObj.mimeType || 'image/jpeg', data: imageObj.base64 } });
+      const r2 = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-4-carbon:generateContent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey
+        },
+        body: JSON.stringify({ contents: [{ parts }], generationConfig: { responseMimeType: 'application/json', temperature: 0.35 } })
+      });
+      if (!r2.ok) return null;
+      const j2 = await r2.json();
+      const c = j2.candidates?.[0];
+      const raw = (c?.content?.parts || []).filter(p => !p.thought && p.text).map(p => p.text).join('\n');
+      return raw ? parseCarbonJsonSafe(raw) : null;
     }
     window.generateCarbonTemplateBlocks = async () => {
       const q = (document.getElementById('carbonPromptInput')?.value || '').trim(); if (!q) return;
@@ -8917,13 +9987,1360 @@
       } else showToast('💡 로컬 서버(:3080) 또는 [Share / Git]에 Carbon 키를 연결해 주세요.');
     };
 
+
+    // ==================== 17.8 v5.0 FLAGSHIP OS ENGINE (4종 테마 · 프로 알람센터 · 가족일기/성장/금고/가계부 · 하루마감 · Carbon 주간리포트) ====================
+    function applyWorkspaceThemeDom(theme) {
+      const t = ['craft', 'midnight', 'executive', 'sage'].includes(theme) ? theme : 'craft';
+      document.documentElement.setAttribute('data-theme', t);
+      const colors = { craft: '#f7f6f3', midnight: '#0b0f19', executive: '#0c1932', sage: '#eff5f0' };
+      const meta = document.getElementById('metaThemeColor');
+      if (meta) meta.setAttribute('content', colors[t] || '#f7f6f3');
+      document.querySelectorAll('.theme-dot').forEach(b => b.classList.toggle('active', b.dataset.themePick === t));
+    }
+    window.setWorkspaceTheme = (theme) => {
+      APP.theme = theme;
+      applyWorkspaceThemeDom(theme);
+      saveAppState(false);
+      const names = { craft: '☀️ 웜 크래프트', midnight: '🌙 미드나잇 다크', executive: '🌊 로열 네이비', sage: '🌿 세이지 모닝' };
+      showToast(`🎨 테마 변경: ${names[theme] || theme}`);
+    };
+    window.toggleMobileFabSheet = (open) => {
+      document.getElementById('mobileFabSheetBg')?.classList.toggle('open', !!open);
+    };
+
+    // ----- Sound & Voice TTS & Push & Telegram Alarm Delivery -----
+    function playUrgentBeep() {
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        const ctx = new AC();
+        const now = ctx.currentTime;
+        [880, 1174.66, 880, 1174.66].forEach((freq, idx) => {
+          const osc = ctx.createOscillator(), gain = ctx.createGain();
+          osc.type = 'triangle'; osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.001, now + idx * 0.14);
+          gain.gain.exponentialRampToValueAtTime(0.11, now + idx * 0.14 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.14 + 0.12);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(now + idx * 0.14); osc.stop(now + idx * 0.14 + 0.13);
+        });
+      } catch (_) {}
+    }
+    function speakAlarmText(msg) {
+      try {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(`대표님 알림입니다. ${msg}`);
+          u.lang = 'ko-KR'; u.rate = 1.02;
+          window.speechSynthesis.speak(u);
+        }
+      } catch (_) {}
+    }
+    window.requestOsNotificationPermission = async () => {
+      if (!('Notification' in window)) { showToast('이 브라우저는 OS 푸시 알림을 지원하지 않습니다.'); return; }
+      const p = await Notification.requestPermission();
+      showToast(p === 'granted' ? '📲 브라우저/모바일 OS 푸시 알림이 활성화되었습니다!' : '알림 권한이 거부되었습니다. 브라우저 설정에서 허용할 수 있습니다.');
+      if (APP.activeView === 'ALARMS') renderAlarmsView();
+    };
+    function sendOsNotificationSafe(title, body) {
+      try {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(title, { body, tag: 'ora-notion-alarm-' + Date.now() });
+        }
+      } catch (_) {}
+    }
+    async function sendAlarmToTelegram(alm, prefix = '🔔 [알람]') {
+      const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
+      const chat = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
+      if (!tok || !chat) return false;
+      const spLabel = alm.space === 'KIDS' ? '👨‍👧‍👦 가족/애들' : (alm.space === 'PERSONAL' ? '🔒 개인' : '🏢 회사/오라테크');
+      const text = `${prefix} ${spLabel} (${alm.category || ''})\n⏰ ${alm.time} · ${alm.title}${alm.note ? `\n📝 ${alm.note}` : ''}`;
+      try {
+        const r = await fetch(`https://api.telegram.org/bot${tok}/sendMessage`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: chat, text })
+        });
+        const j = await r.json();
+        return !!j.ok;
+      } catch (_) { return false; }
+    }
+
+    // ----- Recurrence & Next-Fire Engine -----
+    function getAlarmsOccurringOnDate(iso) {
+      const [y, m, d] = iso.split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      const dow = dt.getDay();
+      return (APP.alarms || []).filter(a => {
+        if (a.active === false) return false;
+        const rep = a.repeat || 'NONE';
+        if (rep === 'NONE') return a.date === iso;
+        if (a.date && iso < a.date) return false;
+        if (rep === 'DAILY') return true;
+        if (rep === 'WEEKDAYS') return dow >= 1 && dow <= 5;
+        if (rep === 'WEEKEND') return dow === 0 || dow === 6;
+        if (rep === 'WEEKLY') {
+          const wds = Array.isArray(a.weekdays) && a.weekdays.length ? a.weekdays : [new Date((a.date || todayStr(0)) + 'T00:00:00').getDay()];
+          return wds.includes(dow);
+        }
+        if (rep === 'MONTHLY') {
+          const targetDay = Number(a.dayOfMonth || Number((a.date || '2026-01-01').slice(8, 10)) || 1);
+          const lastDay = new Date(y, m, 0).getDate();
+          return d === Math.min(targetDay, lastDay);
+        }
+        if (rep === 'YEARLY') {
+          return (a.date || '').slice(5, 10) === iso.slice(5, 10);
+        }
+        return false;
+      }).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+    }
+
+    function computeNextAlarmOccurrence(alm) {
+      if (!alm || alm.active === false) return null;
+      const now = new Date();
+      if (alm.snoozeUntil && alm.snoozeUntil > now.getTime()) {
+        const sd = new Date(alm.snoozeUntil);
+        return { date: `${sd.getFullYear()}-${String(sd.getMonth()+1).padStart(2,'0')}-${String(sd.getDate()).padStart(2,'0')}`, time: `${String(sd.getHours()).padStart(2,'0')}:${String(sd.getMinutes()).padStart(2,'0')}`, ts: alm.snoozeUntil, isSnoozed: true };
+      }
+      const [hh, mm] = (alm.time || '09:00').split(':').map(Number);
+      const maxDays = alm.repeat === 'YEARLY' ? 370 : (alm.repeat === 'MONTHLY' ? 65 : 35);
+      for (let i = 0; i <= maxDays; i++) {
+        const candDate = todayStr(i);
+        const [cy, cm, cd] = candDate.split('-').map(Number);
+        const dt = new Date(cy, cm - 1, cd, hh || 0, mm || 0, 0, 0);
+        if (dt.getTime() < now.getTime() - 55000) continue;
+        const matches = getAlarmsOccurringOnDate(candDate).some(x => x.id === alm.id);
+        if (matches) return { date: candDate, time: alm.time || '09:00', ts: dt.getTime(), isSnoozed: false };
+      }
+      if (alm.repeat === 'NONE' && alm.date) {
+        const [cy, cm, cd] = alm.date.split('-').map(Number);
+        const dt = new Date(cy, cm - 1, cd, hh || 0, mm || 0, 0, 0);
+        if (dt.getTime() >= now.getTime() - 55000) return { date: alm.date, time: alm.time || '09:00', ts: dt.getTime(), isSnoozed: false };
+      }
+      return null;
+    }
+
+    function formatCountdownKorean(ts) {
+      if (!ts) return '종료됨';
+      const diffMin = Math.round((ts - Date.now()) / 60000);
+      if (diffMin <= 0) return '지금 울림!';
+      if (diffMin < 60) return `${diffMin}분 후`;
+      const hrs = Math.floor(diffMin / 60), remM = diffMin % 60;
+      if (hrs < 24) return `${hrs}시간 ${remM ? remM + '분 ' : ''}후`;
+      const days = Math.floor(hrs / 24);
+      return `D-${days}`;
+    }
+
+    function formatRepeatLabel(alm) {
+      const map = { NONE: '1회성', DAILY: '매일', WEEKDAYS: '평일(월~금)', WEEKEND: '주말', MONTHLY: `매월 ${alm.dayOfMonth || 1}일`, YEARLY: `매년 ${(alm.date||'').slice(5).replace('-','월 ')}일` };
+      if (alm.repeat === 'WEEKLY') {
+        const dn = ['일','월','화','수','목','금','토'];
+        return '매주 ' + ((alm.weekdays || []).map(w => dn[w]).join('·') || '반복');
+      }
+      return map[alm.repeat || 'NONE'] || '반복';
+    }
+
+    window.checkProAlarms = function() {
+      const now = new Date();
+      const nowMs = now.getTime();
+      const td = todayStr(0);
+      const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      for (const alm of (APP.alarms || [])) {
+        if (alm.active === false) continue;
+        // 1) Snoozed alarm check
+        if (alm.snoozeUntil && nowMs >= alm.snoozeUntil) {
+          alm.snoozeUntil = 0;
+          saveAppState(false);
+          fireProAlarmNow(alm, '⏰ 스누즈 재알림');
+          return;
+        }
+        // 2) Today exact time or 30m pre-alert
+        const todayList = getAlarmsOccurringOnDate(td);
+        if (todayList.some(x => x.id === alm.id)) {
+          const exactKey = `${td}@${alm.time}`;
+          if (hhmm >= alm.time && alm.lastFiredKey !== exactKey) {
+            const [ah, am] = (alm.time || '09:00').split(':').map(Number);
+            const diffMin = (now.getHours() * 60 + now.getMinutes()) - (ah * 60 + am);
+            if (diffMin >= 0 && diffMin <= 15) {
+              alm.lastFiredKey = exactKey;
+              saveAppState(false);
+              fireProAlarmNow(alm, '🔔 정각 알람');
+              return;
+            }
+          }
+          if (Array.isArray(alm.preAlerts) && alm.preAlerts.includes('30m')) {
+            const [ah, am] = (alm.time || '09:00').split(':').map(Number);
+            const preTotal = ah * 60 + am - 30;
+            const nowTotal = now.getHours() * 60 + now.getMinutes();
+            const preKey = `${td}@pre30m`;
+            if (preTotal >= 0 && nowTotal >= preTotal && nowTotal < ah * 60 + am && alm.lastPreFiredKey !== preKey) {
+              alm.lastPreFiredKey = preKey;
+              saveAppState(false);
+              fireProAlarmNow(alm, '⏳ 30분 전 사전 경보');
+              return;
+            }
+          }
+        }
+        // 3) D-7 / D-3 / D-1 morning pre-alerts (fires at >= 09:00)
+        if (now.getHours() >= 9 && Array.isArray(alm.preAlerts)) {
+          for (const dStr of ['7', '3', '1']) {
+            if (!alm.preAlerts.includes(dStr)) continue;
+            const targetIso = todayStr(Number(dStr));
+            if (getAlarmsOccurringOnDate(targetIso).some(x => x.id === alm.id)) {
+              const pKey = `${td}@D-${dStr}`;
+              if (alm.lastPreFiredKey !== pKey) {
+                alm.lastPreFiredKey = pKey;
+                saveAppState(false);
+                fireProAlarmNow(alm, `📅 D-${dStr}일 사전 경보 (${targetIso})`);
+                return;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    function fireProAlarmNow(alm, prefix) {
+      const spTxt = alm.space === 'KIDS' ? '👨‍👧‍👦 가족·애들' : (alm.space === 'PERSONAL' ? '🔒 개인' : '🏢 회사·오라테크');
+      const fullText = `${alm.title} (${alm.time})`;
+      triggerNagBanner('', '', fullText, {
+        alarmId: alm.id,
+        badge: `${prefix} · ${spTxt} · ${alm.category || ''}`,
+        subText: alm.note || formatRepeatLabel(alm),
+        sound: alm.sound || 'CHIME'
+      });
+      if (alm.sendPush !== false) sendOsNotificationSafe(`${prefix} · ${spTxt}`, `${alm.title}${alm.note ? ' — ' + alm.note : ''}`);
+      if (alm.sendTelegram) sendAlarmToTelegram(alm, prefix);
+      logActivity('프로 알람 실행', `${prefix} ${alm.title}`, alm.id);
+    }
+
+    window.markProAlarmDone = (id) => {
+      const alm = (APP.alarms || []).find(a => a.id === id);
+      if (!alm) return;
+      if (!Array.isArray(alm.completedHistory)) alm.completedHistory = [];
+      alm.completedHistory.unshift({ date: todayStr(0), time: new Date().toTimeString().slice(0,5) });
+      alm.completedHistory = alm.completedHistory.slice(0, 30);
+      alm.snoozeUntil = 0;
+      if (alm.repeat === 'NONE') alm.active = false;
+      saveAppState();
+      renderAll();
+      showToast(`✅ '${alm.title}' 알람 완료 기록됨!`);
+    };
+
+    // ----- V5 Today Executive Hero HTML -----
+    function renderV5TodayHeroHtml(td, tdPage, todos, workTodos, kidsTodos) {
+      const hr = new Date().getHours();
+      const greet = hr < 11 ? '☀️ 좋은 아침입니다, 대표님' : (hr < 17 ? '⚡ 오늘도 완벽하게, 대표님' : '🌙 하루 수고 많으셨습니다, 대표님');
+      const doneCnt = todos.filter(x => x.checked).length;
+      const pct = todos.length ? Math.round((doneCnt / todos.length) * 100) : 0;
+      const ringDash = 113.1;
+      const ringOffset = ringDash - (ringDash * pct) / 100;
+      const upcomingAlarms = (APP.alarms || [])
+        .map(a => ({ a, next: computeNextAlarmOccurrence(a) }))
+        .filter(x => x.next)
+        .sort((x, y) => x.next.ts - y.next.ts);
+      const nextAlm = upcomingAlarms[0];
+      const nextDday = (APP.ddays || []).map(d => ({ ...d, diff: calcDaysDiff(d.date) })).filter(d => d.diff >= 0).sort((a, b) => a.diff - b.diff)[0];
+      const thisMonth = td.slice(0, 7);
+      const monthSpend = (APP.quickLedger || []).filter(x => (x.date || '').startsWith(thisMonth)).reduce((s, x) => s + Number(x.amount || 0), 0);
+
+      return `
+        <div class="v5-hero-card">
+          <div class="v5-hero-top">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px;">
+                <span class="v5-hero-clock">🕒 <span id="v5LiveClock">${new Date().toTimeString().slice(0,5)}</span></span>
+                <span style="font-size:12.5px;color:var(--ink-2);font-weight:600;">${fmtKorDate(td)}</span>
+              </div>
+              <h1 style="margin:0;font-size:25px;font-weight:800;letter-spacing:-0.025em;line-height:1.25;">${greet}</h1>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="position:relative;width:48px;height:48px;flex-shrink:0;" title="오늘 전체 완료율">
+                <svg viewBox="0 0 44 44" width="48" height="48" style="transform:rotate(-90deg);">
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="var(--border)" stroke-width="4.5" />
+                  <circle cx="22" cy="22" r="18" fill="none" stroke="var(--accent)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="${ringDash}" stroke-dashoffset="${ringOffset.toFixed(1)}" />
+                </svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums;">${pct}%</div>
+              </div>
+              <div style="font-size:12px;color:var(--ink-2);line-height:1.45;">
+                <div>💼 회사 <b>${workTodos.filter(x=>x.checked).length}/${workTodos.length}</b></div>
+                <div>👨‍👧‍👦 가족 <b>${kidsTodos.filter(x=>x.checked).length}/${kidsTodos.length}</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="v5-hero-stats">
+            <div class="v5-stat-pill" onclick="setMainView('ALARMS')">
+              <span class="v5-stat-lbl">🔔 다음 알람</span>
+              <span class="v5-stat-val" style="color:var(--accent);">${nextAlm ? formatCountdownKorean(nextAlm.next.ts) : '없음'}</span>
+              <span class="v5-stat-sub">${nextAlm ? `${nextAlm.a.time} · ${escHtml(nextAlm.a.title)}` : '알람을 등록하세요'}</span>
+            </div>
+            <div class="v5-stat-pill" onclick="setMainView('HABITS')">
+              <span class="v5-stat-lbl">📌 다가오는 D-Day</span>
+              <span class="v5-stat-val" style="color:#ea580c;">${nextDday ? (nextDday.diff === 0 ? 'D-DAY' : 'D-' + nextDday.diff) : '-'}</span>
+              <span class="v5-stat-sub">${nextDday ? `${escHtml(nextDday.emoji||'📌')} ${escHtml(nextDday.title)}` : 'D-Day 등록 가능'}</span>
+            </div>
+            <div class="v5-stat-pill" onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')">
+              <span class="v5-stat-lbl">📓 가족·회사 기록</span>
+              <span class="v5-stat-val">${(APP.journal || []).length}건</span>
+              <span class="v5-stat-sub">아이 ${(APP.kidsProfiles||[]).length}명 · 금고 ${(APP.vaultCards||[]).length}장</span>
+            </div>
+            <div class="v5-stat-pill" onclick="setMainView('JOURNAL');setJournalSubTab('LEDGER')">
+              <span class="v5-stat-lbl">💰 이달 퀵지출</span>
+              <span class="v5-stat-val priv-blur">${monthSpend.toLocaleString()}원</span>
+              <span class="v5-stat-sub">회사·가족 경비 요약</span>
+            </div>
+          </div>
+
+          <div class="v5-quick-bar">
+            <button type="button" class="v5-action-chip primary" onclick="openAlarmModal()">🔔 알람 예약</button>
+            <button type="button" class="v5-action-chip" onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 1줄 일기·기록</button>
+            <button type="button" class="v5-action-chip" onclick="openEveningShutdownModal()">🌙 하루 마감 리추얼</button>
+            <button type="button" class="v5-action-chip" onclick="speakTodayDailyBriefing()">🗣️ 음성 브리핑</button>
+            <button type="button" class="v5-action-chip" onclick="runCarbonWeeklyReview()">✨ Carbon 주간리포트</button>
+            <button type="button" class="v5-action-chip" onclick="selectPage('${tdPage.id}')">📝 오늘 문서</button>
+          </div>
+        </div>`;
+    }
+
+    // Live clock update every 30s
+    setInterval(() => {
+      const el = document.getElementById('v5LiveClock');
+      if (el) el.textContent = new Date().toTimeString().slice(0, 5);
+    }, 30000);
+
+    // ==================== 17.9 VIEW: 🔔 프로 알람 & 회사·가족 리마인더 센터 ====================
+    function renderAlarmsView() {
+      const fSpace = APP.alarmFilterSpace || 'ALL';
+      const all = (APP.alarms || []).map(a => ({ a, next: computeNextAlarmOccurrence(a) }));
+      const filtered = all.filter(x => fSpace === 'ALL' || x.a.space === fSpace)
+        .sort((x, y) => {
+          if (x.a.active === false && y.a.active !== false) return 1;
+          if (x.a.active !== false && y.a.active === false) return -1;
+          return (x.next?.ts || 9e15) - (y.next?.ts || 9e15);
+        });
+      const pushState = ('Notification' in window) ? Notification.permission : 'unsupported';
+      const hasTg = !!(getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', ''));
+
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div class="ws-canvas wide-view">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+            <div>
+              <div style="font-size:12px;color:var(--accent);font-weight:800;letter-spacing:0.04em;">TICKTICK PRO + DUE + TIMETREE ENGINE</div>
+              <h2 style="margin:2px 0 0 0;font-size:24px;font-weight:800;">🔔 회사 · 가족 스마트 알람 센터</h2>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="v5-action-chip primary" onclick="openAlarmModal()">＋ 새 알람 등록</button>
+              <button class="v5-action-chip" onclick="installAlarmPresetPack('WORK')">🏢 회사 필수 5종 추가</button>
+              <button class="v5-action-chip" onclick="installAlarmPresetPack('KIDS')">👨‍👧‍👦 가족 필수 5종 추가</button>
+              <button class="v5-action-chip" onclick="exportAlarmsToIcs()">📥 .ics 폰 캘린더 내보내기</button>
+            </div>
+          </div>
+
+          <!-- 3중 알림 채널 상태 스트립 -->
+          <div class="v5-card" style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 16px;">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:12.5px;">
+              <span class="ntag ntag-green">🔊 화면+음성(TTS) ON</span>
+              <span class="ntag ${pushState === 'granted' ? 'ntag-green' : 'ntag-yellow'}" style="cursor:pointer;" onclick="requestOsNotificationPermission()">
+                📲 OS 푸시: ${pushState === 'granted' ? '허용됨 ✅' : (pushState === 'denied' ? '차단됨' : '클릭해 허용')}
+              </span>
+              <span class="ntag ${hasTg ? 'ntag-blue' : 'ntag-gray'}" style="cursor:pointer;" onclick="openTelegramModal()">
+                ✈️ 텔레그램 폰 푸시: ${hasTg ? '연동됨 ✅' : '미설정 (클릭)'}
+              </span>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="n-btn" style="font-size:12px;" onclick="testAlarmRingSample()">🔊 알람 테스트 울리기</button>
+            </div>
+          </div>
+
+          <!-- 1줄 자연어·음성 초고속 알람 입력 -->
+          <div class="v5-card" style="margin-bottom:14px;padding:12px 14px;">
+            <div style="display:flex;gap:7px;flex-wrap:wrap;">
+              <input id="quickNlpAlarmInput" class="field-input" style="flex:1;min-width:220px;"
+                     placeholder="⚡ 1줄 자연어 알람 (예: 매월 10일 오전 9시 세금계산서 마감 #일 / 매주 월 수 금 오후 4시 30분 선유 태권도 #애들)"
+                     onkeydown="if(event.key==='Enter') addQuickNlpAlarm()" />
+              <button type="button" class="n-btn" onclick="startVoiceIntoInput('quickNlpAlarmInput')" title="한국어 음성으로 알람 말하기">🎙️ 음성</button>
+              <button type="button" class="n-btn-primary" onclick="addQuickNlpAlarm()">🔔 즉시 예약</button>
+            </div>
+          </div>
+
+          <!-- 필터 탭 -->
+          <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+            ${[
+              ['ALL', `전체 (${all.length})`],
+              ['WORK', `🏢 회사 (${all.filter(x=>x.a.space==='WORK').length})`],
+              ['KIDS', `👨‍👧‍👦 가족·애들 (${all.filter(x=>x.a.space==='KIDS').length})`],
+              ['PERSONAL', `🔒 개인 (${all.filter(x=>x.a.space==='PERSONAL').length})`]
+            ].map(([k, lbl]) => `<button class="n-btn ${fSpace===k?'n-btn-primary':''}" onclick="APP.alarmFilterSpace='${k}';renderAlarmsView()">${lbl}</button>`).join('')}
+          </div>
+
+          <!-- 알람 카드 그리드 -->
+          ${filtered.length ? `
+            <div class="alarm-grid">
+              ${filtered.map(({ a, next }) => {
+                const cdText = next ? formatCountdownKorean(next.ts) : '종료/대기';
+                const isUrgent = next && (next.ts - Date.now()) < 3600000 * 3;
+                const soundIcon = { CHIME: '🎵', VOICE: '🗣️음성', URGENT: '🚨긴급', SILENT: '🔕' }[a.sound || 'CHIME'] || '🎵';
+                return `
+                  <div class="alarm-card space-${a.space || 'WORK'} ${a.active === false ? 'muted' : ''}">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                      <div>
+                        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">
+                          <span class="ntag ${a.space==='KIDS'?'ntag-orange':(a.space==='PERSONAL'?'ntag-purple':'ntag-blue')}">${a.space==='KIDS'?'👨‍👧‍👦 가족':(a.space==='PERSONAL'?'🔒 개인':'🏢 회사')}</span>
+                          <span class="ntag ntag-gray">${escHtml(a.category || '일반')}</span>
+                          <span class="alarm-countdown-badge ${isUrgent ? 'urgent' : ''}">${cdText}</span>
+                        </div>
+                        <div class="alarm-time-big">${escHtml(a.time || '09:00')} <span style="font-size:12px;font-weight:600;color:var(--ink-3);">${formatRepeatLabel(a)}</span></div>
+                      </div>
+                      <button type="button" class="switch-pill ${a.active !== false ? 'on' : ''}" onclick="toggleProAlarmActive('${a.id}')" title="알람 ON/OFF"></button>
+                    </div>
+                    <div style="font-size:14.5px;font-weight:700;line-height:1.4;">${escHtml(a.title)}</div>
+                    ${a.note ? `<div style="font-size:12px;color:var(--ink-2);line-height:1.45;">📝 ${escHtml(a.note)}</div>` : ''}
+                    <div style="display:flex;gap:5px;flex-wrap:wrap;font-size:11px;color:var(--ink-3);">
+                      <span>${soundIcon}</span>
+                      ${a.sendTelegram ? '<span>✈️ 텔레그램</span>' : ''}
+                      ${a.sendPush !== false ? '<span>📲 OS푸시</span>' : ''}
+                      ${(a.preAlerts || []).length ? `<span>⏳ 사전(${a.preAlerts.map(p => p==='30m'?'30분':'D-'+p).join(',')})</span>` : ''}
+                      ${next ? `<span>· 다음: ${next.date}</span>` : ''}
+                    </div>
+                    <div style="display:flex;gap:5px;margin-top:4px;padding-top:8px;border-top:1px dashed var(--border);flex-wrap:wrap;">
+                      <button class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="fireProAlarmNow(APP.alarms.find(x=>x.id==='${a.id}'),'🔊 미리 울리기')">🔊 테스트</button>
+                      <button class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="markProAlarmDone('${a.id}')">✅ 완료(${(a.completedHistory||[]).length})</button>
+                      <button class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="openAlarmModal('${a.id}')">✏️ 수정</button>
+                      <button class="n-btn-ghost" style="font-size:11.5px;padding:3px 7px;color:#dc2626;margin-left:auto;" onclick="deleteProAlarm('${a.id}')">삭제</button>
+                    </div>
+                  </div>`;
+              }).join('')}
+            </div>` : '<div class="v5-card" style="text-align:center;padding:42px;color:var(--ink-3);">등록된 알람이 없습니다. 상단 <b>[🏢 회사 필수 5종]</b> 또는 <b>[👨‍👧‍👦 가족 필수 5종]</b>을 눌러 1초 만에 세팅해 보세요!</div>'}
+        </div>`;
+    }
+
+    window.toggleAlarmRepeatExtra = () => {
+      const rep = document.getElementById('almRepeat')?.value || 'NONE';
+      const wRow = document.getElementById('almWeekdaysRow');
+      const mRow = document.getElementById('almMonthDayRow');
+      if (wRow) wRow.style.display = rep === 'WEEKLY' ? 'block' : 'none';
+      if (mRow) mRow.style.display = rep === 'MONTHLY' ? 'block' : 'none';
+    };
+
+    window.openAlarmModal = (editId = '', defaultDate = '') => {
+      const alm = editId ? (APP.alarms || []).find(a => a.id === editId) : null;
+      document.getElementById('almEditId').value = alm ? alm.id : '';
+      document.getElementById('alarmModalTitle').textContent = alm ? '✏️ 프로 알람 수정' : '🔔 회사·가족 프로 알람 등록';
+      document.getElementById('almTitle').value = alm ? alm.title : '';
+      document.getElementById('almSpace').value = alm ? (alm.space || 'WORK') : 'WORK';
+      document.getElementById('almCategory').value = alm ? (alm.category || '출고/마감') : '출고/마감';
+      document.getElementById('almDate').value = alm ? (alm.date || todayStr(0)) : (defaultDate || todayStr(0));
+      document.getElementById('almTime').value = alm ? (alm.time || '09:00') : '09:00';
+      document.getElementById('almRepeat').value = alm ? (alm.repeat || 'NONE') : 'NONE';
+      document.getElementById('almDayOfMonth').value = alm ? (alm.dayOfMonth || 10) : Number((defaultDate || todayStr(0)).slice(8, 10));
+      const wds = alm && Array.isArray(alm.weekdays) ? alm.weekdays : [1, 3, 5];
+      document.querySelectorAll('#almWeekdaysBox .wd-chip').forEach(b => b.classList.toggle('on', wds.includes(Number(b.dataset.wd))));
+      const pre = alm && Array.isArray(alm.preAlerts) ? alm.preAlerts : ['1', '30m'];
+      document.getElementById('almPre7').checked = pre.includes('7');
+      document.getElementById('almPre3').checked = pre.includes('3');
+      document.getElementById('almPre1').checked = pre.includes('1');
+      document.getElementById('almPre30m').checked = pre.includes('30m');
+      document.getElementById('almSound').value = alm ? (alm.sound || 'CHIME') : 'VOICE';
+      document.getElementById('almSendTg').checked = alm ? !!alm.sendTelegram : true;
+      document.getElementById('almSendPush').checked = alm ? alm.sendPush !== false : true;
+      document.getElementById('almNote').value = alm ? (alm.note || '') : '';
+      toggleAlarmRepeatExtra();
+      openModal('alarmModal');
+      setTimeout(() => document.getElementById('almTitle')?.focus(), 60);
+    };
+
+    window.saveProAlarm = () => {
+      const title = (document.getElementById('almTitle')?.value || '').trim();
+      if (!title) { showToast('알람 제목을 입력해 주세요.'); return; }
+      const editId = document.getElementById('almEditId').value;
+      const weekdays = Array.from(document.querySelectorAll('#almWeekdaysBox .wd-chip.on')).map(b => Number(b.dataset.wd));
+      const preAlerts = [];
+      if (document.getElementById('almPre7').checked) preAlerts.push('7');
+      if (document.getElementById('almPre3').checked) preAlerts.push('3');
+      if (document.getElementById('almPre1').checked) preAlerts.push('1');
+      if (document.getElementById('almPre30m').checked) preAlerts.push('30m');
+      const obj = {
+        id: editId || uid('alm'),
+        title,
+        space: document.getElementById('almSpace').value,
+        category: document.getElementById('almCategory').value,
+        date: document.getElementById('almDate').value || todayStr(0),
+        time: document.getElementById('almTime').value || '09:00',
+        repeat: document.getElementById('almRepeat').value || 'NONE',
+        weekdays,
+        dayOfMonth: Number(document.getElementById('almDayOfMonth').value || 10),
+        preAlerts,
+        sound: document.getElementById('almSound').value || 'CHIME',
+        sendTelegram: document.getElementById('almSendTg').checked,
+        sendPush: document.getElementById('almSendPush').checked,
+        note: (document.getElementById('almNote').value || '').trim(),
+        active: true,
+        lastFiredKey: '',
+        lastPreFiredKey: '',
+        snoozeUntil: 0,
+        completedHistory: []
+      };
+      if (editId) {
+        const idx = (APP.alarms || []).findIndex(a => a.id === editId);
+        if (idx >= 0) {
+          obj.completedHistory = APP.alarms[idx].completedHistory || [];
+          APP.alarms[idx] = obj;
+        }
+      } else {
+        APP.alarms.unshift(obj);
+      }
+      logActivity('프로 알람 저장', `${obj.time} ${obj.title}`, obj.id);
+      saveAppState();
+      closeModal('alarmModal');
+      renderAll();
+      showToast(`🔔 알람 저장 완료: ${obj.time} ${obj.title}`);
+    };
+
+    window.toggleProAlarmActive = (id) => {
+      const a = (APP.alarms || []).find(x => x.id === id);
+      if (!a) return;
+      a.active = a.active === false ? true : false;
+      saveAppState();
+      renderAll();
+    };
+    window.deleteProAlarm = (id) => {
+      APP.alarms = (APP.alarms || []).filter(a => a.id !== id);
+      saveAppState();
+      renderAll();
+      showToast('🗑️ 알람이 삭제되었습니다.');
+    };
+    window.testAlarmRingSample = () => {
+      const sample = (APP.alarms || [])[0] || { id: '', title: '오라테크 프로 알람 테스트입니다', time: new Date().toTimeString().slice(0,5), space: 'WORK', category: '테스트', sound: 'VOICE', sendPush: true, sendTelegram: false, note: '소리·음성·OS 푸시 정상 작동 확인!' };
+      fireProAlarmNow(sample, '🔊 테스트 알림');
+    };
+
+    window.addQuickNlpAlarm = () => {
+      const inp = document.getElementById('quickNlpAlarmInput');
+      const raw = (inp?.value || '').trim();
+      if (!raw) return;
+      let space = /#애들|#가족|아이|선유|은유|학원|소아과|치과|등원|하원|생일|결혼|어린이집|유치원|태권도/.test(raw) ? 'KIDS' : (/#개인|운동|건강/.test(raw) ? 'PERSONAL' : 'WORK');
+      let repeat = 'NONE', weekdays = [], dayOfMonth = Number(todayStr(0).slice(8, 10)), date = todayStr(0), time = '09:00';
+      if (/매일/.test(raw)) repeat = 'DAILY';
+      else if (/평일/.test(raw)) repeat = 'WEEKDAYS';
+      else if (/주말/.test(raw)) repeat = 'WEEKEND';
+      else if (/매년/.test(raw)) repeat = 'YEARLY';
+      else {
+        const mm = raw.match(/매월\s*(\d{1,2})일/);
+        if (mm) { repeat = 'MONTHLY'; dayOfMonth = Math.min(31, Math.max(1, Number(mm[1]))); }
+        else if (/매주/.test(raw)) {
+          repeat = 'WEEKLY';
+          const dn = { '일':0, '월':1, '화':2, '수':3, '목':4, '금':5, '토':6 };
+          Object.keys(dn).forEach(k => { if (new RegExp(`매주[^0-9]*${k}`).test(raw) || raw.includes(k + '요일') || raw.includes(' ' + k + ' ')) weekdays.push(dn[k]); });
+          if (!weekdays.length) weekdays = [1];
+        }
+      }
+      if (/내일/.test(raw)) date = todayStr(1);
+      else if (/모레/.test(raw)) date = todayStr(2);
+      const dm = raw.match(/(\d{1,2})월\s*(\d{1,2})일/);
+      if (dm) {
+        const y = new Date().getFullYear();
+        date = `${y}-${String(dm[1]).padStart(2,'0')}-${String(dm[2]).padStart(2,'0')}`;
+      }
+      const tm = raw.match(/(오전|오후)?\s*(\d{1,2})\s*시\s*(반|(\d{1,2})\s*분)?/);
+      if (tm) {
+        let h = Number(tm[2]);
+        const m = tm[3] === '반' ? 30 : (tm[4] ? Number(tm[4]) : 0);
+        if (tm[1] === '오후' && h < 12) h += 12;
+        if (tm[1] === '오전' && h === 12) h = 0;
+        time = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      } else {
+        const hm = raw.match(/\b(\d{1,2}):(\d{2})\b/);
+        if (hm) time = `${String(hm[1]).padStart(2,'0')}:${hm[2]}`;
+      }
+      const cleanTitle = raw.replace(/#(일|애들|가족|개인)/g, '').trim();
+      APP.alarms.unshift({
+        id: uid('alm'), title: cleanTitle, space, category: space === 'KIDS' ? '등하원/학원' : '출고/마감',
+        date, time, repeat, weekdays, dayOfMonth, preAlerts: ['30m'], sound: 'VOICE',
+        sendTelegram: true, sendPush: true, active: true, note: '자연어 1줄 예약', lastFiredKey: '', completedHistory: []
+      });
+      if (inp) inp.value = '';
+      saveAppState();
+      renderAll();
+      showToast(`🔔 알람 예약됨: ${formatRepeatLabel(APP.alarms[0])} ${time} · ${cleanTitle}`);
+    };
+
+    window.installAlarmPresetPack = (packSpace) => {
+      const packs = {
+        WORK: [
+          { title: '경동화물 · 택배 당일 출고 마감 20분 전', category: '출고/마감', time: '14:40', repeat: 'WEEKDAYS', preAlerts: ['30m'], sound: 'VOICE', note: '오후 3시 이전 결제건 화물 출고 체크' },
+          { title: '매월 10일 전자세금계산서 발행 최종 마감', category: '세무/결제', time: '09:30', repeat: 'MONTHLY', dayOfMonth: 10, preAlerts: ['3','1'], sound: 'URGENT', note: 'ERP 매출 vs 홈택스 1:1 대사' },
+          { title: '매월 25일 급여 · 부가세 · 자금흐름 점검', category: '세무/결제', time: '10:00', repeat: 'MONTHLY', dayOfMonth: 25, preAlerts: ['3','1'], sound: 'CHIME', note: '법인통장·미수금·부가세 적립 확인' },
+          { title: '주간 ERP 미수금 · 안전재고(소진 임박) 점검', category: '거래처/미팅', time: '09:00', repeat: 'WEEKLY', weekdays: [1], preAlerts: [], sound: 'CHIME', note: '월요일 아침 10분 집중 체크' },
+          { title: '퇴근 전 네이버 톡톡 · 견적서 미응답 0건 체크', category: '거래처/미팅', time: '17:30', repeat: 'WEEKDAYS', preAlerts: [], sound: 'CHIME', note: '김대리 CS함 최종 점검' }
+        ],
+        KIDS: [
+          { title: '아이 등원 준비물 · 물통 · 알림장 최종 체크', category: '등하원/학원', time: '08:15', repeat: 'WEEKDAYS', preAlerts: [], sound: 'CHIME', note: '여벌옷·물통·알림장 사인' },
+          { title: '하원 · 학원 픽업 알림', category: '등하원/학원', time: '16:30', repeat: 'WEEKDAYS', preAlerts: ['30m'], sound: 'VOICE', note: '늦지 않게 출발!' },
+          { title: '내일(월) 학교·어린이집 준비물 미리 챙기기', category: '등하원/학원', time: '20:30', repeat: 'WEEKLY', weekdays: [0], preAlerts: [], sound: 'CHIME', note: '이불·실내화·준비물 가방 세팅' },
+          { title: '매월 1일 아이 키·몸무게 성장기록 & 예방접종 체크', category: '병원/접종', time: '10:00', repeat: 'MONTHLY', dayOfMonth: 1, preAlerts: ['1'], sound: 'CHIME', note: '노션+ 가족·성장 탭에 기록' },
+          { title: '주말 가족 나들이 · 장보기 체크', category: '기념일/가족', time: '18:00', repeat: 'WEEKLY', weekdays: [5], preAlerts: [], sound: 'CHIME', note: '이번 주말 아이들과 갈 곳 정하기' }
+        ]
+      };
+      let added = 0;
+      (packs[packSpace] || []).forEach(p => {
+        if (!(APP.alarms || []).some(a => a.title === p.title)) {
+          APP.alarms.push({
+            id: uid('alm'), space: packSpace, date: todayStr(0), weekdays: p.weekdays || [1,2,3,4,5],
+            dayOfMonth: p.dayOfMonth || 1, sendTelegram: true, sendPush: true, active: true,
+            lastFiredKey: '', completedHistory: [], ...p
+          });
+          added++;
+        }
+      });
+      saveAppState();
+      renderAll();
+      showToast(added ? `🔔 ${packSpace === 'KIDS' ? '가족' : '회사'} 필수 알람 ${added}종을 자동 등록했습니다!` : '이미 모든 필수 알람이 등록되어 있습니다.');
+    };
+
+    window.exportAlarmsToIcs = () => {
+      const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//OraTech//NotionPlusOS v5.0//KO', 'CALSCALE:GREGORIAN'];
+      const rruleMap = {
+        DAILY: 'FREQ=DAILY',
+        WEEKDAYS: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR',
+        WEEKEND: 'FREQ=WEEKLY;BYDAY=SA,SU',
+        MONTHLY: 'FREQ=MONTHLY',
+        YEARLY: 'FREQ=YEARLY'
+      };
+      const wdIcs = ['SU','MO','TU','WE','TH','FR','SA'];
+      (APP.alarms || []).filter(a => a.active !== false).forEach(a => {
+        const dt = (a.date || todayStr(0)).replace(/-/g, '');
+        const tm = (a.time || '09:00').replace(':', '') + '00';
+        lines.push('BEGIN:VEVENT');
+        lines.push(`UID:${a.id}@oratech-notion`);
+        lines.push(`DTSTART:${dt}T${tm}`);
+        lines.push(`SUMMARY:[${a.space==='KIDS'?'가족':'회사'}] ${String(a.title||'').replace(/\r?\n/g,' ')}`);
+        if (a.note) lines.push(`DESCRIPTION:${String(a.note).replace(/\r?\n/g,' ')}`);
+        if (a.repeat === 'WEEKLY' && (a.weekdays || []).length) {
+          lines.push(`RRULE:FREQ=WEEKLY;BYDAY=${a.weekdays.map(w => wdIcs[w]).join(',')}`);
+        } else if (a.repeat === 'MONTHLY') {
+          lines.push(`RRULE:FREQ=MONTHLY;BYMONTHDAY=${a.dayOfMonth || 1}`);
+        } else if (rruleMap[a.repeat]) {
+          lines.push(`RRULE:${rruleMap[a.repeat]}`);
+        }
+        lines.push('BEGIN:VALARM', 'TRIGGER:-PT15M', 'ACTION:DISPLAY', `DESCRIPTION:${a.title}`, 'END:VALARM');
+        lines.push('END:VEVENT');
+      });
+      (APP.ddays || []).forEach(d => {
+        const dt = (d.date || todayStr(0)).replace(/-/g, '');
+        lines.push('BEGIN:VEVENT', `UID:${d.id}@oratech-notion`, `DTSTART;VALUE=DATE:${dt}`, `SUMMARY:${d.emoji||'📌'} ${d.title}`, 'END:VEVENT');
+      });
+      lines.push('END:VCALENDAR');
+      const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `오라테크_회사_가족_알람캘린더_${todayStr(0)}.ics`;
+      a.click();
+      showToast('📥 .ics 캘린더 파일 저장 완료! 아이폰·갤럭시·구글 캘린더에서 열면 즉시 등록됩니다.');
+    };
+
+    window.startVoiceIntoInput = (inputId) => {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { showToast('이 브라우저는 음성 인식을 지원하지 않습니다 (Chrome/Edge 권장).'); return; }
+      const rec = new SR();
+      rec.lang = 'ko-KR'; rec.interimResults = false;
+      showToast('🎙️ 말씀하세요... (예: 매월 10일 오전 9시 세금계산서 마감)');
+      rec.onresult = (e) => {
+        const t = e.results?.[0]?.[0]?.transcript || '';
+        const el = document.getElementById(inputId);
+        if (el && t) { el.value = (el.value ? el.value + ' ' : '') + t; el.focus(); showToast(`🎙️ 인식 완료: "${t}"`); }
+      };
+      rec.onerror = () => showToast('음성 인식에 실패했습니다. 마이크 권한을 확인하세요.');
+      rec.start();
+    };
+
+    // ==================== 17.10 VIEW: 📓 가족 성장 · 타임라인 일기 · 중요정보 금고 · 1초 가계부 ====================
+    let journalFilterSpace = 'ALL';
+    let journalSearchQ = '';
+    let vaultSearchQ = '';
+    let pendingJournalPhotoIds = [];
+
+    window.setJournalSubTab = (tab) => {
+      APP.journalSubTab = tab;
+      saveAppState(false);
+      if (APP.activeView === 'JOURNAL') renderJournalHubView();
+    };
+
+    function renderJournalHubView() {
+      const sub = APP.journalSubTab || 'DIARY';
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div class="ws-canvas wide-view">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+            <div>
+              <div style="font-size:12px;color:#ea580c;font-weight:800;letter-spacing:0.04em;">DAY ONE + FAMILYALBUM + 1PASSWORD PRO VAULT</div>
+              <h2 style="margin:2px 0 0 0;font-size:24px;font-weight:800;">📓 가족 성장 · 일기 · 중요정보 금고 · 퀵경비</h2>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="v5-action-chip" onclick="openEveningShutdownModal()">🌙 하루 마감 회고</button>
+              <button class="v5-action-chip primary" onclick="runCarbonWeeklyReview()">✨ Carbon 주간 매거진</button>
+            </div>
+          </div>
+
+          <div class="v5-subtabs">
+            <button type="button" class="v5-subtab ${sub==='DIARY'?'active':''}" onclick="setJournalSubTab('DIARY')">📓 타임라인 일기 (${(APP.journal||[]).length})</button>
+            <button type="button" class="v5-subtab ${sub==='KIDS'?'active':''}" onclick="setJournalSubTab('KIDS')">👶 아이 성장·건강 (${(APP.kidsProfiles||[]).length})</button>
+            <button type="button" class="v5-subtab ${sub==='VAULT'?'active':''}" onclick="setJournalSubTab('VAULT')">🔐 1초 복사 금고 (${(APP.vaultCards||[]).length})</button>
+            <button type="button" class="v5-subtab ${sub==='LEDGER'?'active':''}" onclick="setJournalSubTab('LEDGER')">💰 회사·가족 퀵경비 (${(APP.quickLedger||[]).length})</button>
+          </div>
+
+          ${sub === 'DIARY' ? renderJournalDiarySubHtml()
+            : (sub === 'KIDS' ? renderKidsGrowthSubHtml()
+            : (sub === 'VAULT' ? renderVaultSubHtml()
+            : renderQuickLedgerSubHtml()))}
+        </div>`;
+    }
+
+    function renderJournalDiarySubHtml() {
+      const td = todayStr(0);
+      const md = td.slice(5);
+      const onThisDay = (APP.journal || []).find(j => j.date !== td && (j.date || '').slice(5) === md)
+        || (APP.journal || []).find(j => j.date !== td && j.space === 'KIDS');
+      const list = (APP.journal || []).filter(j => {
+        if (journalFilterSpace !== 'ALL' && j.space !== journalFilterSpace) return false;
+        if (journalSearchQ && !`${j.title} ${j.body} ${(j.tags||[]).join(' ')}`.toLowerCase().includes(journalSearchQ.toLowerCase())) return false;
+        return true;
+      }).sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+
+      return `
+        ${onThisDay ? `
+          <div class="on-this-day-card">
+            <div style="font-size:11.5px;font-weight:800;color:#b45309;margin-bottom:4px;">🕰️ ON THIS DAY · 잊지 못할 기록 회상 (${escHtml(onThisDay.date)})</div>
+            <div style="font-size:15px;font-weight:700;margin-bottom:3px;">${escHtml(onThisDay.mood||'❤️')} ${escHtml(onThisDay.title)}</div>
+            <div style="font-size:13px;color:var(--ink-2);line-height:1.55;">${escHtml(onThisDay.body)}</div>
+          </div>` : ''}
+
+        <!-- 일기 작성 컴포저 -->
+        <div class="v5-card" style="margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <strong style="font-size:14.5px;">✍️ 오늘의 회사 · 가족 기록 남기기</strong>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
+              <select id="jrnSpace" class="field-select" style="width:auto;padding:4px 8px;font-size:12px;">
+                <option value="KIDS">👨‍👧‍👦 가족 · 애들</option>
+                <option value="WORK">🏢 회사 · 오라테크</option>
+                <option value="PERSONAL">🔒 개인 회고</option>
+              </select>
+              <select id="jrnMood" class="field-select" style="width:auto;padding:4px 8px;font-size:12px;">
+                <option value="❤️">❤️ 감동/행복</option>
+                <option value="😊">😊 최고</option>
+                <option value="🔥">🔥 업무 몰입</option>
+                <option value="🙂">🙂 평온</option>
+                <option value="😴">😴 피곤</option>
+              </select>
+              <select id="jrnWeather" class="field-select" style="width:auto;padding:4px 8px;font-size:12px;">
+                <option value="☀️">☀️ 맑음</option>
+                <option value="⛅">⛅ 흐림</option>
+                <option value="🌧️">🌧️ 비</option>
+                <option value="❄️">❄️ 눈</option>
+              </select>
+              <input id="jrnDate" type="date" class="field-input" style="width:auto;padding:4px 8px;font-size:12px;" value="${td}" />
+            </div>
+          </div>
+          <input id="jrnTitle" class="field-input" style="margin-bottom:8px;font-weight:700;" placeholder="제목 (예: 선유 처음 자전거 성공! / 오늘 대형 호이스트 계약 완료)" />
+          <textarea id="jrnBody" rows="3" class="field-textarea" placeholder="오늘 있었던 소중한 순간, 아이 어록, 회사 주요 결정사항을 자유롭게 적어두세요..."></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+              <input id="jrnTags" class="field-input" style="width:180px;padding:5px 8px;font-size:12px;" placeholder="태그 (쉼표구분: 선유,나들이)" />
+              <label class="n-btn" style="font-size:12px;cursor:pointer;">📷 사진첨부<input type="file" accept="image/*" multiple style="display:none;" onchange="attachJournalPhotos(this.files);this.value='';" /></label>
+              <button type="button" class="n-btn" style="font-size:12px;" onclick="startVoiceIntoInput('jrnBody')">🎙️ 음성일기</button>
+              <span id="jrnPendingPhotosBadge" style="font-size:11.5px;color:var(--accent);font-weight:700;">${pendingJournalPhotoIds.length ? `📎 사진 ${pendingJournalPhotoIds.length}장 대기` : ''}</span>
+            </div>
+            <button type="button" class="n-btn-primary" onclick="saveNewJournalEntry()">📓 타임라인에 기록</button>
+          </div>
+        </div>
+
+        <!-- 필터 & 타임라인 -->
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            ${[['ALL','전체'],['KIDS','👨‍👧‍👦 가족·애들'],['WORK','🏢 회사'],['PERSONAL','🔒 개인']].map(([k,l]) => `<button class="n-btn ${journalFilterSpace===k?'n-btn-primary':''}" style="font-size:12px;" onclick="journalFilterSpace='${k}';renderJournalHubView()">${l}</button>`).join('')}
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input class="field-input" style="width:170px;padding:4px 9px;font-size:12.5px;" value="${escHtml(journalSearchQ)}" oninput="journalSearchQ=this.value;renderJournalHubView()" placeholder="기록 검색..." />
+            <button class="n-btn" style="font-size:12px;" onclick="window.print()">🖨️ 일기북 인쇄</button>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:12px;">
+          ${list.length ? list.map(j => `
+            <div class="journal-entry-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+                <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+                  <span style="font-size:20px;">${escHtml(j.mood || '📓')}</span>
+                  <span class="ntag ${j.space==='KIDS'?'ntag-orange':(j.space==='PERSONAL'?'ntag-purple':'ntag-blue')}">${j.space==='KIDS'?'👨‍👧‍👦 가족':(j.space==='PERSONAL'?'🔒 개인':'🏢 회사')}</span>
+                  <strong style="font-size:15.5px;">${escHtml(j.title)}</strong>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);">
+                  <span>${escHtml(j.weather||'')} ${escHtml(j.date)} ${escHtml(j.time||'')}</span>
+                  <button class="n-btn-ghost" style="color:#dc2626;font-size:11.5px;padding:2px 6px;" onclick="deleteJournalEntry('${j.id}')">삭제</button>
+                </div>
+              </div>
+              <div style="font-size:13.5px;color:var(--ink-2);line-height:1.68;white-space:pre-wrap;">${escHtml(j.body)}</div>
+              ${(j.photoIds || []).length ? `
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  ${j.photoIds.map(pid => PHOTOS[pid] ? `<img src="${PHOTOS[pid].dataUrl}" onclick="openLightbox('${pid}')" style="width:110px;height:110px;object-fit:cover;border-radius:10px;cursor:pointer;border:1px solid var(--border);" />` : '').join('')}
+                </div>` : ''}
+              ${(j.tags || []).length ? `<div style="display:flex;gap:5px;flex-wrap:wrap;">${j.tags.map(t => `<span class="ntag ntag-gray">#${escHtml(t)}</span>`).join('')}</div>` : ''}
+            </div>`).join('') : '<div class="v5-card" style="text-align:center;padding:38px;color:var(--ink-3);">조건에 맞는 기록이 없습니다.</div>'}
+        </div>`;
+    }
+
+    window.attachJournalPhotos = async (files) => {
+      if (!files || !files.length) return;
+      for (const f of Array.from(files).slice(0, 6)) {
+        try {
+          const compressed = await compressImageFile(f, 1280, 0.82);
+          const dataUrl = compressed && compressed.dataUrl ? compressed.dataUrl : '';
+          if (!dataUrl) continue;
+          const pid = uid('ph');
+          const rec = { id: pid, name: f.name || 'journal.jpg', dataUrl, space: document.getElementById('jrnSpace')?.value || 'KIDS', noteDate: document.getElementById('jrnDate')?.value || todayStr(0), caption: '📓 일기 첨부 사진', createdAt: Date.now() };
+          PHOTOS[pid] = rec;
+          await idbPut('photos', rec);
+          pendingJournalPhotoIds.push(pid);
+        } catch (_) {}
+      }
+      const b = document.getElementById('jrnPendingPhotosBadge');
+      if (b) b.textContent = `📎 사진 ${pendingJournalPhotoIds.length}장 준비됨`;
+      showToast(`📷 사진 ${pendingJournalPhotoIds.length}장 첨부 준비 완료!`);
+    };
+
+    window.saveNewJournalEntry = () => {
+      const title = (document.getElementById('jrnTitle')?.value || '').trim();
+      const body = (document.getElementById('jrnBody')?.value || '').trim();
+      if (!title && !body) { showToast('제목이나 내용을 입력해 주세요.'); return; }
+      const tags = (document.getElementById('jrnTags')?.value || '').split(',').map(s => s.trim().replace(/^#/, '')).filter(Boolean);
+      const entry = {
+        id: uid('jrn'),
+        date: document.getElementById('jrnDate')?.value || todayStr(0),
+        time: new Date().toTimeString().slice(0, 5),
+        space: document.getElementById('jrnSpace')?.value || 'KIDS',
+        mood: document.getElementById('jrnMood')?.value || '❤️',
+        weather: document.getElementById('jrnWeather')?.value || '☀️',
+        title: title || body.slice(0, 26),
+        body: body || title,
+        tags,
+        photoIds: [...pendingJournalPhotoIds],
+        createdAt: Date.now()
+      };
+      pendingJournalPhotoIds = [];
+      APP.journal.unshift(entry);
+      logActivity('타임라인 일기 기록', entry.title, entry.id);
+      saveAppState();
+      renderAll();
+      showToast('📓 소중한 기록이 타임라인에 저장되었습니다!');
+    };
+    window.deleteJournalEntry = (id) => {
+      APP.journal = (APP.journal || []).filter(j => j.id !== id);
+      saveAppState(); renderJournalHubView();
+    };
+
+    // ----- Sub-tab 2: Kids Growth, Health, Vaccination & Cute Quotes -----
+    function calcKidAgeMeta(dob) {
+      if (!dob) return { ageTxt: '-', daysAlive: 0, bdayDday: '-' };
+      const [y, m, d] = dob.split('-').map(Number);
+      const birth = new Date(y, m - 1, d);
+      const now = new Date();
+      const daysAlive = Math.max(0, Math.floor((now - birth) / 86400000));
+      const months = (now.getFullYear() - y) * 12 + (now.getMonth() - (m - 1)) - (now.getDate() < d ? 1 : 0);
+      const yrs = Math.floor(Math.max(0, months) / 12);
+      const remM = Math.max(0, months) % 12;
+      let nextB = new Date(now.getFullYear(), m - 1, d);
+      if (nextB < new Date(now.getFullYear(), now.getMonth(), now.getDate())) nextB = new Date(now.getFullYear() + 1, m - 1, d);
+      const bDiff = Math.round((nextB - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+      return { ageTxt: `만 ${yrs}세 ${remM}개월`, daysAlive, bdayDday: bDiff === 0 ? '🎂 오늘 생일!' : `🎂 생일 D-${bDiff}` };
+    }
+
+    function renderGrowthSvgChart(logs) {
+      if (!logs || logs.length < 2) return '<div style="font-size:12px;color:var(--ink-3);padding:14px 0;">성장 기록이 2건 이상 쌓이면 키·몸무게 성장 곡선 그래프가 자동으로 그려집니다!</div>';
+      const sorted = [...logs].sort((a, b) => a.date.localeCompare(b.date)).slice(-10);
+      const W = 460, H = 135, pad = 26;
+      const hs = sorted.map(x => Number(x.height || 0)), ws = sorted.map(x => Number(x.weight || 0));
+      const minH = Math.min(...hs) - 2, maxH = Math.max(...hs) + 2;
+      const minW = Math.min(...ws) - 1, maxW = Math.max(...ws) + 1;
+      const xPos = i => pad + (i / Math.max(1, sorted.length - 1)) * (W - pad * 2);
+      const yH = v => H - pad - ((v - minH) / Math.max(1, maxH - minH)) * (H - pad * 2);
+      const yW = v => H - pad - ((v - minW) / Math.max(1, maxW - minW)) * (H - pad * 2);
+      const hPts = sorted.map((x, i) => `${xPos(i).toFixed(1)},${yH(Number(x.height||0)).toFixed(1)}`).join(' ');
+      const wPts = sorted.map((x, i) => `${xPos(i).toFixed(1)},${yW(Number(x.weight||0)).toFixed(1)}`).join(' ');
+      return `
+        <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block;overflow:visible;">
+          <polyline fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${hPts}" />
+          <polyline fill="none" stroke="#ea580c" stroke-width="2.5" stroke-dasharray="5,3" stroke-linecap="round" stroke-linejoin="round" points="${wPts}" />
+          ${sorted.map((x, i) => `
+            <circle cx="${xPos(i).toFixed(1)}" cy="${yH(Number(x.height||0)).toFixed(1)}" r="3.5" fill="#2563eb" />
+            <text x="${xPos(i).toFixed(1)}" y="${(yH(Number(x.height||0)) - 7).toFixed(1)}" font-size="9.5" fill="#2563eb" text-anchor="middle" font-weight="700">${x.height}cm</text>
+            <circle cx="${xPos(i).toFixed(1)}" cy="${yW(Number(x.weight||0)).toFixed(1)}" r="3" fill="#ea580c" />
+            <text x="${xPos(i).toFixed(1)}" y="${H - 5}" font-size="9" fill="var(--ink-3)" text-anchor="middle">${(x.date||'').slice(5)}</text>
+          `).join('')}
+        </svg>
+        <div style="display:flex;gap:12px;font-size:11px;color:var(--ink-3);margin-top:2px;">
+          <span style="color:#2563eb;font-weight:700;">● 키 (cm)</span>
+          <span style="color:#ea580c;font-weight:700;">● 몸무게 (kg)</span>
+        </div>`;
+    }
+
+    function renderKidsGrowthSubHtml() {
+      const kids = APP.kidsProfiles || [];
+      const curKid = kids.find(k => k.id === APP.activeKidId) || kids[0];
+      const latestG = curKid && (curKid.growthLogs || []).slice().sort((a,b) => b.date.localeCompare(a.date))[0];
+      return `
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:stretch;">
+          ${kids.map(k => {
+            const meta = calcKidAgeMeta(k.dob);
+            return `
+              <div class="kid-profile-card ${curKid && curKid.id === k.id ? 'active' : ''}" style="flex:1;min-width:210px;" onclick="APP.activeKidId='${k.id}';renderJournalHubView()">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                  <span style="font-size:18px;font-weight:800;">${escHtml(k.emoji||'👶')} ${escHtml(k.name)}</span>
+                  <button type="button" class="n-btn-ghost" style="font-size:11.5px;padding:2px 6px;" onclick="event.stopPropagation();openKidProfileModal('${k.id}')">✏️ 수정</button>
+                </div>
+                <div style="font-size:12.5px;font-weight:700;color:#ea580c;">${meta.ageTxt} · 생후 ${meta.daysAlive.toLocaleString()}일</div>
+                <div style="font-size:11.5px;color:var(--ink-2);margin-top:3px;">${meta.bdayDday} · 🏫 ${escHtml(k.school || '-')}</div>
+              </div>`;
+          }).join('')}
+          <button type="button" class="v5-card" style="min-width:120px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:700;color:var(--accent);" onclick="openKidProfileModal()">
+            <span style="font-size:22px;">＋</span><span style="font-size:12.5px;">아이 추가</span>
+          </button>
+        </div>
+
+        ${curKid ? `
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;">
+            <div class="v5-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <strong style="font-size:15px;">📏 ${escHtml(curKid.name)} 신체 성장 곡선</strong>
+                ${latestG ? `<span class="ntag ntag-blue">${latestG.height}cm · ${latestG.weight}kg${latestG.foot?` · 발${latestG.foot}mm`:''}</span>` : ''}
+              </div>
+              ${renderGrowthSvgChart(curKid.growthLogs)}
+              <div style="display:grid;grid-template-columns:1fr 76px 76px 72px;gap:6px;margin-top:12px;">
+                <input id="kgDate" type="date" class="field-input" style="font-size:12px;padding:5px;" value="${todayStr(0)}" />
+                <input id="kgHeight" type="number" step="0.1" class="field-input" style="font-size:12px;padding:5px;" placeholder="키 cm" />
+                <input id="kgWeight" type="number" step="0.1" class="field-input" style="font-size:12px;padding:5px;" placeholder="kg" />
+                <input id="kgFoot" type="number" class="field-input" style="font-size:12px;padding:5px;" placeholder="발mm" />
+              </div>
+              <div style="display:flex;gap:6px;margin-top:6px;">
+                <input id="kgNote" class="field-input" style="flex:1;font-size:12px;padding:5px 8px;" placeholder="메모 (예: 영유아 4차 검진 정상)" />
+                <button class="n-btn-primary" style="font-size:12px;" onclick="addKidGrowthLog('${curKid.id}')">기록 추가</button>
+              </div>
+              <div style="margin-top:10px;display:grid;gap:4px;max-height:140px;overflow-y:auto;">
+                ${(curKid.growthLogs || []).slice().sort((a,b)=>b.date.localeCompare(a.date)).map(g => `
+                  <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 7px;background:var(--bg-subtle);border-radius:7px;">
+                    <span><b>${g.date}</b> · ${g.height}cm / ${g.weight}kg ${g.foot?`/ 발${g.foot}mm`:''} ${g.note?`(${escHtml(g.note)})`:''}</span>
+                    <button class="n-btn-ghost" style="color:#dc2626;font-size:11px;padding:0 4px;" onclick="deleteKidGrowthLog('${curKid.id}','${g.id}')">✕</button>
+                  </div>`).join('')}
+              </div>
+            </div>
+
+            <div class="v5-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <strong style="font-size:15px;">🏥 병원 · 투약 · 예방접종 · 귀여운 어록</strong>
+                <span style="font-size:11.5px;color:var(--ink-3);">🏥 ${escHtml(curKid.clinic || '병원 미입력')}</span>
+              </div>
+              <div style="display:grid;gap:6px;margin-bottom:10px;">
+                <div style="display:grid;grid-template-columns:110px 1fr;gap:6px;">
+                  <select id="khKind" class="field-select" style="font-size:12px;padding:5px;">
+                    <option value="병원/투약">🏥 병원/투약</option>
+                    <option value="예방접종">💉 예방접종</option>
+                    <option value="어록">💬 귀여운 어록</option>
+                    <option value="성장순간">🌟 첫 순간</option>
+                  </select>
+                  <input id="khTitle" class="field-input" style="font-size:12.5px;padding:5px 8px;" placeholder="제목 (예: 해열제 복용 / 독감 접종 / 오늘 한 귀여운 말)" />
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 125px auto;gap:6px;">
+                  <input id="khDetail" class="field-input" style="font-size:12px;padding:5px 8px;" placeholder="증상·처방·상세 내용" />
+                  <input id="khNextDate" type="date" class="field-input" style="font-size:11.5px;padding:5px;" title="다음 재진/접종 예정일" />
+                  <button class="n-btn-primary" style="font-size:12px;" onclick="addKidHealthLog('${curKid.id}')">저장</button>
+                </div>
+              </div>
+              <div style="display:grid;gap:7px;max-height:270px;overflow-y:auto;">
+                ${(curKid.healthLogs || []).slice().sort((a,b)=>b.date.localeCompare(a.date)).map(h => `
+                  <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:10px;padding:9px 11px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                      <span style="font-size:13px;font-weight:700;"><span class="ntag ${h.kind==='예방접종'?'ntag-red':(h.kind==='어록'?'ntag-yellow':'ntag-orange')}">${escHtml(h.kind)}</span> ${escHtml(h.title)}</span>
+                      <span style="font-size:11px;color:var(--ink-3);">${h.date} <button class="n-btn-ghost" style="color:#dc2626;padding:0 4px;" onclick="deleteKidHealthLog('${curKid.id}','${h.id}')">✕</button></span>
+                    </div>
+                    ${h.detail ? `<div style="font-size:12px;color:var(--ink-2);margin-top:4px;">${escHtml(h.detail)}</div>` : ''}
+                    ${h.nextDate ? `<div style="margin-top:6px;display:flex;align-items:center;gap:6px;"><span class="ntag ntag-purple">다음 예정: ${h.nextDate}</span><button class="n-btn" style="font-size:11px;padding:2px 7px;" onclick="registerKidHealthAlarm('${escJsStr(curKid.name)}','${escJsStr(h.title)}','${h.nextDate}')">🔔 알람 자동예약</button></div>` : ''}
+                  </div>`).join('') || '<div style="font-size:12px;color:var(--ink-3);padding:16px 0;text-align:center;">병원·접종·어록 기록을 추가해 보세요!</div>'}
+              </div>
+            </div>
+          </div>` : ''}`;
+    }
+
+    window.openKidProfileModal = (id = '') => {
+      const k = id ? (APP.kidsProfiles || []).find(x => x.id === id) : null;
+      document.getElementById('kidEditId').value = k ? k.id : '';
+      document.getElementById('kidNameIn').value = k ? k.name : '';
+      document.getElementById('kidEmojiIn').value = k ? (k.emoji || '👶') : '👶';
+      document.getElementById('kidDobIn').value = k ? (k.dob || '') : todayStr(-1000);
+      document.getElementById('kidBloodIn').value = k ? (k.blood || '') : '';
+      document.getElementById('kidSchoolIn').value = k ? (k.school || '') : '';
+      document.getElementById('kidClinicIn').value = k ? (k.clinic || '') : '';
+      document.getElementById('btnDeleteKid').style.display = k ? 'inline-flex' : 'none';
+      openModal('kidProfileModal');
+    };
+    window.saveKidProfile = () => {
+      const name = (document.getElementById('kidNameIn')?.value || '').trim();
+      if (!name) { showToast('아이 이름을 입력하세요.'); return; }
+      const id = document.getElementById('kidEditId').value;
+      const existing = id ? (APP.kidsProfiles || []).find(x => x.id === id) : null;
+      const data = {
+        id: id || uid('kid'), name, emoji: document.getElementById('kidEmojiIn').value || '👶',
+        dob: document.getElementById('kidDobIn').value || '', blood: document.getElementById('kidBloodIn').value || '',
+        school: document.getElementById('kidSchoolIn').value || '', clinic: document.getElementById('kidClinicIn').value || '',
+        growthLogs: existing?.growthLogs || [], healthLogs: existing?.healthLogs || []
+      };
+      if (existing) Object.assign(existing, data);
+      else APP.kidsProfiles.push(data);
+      APP.activeKidId = data.id;
+      saveAppState(); closeModal('kidProfileModal'); renderJournalHubView();
+      showToast(`👶 ${name} 프로필이 저장되었습니다!`);
+    };
+    window.deleteKidProfile = () => {
+      const id = document.getElementById('kidEditId').value;
+      APP.kidsProfiles = (APP.kidsProfiles || []).filter(k => k.id !== id);
+      APP.activeKidId = APP.kidsProfiles[0]?.id || '';
+      saveAppState(); closeModal('kidProfileModal'); renderJournalHubView();
+    };
+    window.addKidGrowthLog = (kidId) => {
+      const k = (APP.kidsProfiles || []).find(x => x.id === kidId); if (!k) return;
+      const h = parseFloat(document.getElementById('kgHeight')?.value || '0');
+      const w = parseFloat(document.getElementById('kgWeight')?.value || '0');
+      if (!h && !w) { showToast('키(cm) 또는 몸무게(kg)를 입력해 주세요.'); return; }
+      if (!Array.isArray(k.growthLogs)) k.growthLogs = [];
+      k.growthLogs.push({ id: uid('gl'), date: document.getElementById('kgDate')?.value || todayStr(0), height: h || 0, weight: w || 0, foot: Number(document.getElementById('kgFoot')?.value || 0), note: (document.getElementById('kgNote')?.value || '').trim() });
+      saveAppState(); renderJournalHubView(); showToast('📏 성장 기록이 그래프에 반영되었습니다!');
+    };
+    window.deleteKidGrowthLog = (kidId, glId) => {
+      const k = (APP.kidsProfiles || []).find(x => x.id === kidId); if (!k) return;
+      k.growthLogs = (k.growthLogs || []).filter(g => g.id !== glId);
+      saveAppState(); renderJournalHubView();
+    };
+    window.addKidHealthLog = (kidId) => {
+      const k = (APP.kidsProfiles || []).find(x => x.id === kidId); if (!k) return;
+      const title = (document.getElementById('khTitle')?.value || '').trim();
+      if (!title) { showToast('내용 제목을 입력해 주세요.'); return; }
+      if (!Array.isArray(k.healthLogs)) k.healthLogs = [];
+      k.healthLogs.unshift({ id: uid('hl'), date: todayStr(0), kind: document.getElementById('khKind')?.value || '병원/투약', title, detail: (document.getElementById('khDetail')?.value || '').trim(), nextDate: document.getElementById('khNextDate')?.value || '' });
+      saveAppState(); renderJournalHubView(); showToast('🏥 건강/어록 기록 저장 완료!');
+    };
+    window.deleteKidHealthLog = (kidId, hlId) => {
+      const k = (APP.kidsProfiles || []).find(x => x.id === kidId); if (!k) return;
+      k.healthLogs = (k.healthLogs || []).filter(h => h.id !== hlId);
+      saveAppState(); renderJournalHubView();
+    };
+    window.registerKidHealthAlarm = (kidName, title, nextDate) => {
+      APP.alarms.unshift({
+        id: uid('alm'), title: `[${kidName}] ${title} 예정일`, space: 'KIDS', category: '병원/접종',
+        date: nextDate, time: '09:00', repeat: 'NONE', weekdays: [], dayOfMonth: 1,
+        preAlerts: ['7', '1', '30m'], sound: 'VOICE', sendTelegram: true, sendPush: true, active: true,
+        note: '아이 건강 기록에서 자동 예약됨', lastFiredKey: '', completedHistory: []
+      });
+      saveAppState(); renderAll(); showToast(`🔔 [${kidName}] ${nextDate} (D-7, D-1 사전경보 포함) 알람 등록 완료!`);
+    };
+
+    // ----- Sub-tab 3: 1-Second Copy Quick Vault (1Password Notes) -----
+    function renderVaultSubHtml() {
+      const q = (vaultSearchQ || '').trim().toLowerCase();
+      const cards = (APP.vaultCards || []).filter(c => !q || `${c.title} ${c.value} ${c.note}`.toLowerCase().includes(q));
+      return `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <input class="field-input" style="max-width:280px;font-size:13px;" value="${escHtml(vaultSearchQ)}" oninput="vaultSearchQ=this.value;renderJournalHubView()" placeholder="🔍 계좌·사업자·화물코드·병원·차량번호 검색..." />
+          <div style="display:flex;gap:6px;">
+            <button class="n-btn" onclick="togglePrivacyBlurMode()">${APP.privacyBlur ? '🔓 블러 해제' : '🙈 민감정보 가리기'}</button>
+            <button class="n-btn-primary" onclick="openVaultCardModal()">＋ 중요 정보 추가</button>
+          </div>
+        </div>
+        <div class="vault-grid">
+          ${cards.map(c => `
+            <div class="vault-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                <span style="font-size:14px;font-weight:700;">${escHtml(c.icon || '🔐')} ${escHtml(c.title)}</span>
+                <span class="ntag ${c.space==='KIDS'?'ntag-orange':(c.space==='PERSONAL'?'ntag-purple':'ntag-blue')}">${c.space==='KIDS'?'가족':(c.space==='PERSONAL'?'차량/집':'회사')}</span>
+              </div>
+              <div class="vault-secret-val">
+                <span class="${c.sensitive ? 'priv-blur' : ''}" style="flex:1;min-width:0;">${escHtml(c.value)}</span>
+                <button type="button" class="n-btn-primary" style="font-size:11px;padding:4px 9px;flex-shrink:0;" onclick="copyVaultCardValue('${c.id}')">복사</button>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--ink-3);">
+                <span>${escHtml(c.note || '')}</span>
+                <div style="display:flex;gap:4px;">
+                  <button class="n-btn-ghost" style="font-size:11px;padding:2px 5px;" onclick="openVaultCardModal('${c.id}')">수정</button>
+                  <button class="n-btn-ghost" style="font-size:11px;padding:2px 5px;color:#dc2626;" onclick="deleteVaultCard('${c.id}')">삭제</button>
+                </div>
+              </div>
+            </div>`).join('')}
+        </div>`;
+    }
+    window.openVaultCardModal = (id = '') => {
+      const c = id ? (APP.vaultCards || []).find(x => x.id === id) : null;
+      document.getElementById('vcEditId').value = c ? c.id : '';
+      document.getElementById('vcSpace').value = c ? (c.space || 'WORK') : 'WORK';
+      document.getElementById('vcIcon').value = c ? (c.icon || '🔐') : '🔐';
+      document.getElementById('vcTitle').value = c ? c.title : '';
+      document.getElementById('vcValue').value = c ? c.value : '';
+      document.getElementById('vcNote').value = c ? (c.note || '') : '';
+      document.getElementById('vcSensitive').checked = c ? !!c.sensitive : true;
+      openModal('vaultCardModal');
+    };
+    window.saveVaultCard = () => {
+      const title = (document.getElementById('vcTitle')?.value || '').trim();
+      const value = (document.getElementById('vcValue')?.value || '').trim();
+      if (!title || !value) { showToast('제목과 복사 값을 모두 입력해 주세요.'); return; }
+      const id = document.getElementById('vcEditId').value;
+      const obj = { id: id || uid('vc'), space: document.getElementById('vcSpace').value, icon: document.getElementById('vcIcon').value || '🔐', title, value, note: (document.getElementById('vcNote').value || '').trim(), sensitive: document.getElementById('vcSensitive').checked };
+      const idx = id ? (APP.vaultCards || []).findIndex(x => x.id === id) : -1;
+      if (idx >= 0) APP.vaultCards[idx] = obj; else APP.vaultCards.unshift(obj);
+      saveAppState(); closeModal('vaultCardModal'); renderJournalHubView(); showToast('🔐 중요 정보 금고에 저장되었습니다!');
+    };
+    window.copyVaultCardValue = (id) => {
+      const c = (APP.vaultCards || []).find(x => x.id === id); if (!c) return;
+      navigator.clipboard?.writeText(c.value).then(() => showToast(`📋 '${c.title}' 복사 완료!`)).catch(() => showToast(c.value));
+    };
+    window.deleteVaultCard = (id) => {
+      APP.vaultCards = (APP.vaultCards || []).filter(x => x.id !== id);
+      saveAppState(); renderJournalHubView();
+    };
+
+    // ----- Sub-tab 4: Quick Company & Family Expense Ledger -----
+    function renderQuickLedgerSubHtml() {
+      const ym = todayStr(0).slice(0, 7);
+      const all = (APP.quickLedger || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      const mItems = all.filter(x => (x.date || '').startsWith(ym));
+      const workSum = mItems.filter(x => x.space === 'WORK').reduce((s, x) => s + Number(x.amount || 0), 0);
+      const kidsSum = mItems.filter(x => x.space !== 'WORK').reduce((s, x) => s + Number(x.amount || 0), 0);
+      const total = workSum + kidsSum;
+      return `
+        <div class="v5-hero-stats" style="margin-top:0;margin-bottom:14px;grid-template-columns:repeat(3,minmax(0,1fr));">
+          <div class="v5-stat-pill"><span class="v5-stat-lbl">🏢 ${ym} 회사 경비</span><span class="v5-stat-val priv-blur" style="color:var(--accent);">${workSum.toLocaleString()}원</span></div>
+          <div class="v5-stat-pill"><span class="v5-stat-lbl">👨‍👧‍👦 ${ym} 가족 지출</span><span class="v5-stat-val priv-blur" style="color:#ea580c;">${kidsSum.toLocaleString()}원</span></div>
+          <div class="v5-stat-pill"><span class="v5-stat-lbl">💰 이달 총 합계</span><span class="v5-stat-val priv-blur">${total.toLocaleString()}원</span></div>
+        </div>
+        <div class="v5-card" style="margin-bottom:14px;">
+          <div style="display:grid;grid-template-columns:115px 115px 1fr 110px 95px auto;gap:6px;align-items:center;" class="ledger-in-row">
+            <select id="lgSpace" class="field-select" style="font-size:12px;"><option value="WORK">🏢 회사경비</option><option value="KIDS">👨‍👧‍👦 가족지출</option></select>
+            <select id="lgCat" class="field-select" style="font-size:12px;">
+              <option value="화물/택배비">화물/택배비</option><option value="식대/접대비">식대/접대비</option><option value="사무/비품">사무/비품</option>
+              <option value="식비/장보기">식비/장보기</option><option value="육아/교육">육아/교육</option><option value="병원/약국">병원/약국</option><option value="차량/주유">차량/주유</option>
+            </select>
+            <input id="lgTitle" class="field-input" style="font-size:12.5px;" placeholder="내역 (예: 경동화물 선불 / 아이들 우유·과일)" onkeydown="if(event.key==='Enter') addQuickLedgerItem()" />
+            <input id="lgAmount" type="number" class="field-input" style="font-size:12.5px;" placeholder="금액(원)" onkeydown="if(event.key==='Enter') addQuickLedgerItem()" />
+            <select id="lgMethod" class="field-select" style="font-size:12px;"><option value="법인카드">법인카드</option><option value="개인카드">개인카드</option><option value="계좌이체">계좌이체</option><option value="현금">현금</option></select>
+            <button class="n-btn-primary" style="font-size:12.5px;" onclick="addQuickLedgerItem()">기록</button>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+            <button class="n-btn" style="font-size:12px;" onclick="exportQuickLedgerCsv()">📥 엑셀(CSV) 다운로드</button>
+          </div>
+        </div>
+        <div class="v5-card" style="display:grid;gap:6px;">
+          ${all.map(x => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-subtle);border-radius:9px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="font-size:11.5px;color:var(--ink-3);font-family:var(--font-mono);">${x.date}</span>
+                <span class="ntag ${x.space==='WORK'?'ntag-blue':'ntag-orange'}">${x.space==='WORK'?'회사':'가족'} · ${escHtml(x.category)}</span>
+                <strong style="font-size:13px;">${escHtml(x.title)}</strong>
+                <span style="font-size:11px;color:var(--ink-3);">(${escHtml(x.method)})</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <strong class="priv-blur" style="font-size:13.5px;font-family:var(--font-mono);">${Number(x.amount||0).toLocaleString()}원</strong>
+                <button class="n-btn-ghost" style="color:#dc2626;font-size:11px;padding:2px 5px;" onclick="deleteQuickLedgerItem('${x.id}')">✕</button>
+              </div>
+            </div>`).join('') || '<div style="text-align:center;padding:24px;color:var(--ink-3);">기록된 경비/지출 내역이 없습니다.</div>'}
+        </div>`;
+    }
+    window.addQuickLedgerItem = () => {
+      const title = (document.getElementById('lgTitle')?.value || '').trim();
+      const amount = Number(document.getElementById('lgAmount')?.value || 0);
+      if (!title || amount <= 0) { showToast('내역과 금액을 입력해 주세요.'); return; }
+      APP.quickLedger.unshift({ id: uid('lg'), date: todayStr(0), space: document.getElementById('lgSpace').value, category: document.getElementById('lgCat').value, title, amount, method: document.getElementById('lgMethod').value });
+      saveAppState(); renderJournalHubView(); showToast(`💰 ${amount.toLocaleString()}원 기록 완료!`);
+    };
+    window.deleteQuickLedgerItem = (id) => {
+      APP.quickLedger = (APP.quickLedger || []).filter(x => x.id !== id);
+      saveAppState(); renderJournalHubView();
+    };
+    window.exportQuickLedgerCsv = () => {
+      const rows = [['날짜','구분','카테고리','내역','금액','결제수단'], ...(APP.quickLedger || []).map(x => [x.date, x.space==='WORK'?'회사경비':'가족지출', x.category, x.title, x.amount, x.method])];
+      const csv = '\uFEFF' + rows.map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      a.download = `오라테크_회사_가족_경비가계부_${todayStr(0)}.csv`; a.click();
+      showToast('📥 CSV 엑셀 파일 다운로드 완료!');
+    };
+
+    // ==================== 17.11 🌙 하루 마감 리추얼 & ✨ Carbon 주간 매거진 리포트 ====================
+    window.openEveningShutdownModal = () => {
+      const tdPage = ensureTodayDailyPage();
+      const todos = tdPage.blocks.filter(b => b.type === 'todo');
+      const done = todos.filter(b => b.checked).length;
+      const open = todos.length - done;
+      const box = document.getElementById('shutdownStatsBox');
+      if (box) {
+        box.innerHTML = `
+          <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;">
+            <span>📊 오늘 완료 <b>${done}/${todos.length}건</b> (${todos.length ? Math.round((done/todos.length)*100) : 0}%) · 남은 할일 <b>${open}건</b></span>
+            <span class="ntag ntag-blue">⏱️ 집중 ${pomoState.completedSessions || 0}세션</span>
+          </div>`;
+      }
+      document.getElementById('sdWinText').value = '';
+      document.getElementById('sdTomorrowTop').value = '';
+      openModal('shutdownModal');
+    };
+
+    window.completeEveningShutdown = async () => {
+      const win = (document.getElementById('sdWinText')?.value || '').trim();
+      const tmrTop = (document.getElementById('sdTomorrowTop')?.value || '').trim();
+      const doCarry = document.getElementById('sdCarryOver')?.checked;
+      const doTg = document.getElementById('sdSendTg')?.checked;
+      const td = todayStr(0), tmr = todayStr(1);
+      const tdPage = ensureTodayDailyPage();
+      const openTodos = tdPage.blocks.filter(b => b.type === 'todo' && !b.checked);
+
+      let tmrPage = APP.pages.find(p => p.isDaily && p.dailyDate === tmr && !p.archived);
+      if ((doCarry && openTodos.length) || tmrTop) {
+        if (!tmrPage) {
+          tmrPage = { id: 'page_daily_' + tmr, parentId: null, space: 'WORK', icon: '🌅', title: `내일 데일리 (${tmr})`, coverTheme: 'warm-sand', font: 'sans', pinned: false, isDaily: true, dailyDate: tmr, createdAt: Date.now(), updatedAt: Date.now(), blocks: [] };
+          APP.pages.unshift(tmrPage);
+        }
+        if (tmrTop) tmrPage.blocks.unshift(createBlock('todo', { text: tmrTop, space: 'WORK', priority: 'HIGH', dueDate: tmr }));
+        if (doCarry) {
+          openTodos.forEach(t => {
+            if (!tmrPage.blocks.some(x => x.type === 'todo' && x.text === t.text)) {
+              tmrPage.blocks.push(createBlock('todo', { text: t.text, space: t.space || 'WORK', priority: t.priority || 'MID', dueDate: tmr, remindAt: t.remindAt || '' }));
+            }
+          });
+        }
+      }
+      if (win || tmrTop) {
+        APP.journal.unshift({
+          id: uid('jrn'), date: td, time: new Date().toTimeString().slice(0,5), space: 'PERSONAL', mood: '✨', weather: '🌙',
+          title: `🌙 ${td} 하루 마감 회고`,
+          body: `${win ? '✨ 잘한 일 / 감사한 순간:\n' + win : ''}${tmrTop ? '\n\n🎯 내일 최우선 1가지:\n' + tmrTop : ''}`.trim(),
+          tags: ['하루마감', '회고'], photoIds: [], createdAt: Date.now()
+        });
+      }
+      if (doTg) {
+        await sendAlarmToTelegram({
+          space: 'WORK', category: '하루마감', time: new Date().toTimeString().slice(0,5),
+          title: `${td} 마감 완료 (미완료 ${openTodos.length}건 내일 이월)`,
+          note: `${win ? '회고: ' + win : ''}${tmrTop ? ' / 내일 1순위: ' + tmrTop : ''}`
+        }, '🌙 [하루 마감 리포트]');
+      }
+      logActivity('하루 마감 리추얼 완료', `이월 ${doCarry ? openTodos.length : 0}건`, tdPage.id);
+      await saveAppState();
+      closeModal('shutdownModal');
+      renderAll();
+      showToast('🌙 오늘 하루 마감 완료! 회고 저장 & 내일 보드 준비가 끝났습니다.');
+    };
+
+    window.runCarbonWeeklyReview = async () => {
+      showToast('✨ Gemini 4 Carbon이 지난 7일 회사·가족 기록을 매거진 리포트로 요약 중...');
+      const weekDates = new Set(Array.from({ length: 7 }, (_, i) => todayStr(-i)));
+      let doneWork = 0, doneKids = 0, openCnt = 0;
+      APP.pages.filter(p => !p.archived).forEach(p => (p.blocks || []).forEach(b => {
+        if (b.type === 'todo' && (!b.dueDate || weekDates.has(b.dueDate))) {
+          if (b.checked) { if (b.space === 'KIDS') doneKids++; else doneWork++; }
+          else openCnt++;
+        }
+      }));
+      const recentJournals = (APP.journal || []).filter(j => weekDates.has(j.date)).slice(0, 6);
+      const weekSpend = (APP.quickLedger || []).filter(x => weekDates.has(x.date)).reduce((s, x) => s + Number(x.amount || 0), 0);
+      const summaryCtx = `최근 7일 완료(회사 ${doneWork}건, 가족 ${doneKids}건, 미완료 ${openCnt}건), 주간지출 ${weekSpend.toLocaleString()}원, 주요 일기: ${recentJournals.map(j => j.title).join(' / ') || '없음'}`;
+      let parsed = null;
+      try {
+        parsed = await callCarbonJson(`(주)오라테크 대표님(회사+가족) 주간 회고 코치. 데이터: ${summaryCtx}. JSON 반환: {"headline":"한줄 총평","workHighlight":"회사 성과","familyHighlight":"가족 추억/케어","nextWeekTop3":["다음주 핵심1","핵심2","핵심3"]}`);
+      } catch (_) {}
+      if (!parsed) {
+        parsed = {
+          headline: `지난 7일간 회사 ${doneWork}건 · 가족 ${doneKids}건을 완수한 알찬 한 주였습니다!`,
+          workHighlight: `업무 실행 ${doneWork}건 완료 · 미완료 ${openCnt}건 우선순위 재배치 권장`,
+          familyHighlight: `가족·육아 케어 ${doneKids}건 및 소중한 타임라인 기록 ${recentJournals.length}건 축적`,
+          nextWeekTop3: ['오후 3시 경동화물 마감 및 주력 윈치 견적 즉시 대응', '아이 준비물·건강/성장 기록 주 1회 업데이트', '다가오는 D-Day 및 반복 알람 사전 점검']
+        };
+      }
+      const pg = {
+        id: uid('pg_wk'), parentId: null, space: 'WORK', icon: '📰',
+        title: `✨ 주간 매거진 리포트 (${todayStr(-6).slice(5)} ~ ${todayStr(0).slice(5)})`,
+        coverTheme: 'aurora', font: 'sans', pinned: true, archived: false,
+        createdAt: Date.now(), updatedAt: Date.now(),
+        blocks: [
+          createBlock('callout', { calloutIcon: '💎', bg: 'purple', text: parsed.headline }),
+          createBlock('h2', { text: '📊 7일 핵심 스코어카드' }),
+          createBlock('bullet', { text: `💼 회사 업무 완료: ${doneWork}건 / 👨‍👧‍👦 가족 케어 완료: ${doneKids}건 / ⏳ 남은 할일: ${openCnt}건` }),
+          createBlock('bullet', { text: `💰 주간 퀵경비 합계: ${weekSpend.toLocaleString()}원 · 📓 일기 기록: ${recentJournals.length}건` }),
+          createBlock('h2', { text: '🏢 회사 하이라이트' }),
+          createBlock('text', { text: parsed.workHighlight || '' }),
+          createBlock('h2', { text: '👨‍👧‍👦 가족 하이라이트' }),
+          createBlock('text', { text: parsed.familyHighlight || '' }),
+          createBlock('h2', { text: '🎯 다음 주 핵심 실행 TOP 3' }),
+          ...(parsed.nextWeekTop3 || []).map(t => createBlock('todo', { text: t, space: 'WORK', priority: 'HIGH', dueDate: todayStr(1) }))
+        ]
+      };
+      APP.pages.unshift(pg);
+      logActivity('Carbon 주간 매거진 생성', pg.title, pg.id);
+      await saveAppState();
+      selectPage(pg.id);
+      showToast('📰 Gemini 4 Carbon 주간 매거진 리포트가 생성되었습니다!');
+    };
+
     // ==================== 18. 부팅 ====================
+    function applyImportedUrlTaskIfAny() {
+      try {
+        const params = new URLSearchParams(location.search);
+        const importTask = (params.get('importTask') || '').trim();
+        if (!importTask) return false;
+        const rawLane = (params.get('lane') || 'WORK').toUpperCase();
+        const space = (rawLane === 'KIDS' || rawLane === 'PERSONAL') ? rawLane : 'WORK';
+        const rawPrio = (params.get('priority') || 'MID').toUpperCase();
+        const priority = (rawPrio === 'HIGH' || rawPrio === 'LOW') ? rawPrio : 'MID';
+        const tdPage = ensureTodayDailyPage();
+        const exists = (tdPage.blocks || []).some(b => b.type === 'todo' && (b.text || '').trim() === importTask);
+        if (!exists) {
+          tdPage.blocks.unshift(createBlock('todo', { text: importTask, space, priority, dueDate: todayStr(0) }));
+          tdPage.updatedAt = Date.now();
+          APP.activeView = 'TODAY';
+          logActivity('외부 앱 할일 가져오기', importTask.slice(0, 60), tdPage.id);
+          saveAppState(true);
+        }
+        if (history && history.replaceState) {
+          history.replaceState({}, '', location.pathname);
+        }
+        setTimeout(() => showToast(`📥 오늘 보드(${space === 'KIDS' ? '애들' : '업무'})에 할일을 자동 등록했습니다!`), 300);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
     (async function bootNotionOS() {
       try {
         await loadAppState();
-        if (APP.pinCode) document.getElementById('btnTopPinLock').textContent = '🔒';
+
+        // 1) Restore Privacy Blur on boot
+        document.body.classList.toggle('privacy-blur', !!APP.privacyBlur);
+        const pBtn = document.getElementById('btnPrivacyBlur');
+        if (pBtn) pBtn.textContent = APP.privacyBlur ? '🔒' : '🙈';
+
+        // 2) Enforce PIN Lock on boot (F5 cannot bypass when PIN is configured and session isn't unlocked!)
+        const lockBtn = document.getElementById('btnTopPinLock');
+        if (lockBtn) lockBtn.textContent = APP.pinCode ? '🔒' : '🔓';
+        let sessionUnlocked = false;
+        try { sessionUnlocked = sessionStorage.getItem('ora_notes_pin_unlocked') === '1'; } catch (_) {}
+        if (APP.pinCode && !sessionUnlocked) {
+          const overlay = document.getElementById('pinLockOverlay');
+          if (overlay) overlay.style.display = 'flex';
+          setTimeout(() => document.getElementById('pinUnlockInput')?.focus(), 80);
+        }
+
+        // 3) Capture ?importTask=...&lane=...&priority=... cross-app bridge params
+        applyImportedUrlTaskIfAny();
+
         renderAll();
-        setTimeout(() => { try { checkScheduledReminders(); } catch (_) {} }, 1200);
+
+        // 4) Probe Vault Bridge & Live Oratech Summary asynchronously
+        probeLocalErpVaultBridge().catch(() => {});
+        fetchLiveOratechSummary().catch(() => {});
+        applyWorkspaceThemeDom(APP.theme || 'craft');
+        setTimeout(() => { try { checkScheduledReminders(); checkProAlarms(); } catch (_) {} }, 1200);
       } catch (err) {
         console.error('Boot error:', err);
         APP = buildInitialSeedState();
