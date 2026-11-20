@@ -1279,7 +1279,7 @@
       background: #ffffff;
       border-left: 1px solid var(--border);
       box-shadow: rgba(15,15,15,0.12) -8px 0 32px;
-      z-index: 110;
+      z-index: 440;
       display: none;
       flex-direction: column;
       transform: translateX(100%);
@@ -1304,7 +1304,10 @@
     /* Floating Popovers (Slash Menu, Block Action Menu, Page More Menu, Emoji/Cover Pickers) */
     .popover-menu {
       position: fixed;
-      z-index: 250;
+      z-index: 460;
+      max-height: calc(100dvh - 72px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       background: #ffffff;
       border-radius: 8px;
       box-shadow: var(--shadow-pop);
@@ -1374,7 +1377,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 260;
+      z-index: 520;
       padding: 16px;
     }
     .modal-bg.open { display: flex; }
@@ -1405,7 +1408,7 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      z-index: 500;
+      z-index: 580;
       background: #37352f;
       color: #ffffff;
       padding: 9px 15px;
@@ -1422,7 +1425,7 @@
       inset: 30px 0 0 0;
       background: rgba(15, 23, 42, 0.42);
       backdrop-filter: blur(2px);
-      z-index: 95;
+      z-index: 410;
       display: none;
     }
     .mobile-sidebar-scrim.open { display: block; }
@@ -1461,7 +1464,8 @@
         top: 30px; bottom: 0; left: 0;
         transform: translateX(-100%);
         box-shadow: var(--shadow-pop);
-        z-index: 120;
+        z-index: 420;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
       }
       .sidebar.mobile-open { transform: translateX(0); width: 264px; min-width: 264px; }
       .ws-canvas { padding: 0 14px 0 46px; }
@@ -2103,6 +2107,33 @@
       }
       .mobile-fab:active { transform: scale(0.94); }
       .rem-nag-banner { top: 10px !important; right: 10px !important; left: 10px !important; width: auto !important; max-width: none !important; }
+
+      /* Strict Mobile Overflow & Topbar Protection (360px ~ 768px) */
+      html, body { max-width: 100vw; overflow-x: hidden; }
+      .workspace-main, .ws-content, .ws-canvas, .v5-card { max-width: 100%; box-sizing: border-box; }
+      .ws-topbar-left { min-width: 0; flex: 1; overflow: hidden; }
+      .ws-topbar-right { flex-shrink: 0; gap: 2px; }
+      .ws-topbar .theme-dot-group { display: none !important; }
+      .ws-topbar .n-btn-ghost { padding: 4px 6px; font-size: 11.5px; white-space: nowrap; }
+      .ws-canvas { padding: 0 12px 0 34px; }
+      .ws-canvas.wide-view { padding: 12px 12px; }
+      .side-peek { width: 100vw !important; max-width: 100vw !important; top: 0 !important; z-index: 440 !important; }
+      .sb-bottom { padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+      .mob-stack-grid { grid-template-columns: 1fr !important; }
+      .kids-detail-grid { grid-template-columns: 1fr !important; }
+      .kid-growth-inputs { grid-template-columns: 1fr 1fr !important; }
+      .kid-health-inputs { grid-template-columns: 1fr 1fr !important; }
+      .kid-health-inputs > button { grid-column: 1 / -1; justify-content: center; }
+      .ledger-stats-row { grid-template-columns: 1fr !important; }
+      .v5-quick-bar { gap: 5px; }
+      .v5-action-chip { padding: 6px 10px; font-size: 11.5px; }
+      .v5-hero-card h1 { font-size: 19px !important; }
+      .v5-subtabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .v5-subtabs::-webkit-scrollbar { display: none; }
+      .v5-subtab { flex: 0 0 auto; white-space: nowrap; padding: 7px 11px; }
+      .popover-menu { max-width: calc(100vw - 16px) !important; }
+      .modal-card { overflow-x: hidden; }
+      .cal-grid { font-size: 11px; }
     }
     @media print {
       .mobile-bottom-nav, .mobile-fab, .fab-sheet-bg, .theme-dot-group { display: none !important; }
@@ -2163,8 +2194,14 @@
           <span class="sb-item-left"><span class="sb-item-icon">📓</span><span class="sb-item-title">가족·일기·금고·가계부</span></span>
           <span id="sbJournalCount" class="sb-item-count">0</span>
         </button>
+        <button type="button" class="sb-item" id="sbNavCalendar" onclick="setMainView('CALENDAR')">
+          <span class="sb-item-left"><span class="sb-item-icon">📅</span><span class="sb-item-title">월간 캘린더</span></span>
+        </button>
         <button type="button" class="sb-item" id="sbNavInbox" onclick="setMainView('KANBAN')">
-          <span class="sb-item-left"><span class="sb-item-icon">📋</span><span class="sb-item-title">전체 보드 · 캘린더</span></span>
+          <span class="sb-item-left"><span class="sb-item-icon">📋</span><span class="sb-item-title">전체 보드 · 매트릭스</span></span>
+        </button>
+        <button type="button" class="sb-item" id="sbNavGraph" onclick="setMainView('GRAPH')">
+          <span class="sb-item-left"><span class="sb-item-icon">🕸️</span><span class="sb-item-title">그래프 · 자유 보드</span></span>
         </button>
         <button type="button" class="sb-item" id="sbNavPhotos" onclick="setMainView('GALLERY')">
           <span class="sb-item-left"><span class="sb-item-icon">🖼️</span><span class="sb-item-title">사진 금고</span></span>
@@ -2215,6 +2252,15 @@
       </div>
 
       <div class="sb-bottom">
+        <div class="sb-theme-row" style="display:flex;align-items:center;justify-content:space-between;padding:2px 2px 6px;border-bottom:1px solid var(--border);margin-bottom:5px;">
+          <span style="font-size:11px;color:var(--ink-3);font-weight:600;">🎨 화면 테마</span>
+          <div style="display:flex;gap:6px;">
+            <button type="button" class="theme-dot" data-theme-pick="craft" style="background:#f7f6f3;" onclick="setWorkspaceTheme('craft')" title="웜 크래프트"></button>
+            <button type="button" class="theme-dot" data-theme-pick="midnight" style="background:#0f172a;" onclick="setWorkspaceTheme('midnight')" title="미드나잇 다크"></button>
+            <button type="button" class="theme-dot" data-theme-pick="executive" style="background:#1d4ed8;" onclick="setWorkspaceTheme('executive')" title="로열 네이비"></button>
+            <button type="button" class="theme-dot" data-theme-pick="sage" style="background:#059669;" onclick="setWorkspaceTheme('sage')" title="세이지 모닝"></button>
+          </div>
+        </div>
         <div class="sb-sync-row">
           <span class="sb-sync-dot" id="sbSyncDot"></span>
           <span id="sbSyncBadge" style="font-size:11.5px;color:var(--ink-2);flex:1;">로컬 즉시 저장중</span>
@@ -2372,7 +2418,7 @@
           <label class="field-label">프로젝트 이름</label>
           <input id="newProjName" class="field-input" placeholder="예: 가족 여행 계획 / 업무 프로젝트" />
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="mob-stack-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div>
             <label class="field-label">구분 (공간)</label>
             <select id="newProjSpace" class="field-select">
@@ -2524,7 +2570,7 @@
             <button type="button" class="n-btn" style="padding:6px 9px;font-size:12px;flex-shrink:0;" onclick="clearGithubTokenInput()" title="저장된 브라우저 토큰 지우기">🗑️</button>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="mob-stack-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div>
             <label class="field-label">비공개 금고 저장소 이름</label>
             <input id="cfgVaultRepo" class="field-input" autocomplete="off" placeholder="seonyu-eunyu-notes-vault" />
@@ -2575,7 +2621,7 @@
             5) 발급된 <b>클라이언트 ID</b>(<code>...apps.googleusercontent.com</code>)를 아래 칸에 붙여넣고 <b>[🔑 Google 로그인 연동]</b> 클릭!
           </div>
         </details>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <div class="mob-stack-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
           <div>
             <label class="field-label">Google OAuth Client ID (선택)</label>
             <input id="cfgGdriveClientId" class="field-input" placeholder="123456-xxx.apps.googleusercontent.com" />
@@ -2771,7 +2817,7 @@
             </select>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div class="mob-stack-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
           <div>
             <label class="field-label">기준 날짜</label>
             <input id="almDate" type="date" class="field-input" />
@@ -2975,7 +3021,7 @@
     </div>
   </div>
 
-  <div id="pinLockOverlay" style="position:fixed;inset:0;z-index:500;background:#f7f6f3;color:var(--ink);display:none;align-items:center;justify-content:center;padding:20px;">
+  <div id="pinLockOverlay" style="position:fixed;inset:0;z-index:560;background:#f7f6f3;color:var(--ink);display:none;align-items:center;justify-content:center;padding:20px;">
     <div style="background:#ffffff;border:1px solid var(--border);box-shadow:var(--shadow-pop);border-radius:12px;padding:28px;max-width:350px;width:100%;text-align:center;">
       <div style="font-size:32px;margin-bottom:8px;">🔐</div>
       <h2 style="margin:0 0 6px 0;font-size:18px;font-weight:600;">서뉴으뉴 노션 잠금됨</h2>
@@ -6367,25 +6413,36 @@
       closeAllPopovers();
       const menu = document.getElementById('pageMoreMenu');
       const mobileToolsHtml = `
-        <div class="pop-sec-hdr" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">빠른 도구 · 보안 · 동기화</div>
+        <div class="pop-sec-hdr" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">빠른 이동 · 오늘 도구</div>
+        <button class="pop-item" onclick="carryOverYesterdayTodos();closeAllPopovers()"><span>♻️ 어제 미완료 할일 이월</span></button>
+        <button class="pop-item" onclick="applyTodayRoutines(true);closeAllPopovers()"><span>🔁 오늘 루틴 자동 적용</span></button>
+        <button class="pop-item" onclick="setMainView('GRAPH');closeAllPopovers()"><span>🕸️ 그래프 · 자유 보드</span></button>
+        <button class="pop-item" onclick="setMainView('GALLERY');closeAllPopovers()"><span>🖼️ 사진 금고</span></button>
+        <div class="pop-sec-hdr" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">집중 · 보안 · 동기화</div>
         <button class="pop-item" onclick="togglePomodoroTimer();closeAllPopovers()"><span>⏱️ 뽀모도로 타이머</span></button>
         <button class="pop-item" onclick="cycleAmbientFocusSound();closeAllPopovers()"><span>🎧 집중 백색소음 전환</span></button>
         <button class="pop-item" onclick="speakTodayDailyBriefing();closeAllPopovers()"><span>🗣️ 오늘 할일 음성 브리핑</span></button>
         <button class="pop-item" onclick="togglePrivacyBlurMode();closeAllPopovers()"><span>${APP.privacyBlur ? '🔓 프라이버시 블러 끄기' : '🙈 프라이버시 블러 켜기'}</span></button>
         <button class="pop-item" onclick="toggleActiveItemPin();closeAllPopovers()"><span>⭐ 즐겨찾기 토글</span></button>
-        <button class="pop-item" onclick="openSyncModal();closeAllPopovers()"><span>☁️ Share / Git 금고 설정</span></button>
+        <button class="pop-item" onclick="openHistoryModal('LOCAL');closeAllPopovers()"><span>🕒 버전 기록 · 히스토리</span></button>
+        <button class="pop-item" onclick="openSyncModal();closeAllPopovers()"><span>☁️ 설정 · Git · 구글드라이브</span></button>
         <button class="pop-item" onclick="openLockModal();closeAllPopovers()"><span>${APP.pinCode ? '🔒 PIN 잠금 설정/잠그기' : '🔓 PIN 잠금 설정'}</span></button>
       `;
       if (APP.activeView === 'PROJECT') {
-        const proj = APP.projects.find(p => p.id === APP.activeProjectId);
-        if (!proj) return;
-        menu.innerHTML = `
+        const proj = (APP.projects || []).find(p => p.id === APP.activeProjectId);
+        menu.innerHTML = (proj ? `
           <div class="pop-sec-hdr">프로젝트 설정</div>
           <button class="pop-item" onclick="moveProjectToTrash('${proj.id}')"><span style="color:#c93b3b;">🗑️ 휴지통으로 이동</span></button>
-          ${mobileToolsHtml}`;
+        ` : `<div class="pop-sec-hdr">프로젝트</div><button class="pop-item" onclick="openNewProjectModal();closeAllPopovers()"><span>＋ 새 프로젝트 만들기</span></button>`) + mobileToolsHtml;
       } else {
-        const pg = APP.pages.find(p => p.id === APP.activePageId);
-        if (!pg) return;
+        const pg = (APP.pages || []).find(p => p.id === APP.activePageId && !p.archived) || (APP.pages || []).find(p => !p.archived);
+        if (!pg) {
+          menu.innerHTML = `<div class="pop-sec-hdr">서뉴으뉴 노션</div><button class="pop-item" onclick="createNewPage();closeAllPopovers()"><span>＋ 새 페이지 만들기</span></button>${mobileToolsHtml}`;
+          menu.style.left = Math.max(8, Math.min(window.innerWidth - 260, (ev.clientX || window.innerWidth) - 200)) + 'px';
+          menu.style.top = '48px';
+          menu.classList.add('open');
+          return;
+        }
         menu.innerHTML = `
           <div class="pop-sec-hdr">글꼴 스타일</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px 8px 8px 8px;">
@@ -10624,14 +10681,14 @@
         </div>
 
         ${curKid ? `
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;">
+          <div class="kids-detail-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
             <div class="v5-card">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
                 <strong style="font-size:15px;">📏 ${escHtml(curKid.name)} 신체 성장 곡선</strong>
                 ${latestG ? `<span class="ntag ntag-blue">${latestG.height}cm · ${latestG.weight}kg${latestG.foot?` · 발${latestG.foot}mm`:''}</span>` : ''}
               </div>
               ${renderGrowthSvgChart(curKid.growthLogs)}
-              <div style="display:grid;grid-template-columns:1fr 76px 76px 72px;gap:6px;margin-top:12px;">
+              <div class="kid-growth-inputs" style="display:grid;grid-template-columns:1fr 76px 76px 72px;gap:6px;margin-top:12px;">
                 <input id="kgDate" type="date" class="field-input" style="font-size:12px;padding:5px;" value="${todayStr(0)}" />
                 <input id="kgHeight" type="number" step="0.1" class="field-input" style="font-size:12px;padding:5px;" placeholder="키 cm" />
                 <input id="kgWeight" type="number" step="0.1" class="field-input" style="font-size:12px;padding:5px;" placeholder="kg" />
@@ -10665,7 +10722,7 @@
                   </select>
                   <input id="khTitle" class="field-input" style="font-size:12.5px;padding:5px 8px;" placeholder="제목 (예: 해열제 복용 / 독감 접종 / 오늘 한 귀여운 말)" />
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 125px auto;gap:6px;">
+                <div class="kid-health-inputs" style="display:grid;grid-template-columns:1fr 125px auto;gap:6px;">
                   <input id="khDetail" class="field-input" style="font-size:12px;padding:5px 8px;" placeholder="증상·처방·상세 내용" />
                   <input id="khNextDate" type="date" class="field-input" style="font-size:11.5px;padding:5px;" title="다음 재진/접종 예정일" />
                   <button class="n-btn-primary" style="font-size:12px;" onclick="addKidHealthLog('${curKid.id}')">저장</button>
@@ -10835,7 +10892,7 @@
       const kidsSum = mItems.filter(x => x.space !== 'WORK').reduce((s, x) => s + Number(x.amount || 0), 0);
       const total = workSum + kidsSum;
       return `
-        <div class="v5-hero-stats" style="margin-top:0;margin-bottom:14px;grid-template-columns:repeat(3,minmax(0,1fr));">
+        <div class="v5-hero-stats ledger-stats-row" style="margin-top:0;margin-bottom:14px;grid-template-columns:repeat(3,minmax(0,1fr));">
           <div class="v5-stat-pill"><span class="v5-stat-lbl">🏢 ${ym} 회사 경비</span><span class="v5-stat-val priv-blur" style="color:var(--accent);">${workSum.toLocaleString()}원</span></div>
           <div class="v5-stat-pill"><span class="v5-stat-lbl">👨‍👧‍👦 ${ym} 가족 지출</span><span class="v5-stat-val priv-blur" style="color:#ea580c;">${kidsSum.toLocaleString()}원</span></div>
           <div class="v5-stat-pill"><span class="v5-stat-lbl">💰 이달 총 합계</span><span class="v5-stat-val priv-blur">${total.toLocaleString()}원</span></div>
