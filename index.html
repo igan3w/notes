@@ -1945,6 +1945,40 @@
     .v5-action-chip.primary { background: var(--accent-grad); color: #ffffff; border-color: transparent; box-shadow: 0 4px 12px rgba(37,99,235,0.24); }
     .v5-action-chip.primary:hover { filter: brightness(1.06); color: #ffffff; }
 
+    /* B-5: 낮 업무 ↔ 저녁/주말 가족 집중 모드 & B-1 동기화 배지 */
+    .focus-mode-bar {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 3px; border-radius: 999px;
+      background: var(--surface-card); border: 1px solid var(--border);
+    }
+    .focus-mode-pill {
+      border: none; background: transparent; color: var(--ink-2);
+      font-size: 11px; font-weight: 700; padding: 3px 9px;
+      border-radius: 999px; cursor: pointer; transition: all 0.14s; white-space: nowrap;
+    }
+    .focus-mode-pill.active {
+      background: var(--accent); color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+    }
+    .focus-mode-pill.active.kids-mode {
+      background: linear-gradient(135deg, #f97316, #ec4899);
+      box-shadow: 0 2px 8px rgba(249,115,22,0.28);
+    }
+    .evening-family-banner {
+      background: linear-gradient(135deg, #fff7ed 0%, #fdf2f8 100%);
+      border: 1px solid #fed7aa; border-radius: 12px;
+      padding: 11px 15px; margin-bottom: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+    }
+    .notion-lane-card.priority-spotlight {
+      border-color: #fb923c;
+      box-shadow: 0 4px 16px rgba(249, 115, 22, 0.10);
+    }
+    #hdrVaultStatus.synced { border-color: rgba(16,185,129,0.45); color: #047857; background: #ecfdf5; }
+    #hdrVaultStatus.syncing { border-color: rgba(59,130,246,0.45); color: #1d4ed8; background: #eff6ff; }
+    #hdrVaultStatus.offline { border-color: rgba(239,68,68,0.45); color: #b91c1c; background: #fef2f2; }
+
     /* v5 Generic Cards, Subtabs & Grids */
     .v5-card {
       background: var(--surface-card);
@@ -2831,8 +2865,22 @@
         <h3 style="margin:0;font-size:16px;font-weight:600;">🔐 GitHub 비공개 금고 &amp; Carbon 설정</h3>
         <button type="button" class="icon-btn" onclick="closeModal('syncModal')">✕</button>
       </div>
+      <div style="background:linear-gradient(135deg,#ecfdf5 0%,#eff6ff 100%);border:1px solid #a7f3d0;border-radius:8px;padding:11px 13px;font-size:12.5px;margin-bottom:12px;line-height:1.55;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+          <strong>☁️ 실시간 기기간 자동 동기화 (내 PC ↔ 폰 ↔ 다른 PC)</strong>
+          <span id="cloudVaultBadge" class="ntag ntag-green">자동 2방향 ON</span>
+        </div>
+        <div id="cloudVaultStatsBox" style="font-size:12px;color:var(--ink-2);margin-bottom:8px;">
+          수정 후 2.5초마다 서버 금고에 자동 저장되고, 다른 기기를 열면 최신 상태를 자동 불러옵니다. 오래 써도 느려지지 않도록 페이지 기록(최근 15개/페이지)·활동로그(80건)가 자동 경량화됩니다.
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button type="button" class="n-btn-primary" style="font-size:12px;padding:5px 11px;" onclick="syncToCloudVault(false, { force: true })">☁️ 지금 클라우드 동기화</button>
+          <button type="button" class="n-btn" style="font-size:12px;padding:5px 11px;" onclick="pullFromCloudVault(false, true)">⬇️ 클라우드에서 즉시 받기</button>
+          <button type="button" class="n-btn" style="font-size:12px;padding:5px 11px;" onclick="openIcsSubscribeModal()">📡 .ics 캘린더 라이브 구독</button>
+        </div>
+      </div>
       <div style="background:var(--tag-green-bg);color:var(--tag-green-ink);border-radius:6px;padding:10px 12px;font-size:12.5px;margin-bottom:14px;line-height:1.5;">
-        <strong>안심 Private 금고:</strong> 입력하신 토큰과 키는 브라우저 로컬에만 보관되며, 모든 노트·프로젝트·사진 데이터는 자동으로 <strong>Private(비공개)</strong> GitHub 저장소에 분리 업로드됩니다.
+        <strong>GitHub Private 영구 금고 (최대 100MB · 대용량 대응):</strong> Git Tree/Blob 방식으로 1MB 초과 워크스페이스도 안정적으로 백업·복원됩니다.
       </div>
       <div style="display:grid;gap:12px;">
         <div id="localErpBridgeBanner" style="display:none;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:6px;padding:9px 12px;font-size:12px;line-height:1.5;"></div>
@@ -2941,23 +2989,76 @@
     </div>
   </div>
 
-  <!-- 텔레그램 알림 & 인박스 모달 -->
+  <!-- 텔레그램 2채널 알림 & 서버 무인 마감 스케줄러 모달 -->
   <div id="telegramModal" class="modal-bg" onclick="if(event.target===this) closeModal('telegramModal')">
-    <div class="modal-card" style="max-width:520px;">
+    <div class="modal-card" style="max-width:560px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <h3 style="margin:0;font-size:16px;font-weight:600;">✈️ 텔레그램 알림 &amp; 사진·메모 인박스</h3>
+        <h3 style="margin:0;font-size:16px;font-weight:700;">✈️ 텔레그램 2채널 알람 &amp; 무인 자동 마감 보고</h3>
         <button type="button" class="icon-btn" onclick="closeModal('telegramModal')">✕</button>
       </div>
-      <div style="display:grid;gap:10px;">
-        <div><label class="field-label">Bot Token</label><input id="cfgTgToken" type="password" class="field-input" placeholder="123456:ABC..." /></div>
-        <div><label class="field-label">Chat ID</label><input id="cfgTgChatId" class="field-input" placeholder="-100... 또는 숫자 ID" /></div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.5;margin-bottom:12px;">
+        <strong>24시간 서버 무인 발송 (한국시간 KST):</strong> 앱·브라우저가 꺼져 있어도 서버가 정각 알람, 사전 알림, 밤 자동 마감을 텔레그램으로 보냅니다. 메시지 아래 <b>[✅ 완료] · [⏰ 30분 뒤] · [♻️ 미완료 이월]</b> 버튼으로 원격 처리할 수 있습니다.
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
-        <button type="button" class="n-btn-primary" onclick="saveTelegramSettings()">💾 저장</button>
-        <button type="button" class="n-btn" onclick="sendDailySummaryToTelegram()">📤 오늘 할일 전송</button>
-        <button type="button" class="n-btn" onclick="pullTelegramInbox()">📥 보낸 메모 가져오기</button>
+      <div style="display:grid;gap:10px;">
+        <div>
+          <label class="field-label">Telegram Bot Token (저장 시 클라우드 금고·서버 자동 동기화)</label>
+          <input id="cfgTgToken" type="password" class="field-input" placeholder="123456:ABC... (비워두면 서버 기본 봇 자동 사용)" />
+        </div>
+        <div class="mob-stack-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label class="field-label">💼 회사·업무 · 개인 Chat ID</label>
+            <input id="cfgTgChatWork" class="field-input" placeholder="-100... 또는 본인 숫자 ID" />
+          </div>
+          <div>
+            <label class="field-label">👨‍👧‍👦 가족·아이 공유방 Chat ID</label>
+            <input id="cfgTgChatKids" class="field-input" placeholder="가족 단톡방/배우자 ID (비우면 업무방으로 통합)" />
+          </div>
+        </div>
+        <div class="mob-stack-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label class="field-label">🌙 밤 자동 하루 마감 시각 (KST)</label>
+            <input id="cfgTgEveningTime" type="time" class="field-input" value="22:00" />
+          </div>
+          <div>
+            <label class="field-label">자동 하루 마감 리포트 발송</label>
+            <select id="cfgTgEveningEnabled" class="field-select">
+              <option value="ON">🟢 매일 지정 시각 자동 발송 ON</option>
+              <option value="OFF">⏸️ 자동 발송 일시정지 OFF</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;">
+        <button type="button" class="n-btn-primary" onclick="saveTelegramSettings()">💾 저장 &amp; 서버·클라우드 반영</button>
+        <button type="button" class="n-btn" onclick="testTelegramChannel('WORK')">💼 업무방 테스트</button>
+        <button type="button" class="n-btn" onclick="testTelegramChannel('KIDS')">👨‍👧‍👦 가족방 테스트</button>
+        <button type="button" class="n-btn" onclick="testTelegramChannel('WORK', 'EVENING')">🌙 마감 리포트 테스트</button>
+        <button type="button" class="n-btn" onclick="sendDailySummaryToTelegram()">📤 오늘 할일 요약</button>
+        <button type="button" class="n-btn" onclick="pullTelegramInbox()">📥 메모 가져오기</button>
       </div>
       <div id="tgResultBox" style="margin-top:10px;font-size:12.5px;color:var(--ink-2);"></div>
+    </div>
+  </div>
+
+  <!-- 실시간 .ics 캘린더 라이브 구독 (WebCal) 모달 -->
+  <div id="icsSubscribeModal" class="modal-bg" onclick="if(event.target===this) closeModal('icsSubscribeModal')">
+    <div class="modal-card" style="max-width:580px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:16px;font-weight:700;">📡 실시간 캘린더 구독 피드 (.ics / WebCal)</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('icsSubscribeModal')">✕</button>
+      </div>
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.55;margin-bottom:12px;">
+        <strong>파일을 매번 내려받지 마세요:</strong> 아래 구독 주소를 구글·애플·네이버 캘린더에 <b>1번만 추가</b>하면, 서뉴으뉴 노션의 일정·알람·D-Day·마감일이 자동으로 최신화됩니다!
+      </div>
+      <div id="icsFeedRows" style="display:grid;gap:10px;margin-bottom:12px;"></div>
+      <details style="background:var(--bg-sidebar);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;line-height:1.6;">
+        <summary style="cursor:pointer;font-weight:700;color:var(--accent);">📱 구글 · 아이폰 · 네이버 캘린더 연결 방법</summary>
+        <div style="margin-top:6px;color:var(--ink-2);">
+          • <b>아이폰/아이패드/맥:</b> 위 <b>[📆 바로 구독 열기]</b> 버튼을 누르면 기본 캘린더에 원클릭 추가됩니다.<br>
+          • <b>구글 캘린더(PC 웹):</b> 왼쪽 <code>다른 캘린더(+)</code> → <b>URL로 추가</b> 클릭 → 위 <b>복사</b> 버튼의 주소 붙여넣기.<br>
+          • <b>가족과 아이 일정만 공유:</b> 아래 <b>가족·아이 전용 주소</b>를 배우자 캘린더에 추가하면 애들 일정·준비물만 깔끔하게 공유됩니다.
+        </div>
+      </details>
     </div>
   </div>
 
@@ -3373,9 +3474,21 @@
     // ==================== 0. 환경 & 유틸 ====================
     const IS_APP_SERVER = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.up.railway.app'));
     const IS_LOCAL_SERVER = IS_APP_SERVER;
+    const CLOUD_SYNC_BASE = IS_APP_SERVER ? '' : 'https://naver-store-ai-manager-production.up.railway.app';
     let VAULT_BRIDGE_AVAILABLE = false;
     let LIVE_ORATECH_STATE = null;
     let LIVE_ORATECH_STRIP_OPEN = true;
+    let cloudPushDebounce = null;
+    const CLOUD_SYNC_STATE = {
+      status: 'IDLE',
+      syncing: false,
+      bootPulled: false,
+      hasLocalEdit: false,
+      lastPulledAt: 0,
+      lastPushedAt: 0,
+      remoteExists: null,
+      lastError: ''
+    };
 
     document.querySelectorAll('.eco-pill[data-local]').forEach(a => {
       if (IS_APP_SERVER) a.href = a.getAttribute('data-local');
@@ -3782,9 +3895,18 @@
         activePageId: dailyId,
         activeProjectId: '',
         vaultRepo: 'seonyu-eunyu-notes-vault',
-        autoSyncMode: 'OFF',
+        autoSyncMode: '15S',
         lastSyncAt: '',
         lastCommitSha: '',
+        lastCloudUpdatedAt: 0,
+        focusContextMode: 'AUTO',
+        tgConfig: {
+          botToken: '',
+          chatIdWork: '',
+          chatIdKids: '',
+          eveningReportTime: '22:00',
+          eveningReportEnabled: true
+        },
         pinCode: '',
         theme: 'craft',
         journalSubTab: 'DIARY',
@@ -3890,6 +4012,15 @@
       });
       if (!APP.activeProjectId && APP.projects[0]) APP.activeProjectId = APP.projects[0].id;
       if (!APP.theme) APP.theme = 'craft';
+      if (!APP.focusContextMode) APP.focusContextMode = 'AUTO';
+      if (APP.lastCloudUpdatedAt === undefined) APP.lastCloudUpdatedAt = 0;
+      if (!APP.autoSyncMode || APP.autoSyncMode === 'OFF') APP.autoSyncMode = '15S';
+      if (!APP.tgConfig || typeof APP.tgConfig !== 'object') {
+        APP.tgConfig = { botToken: '', chatIdWork: '', chatIdKids: '', eveningReportTime: '22:00', eveningReportEnabled: true };
+      }
+      if (APP.tgConfig.eveningReportTime === undefined) APP.tgConfig.eveningReportTime = '22:00';
+      if (APP.tgConfig.eveningReportEnabled === undefined) APP.tgConfig.eveningReportEnabled = true;
+      hydrateTgSecretsFromApp();
       if (!APP.journalSubTab) APP.journalSubTab = 'DIARY';
       if (!APP.alarmFilterSpace) APP.alarmFilterSpace = 'ALL';
       if (!Array.isArray(APP.alarms)) APP.alarms = [];
@@ -4046,10 +4177,10 @@
           showToast(`⚡ 자동화 실행: 마감일 오늘(${todayStr(0)}) 자동 지정`);
         } else if (rule.action === 'TG_NOTIFY') {
           logActivity('DB 자동화(텔레그램)', `${proj.title} - ${row.title} 알림 준비`, proj.id);
-          const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
-          const chatId = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
-          if (tok && chatId) {
-            fetch(`https://api.telegram.org/bot${tok}/sendMessage`, {
+          const tg = getResolvedTgSettings();
+          const chatId = proj.space === 'KIDS' ? (tg.chatIdKids || tg.chatIdWork) : tg.chatIdWork;
+          if (tg.botToken && chatId) {
+            fetch(`https://api.telegram.org/bot${tg.botToken}/sendMessage`, {
               method: 'POST', headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ chat_id: chatId, text: `⚡ [서뉴으뉴 노션 자동화]\n${proj.title} > ${row.title} (${row.status || row.priority})` })
             }).catch(() => {});
@@ -4284,8 +4415,210 @@
     }, 1000);
     setInterval(() => { if (APP) { checkScheduledReminders(); checkProAlarms(); } }, 20000);
 
-    async function saveAppState(triggerAutoSync = true) {
+    function hydrateTgSecretsFromApp() {
+      try {
+        const cfg = APP?.tgConfig || {};
+        if (cfg.botToken && !getLocalSecret('ora_notion_tg_token', '')) {
+          setLocalSecret('ora_notion_tg_token', cfg.botToken);
+          setLocalSecret('ora_tg_token', cfg.botToken);
+        }
+        if (cfg.chatIdWork && !getLocalSecret('ora_notion_tg_chat_work', '')) {
+          setLocalSecret('ora_notion_tg_chat_work', cfg.chatIdWork);
+          setLocalSecret('ora_notion_tg_chat', cfg.chatIdWork);
+        }
+        if (cfg.chatIdKids && !getLocalSecret('ora_notion_tg_chat_kids', '')) {
+          setLocalSecret('ora_notion_tg_chat_kids', cfg.chatIdKids);
+        }
+      } catch (_) {}
+    }
+
+    function getResolvedTgSettings() {
+      const cfg = APP?.tgConfig || {};
+      const botToken = String(cfg.botToken || getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '') || '').trim();
+      const chatIdWork = String(cfg.chatIdWork || getLocalSecret('ora_notion_tg_chat_work', '') || getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '') || '').trim();
+      const chatIdKids = String(cfg.chatIdKids || getLocalSecret('ora_notion_tg_chat_kids', '') || '').trim();
+      const eveningReportTime = String(cfg.eveningReportTime || '22:00').trim() || '22:00';
+      const eveningReportEnabled = cfg.eveningReportEnabled !== false;
+      return { botToken, chatIdWork, chatIdKids, eveningReportTime, eveningReportEnabled };
+    }
+
+    function pruneWorkspaceBloatLocal(appObj) {
+      if (!appObj || typeof appObj !== 'object') return;
+      if (appObj.pageVersions && typeof appObj.pageVersions === 'object') {
+        const activeIds = new Set((appObj.pages || []).filter(p => !p.archived).map(p => p.id));
+        for (const pid of Object.keys(appObj.pageVersions)) {
+          if (!activeIds.has(pid)) {
+            delete appObj.pageVersions[pid];
+          } else if (Array.isArray(appObj.pageVersions[pid]) && appObj.pageVersions[pid].length > 15) {
+            appObj.pageVersions[pid].length = 15;
+          }
+        }
+      }
+      if (Array.isArray(appObj.activityLog) && appObj.activityLog.length > 80) {
+        appObj.activityLog.length = 80;
+      }
+    }
+
+    function hasMeaningfulLocalData(appObj) {
+      if (!appObj) return false;
+      const totalBlocks = (appObj.pages || []).reduce((s, p) => s + ((p.blocks || []).length), 0);
+      return (appObj.pages || []).length > 1 || totalBlocks > 0 || (appObj.projects || []).length > 0 ||
+        (appObj.alarms || []).length > 0 || (appObj.journal || []).length > 0 ||
+        (appObj.ddays || []).length > 0 || (appObj.routines || []).length > 0 ||
+        (appObj.kidsProfiles || []).length > 0 || (appObj.vaultCards || []).length > 0 ||
+        (appObj.quickLedger || []).length > 0 || Object.keys(PHOTOS || {}).length > 0;
+    }
+
+    function blobToDataUrl(blob) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(String(r.result || ''));
+        r.onerror = () => reject(r.error || new Error('FileReader error'));
+        r.readAsDataURL(blob);
+      });
+    }
+
+    async function downloadMissingCloudPhotos(photoIds = [], photoIndex = {}) {
+      for (const phId of photoIds.slice(0, 24)) {
+        if (PHOTOS[phId]) continue;
+        try {
+          const resp = await fetch(`${CLOUD_SYNC_BASE}/api/notes-vault/photo/${encodeURIComponent(phId)}.jpg`);
+          if (!resp.ok) continue;
+          const dataUrl = await blobToDataUrl(await resp.blob());
+          const meta = photoIndex[phId] || { id: phId, name: `${phId}.jpg`, space: 'WORK', createdAt: Date.now() };
+          PHOTOS[phId] = { ...meta, dataUrl, cloudSynced: true };
+          await idbPut('photos', PHOTOS[phId]);
+        } catch (_) {}
+      }
+    }
+
+    window.syncToCloudVault = async (silent = true, options = {}) => {
+      if (!APP) return false;
+      if (CLOUD_SYNC_STATE.syncing && !options.force) return false;
+      if (!CLOUD_SYNC_STATE.bootPulled && !options.force) return false;
+      if (!hasMeaningfulLocalData(APP) && !CLOUD_SYNC_STATE.hasLocalEdit && !options.force) return false;
+
+      CLOUD_SYNC_STATE.syncing = true;
+      CLOUD_SYNC_STATE.status = 'SYNCING';
+      updateTopStatusMetrics();
+      try {
+        pruneWorkspaceBloatLocal(APP);
+        const photoIndex = {};
+        Object.values(PHOTOS).forEach(ph => {
+          photoIndex[ph.id] = { id: ph.id, name: ph.name, space: ph.space, pageId: ph.pageId, blockId: ph.blockId, noteDate: ph.noteDate, caption: ph.caption, createdAt: ph.createdAt };
+        });
+        const unsyncedPhotos = Object.values(PHOTOS)
+          .filter(p => !p.cloudSynced && p.dataUrl && p.dataUrl.includes(','))
+          .slice(0, 8)
+          .map(p => ({
+            id: p.id, name: p.name, space: p.space, pageId: p.pageId, blockId: p.blockId,
+            noteDate: p.noteDate, caption: p.caption, createdAt: p.createdAt,
+            base64: p.dataUrl.split(',')[1]
+          }));
+
+        const nowTs = Date.now();
+        const tgSettings = getResolvedTgSettings();
+        APP.tgConfig = { ...tgSettings };
+        const res = await fetch(`${CLOUD_SYNC_BASE}/api/notes-vault/cloud`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            app: APP,
+            photoIndex,
+            photos: unsyncedPhotos,
+            tgSettings,
+            updatedAt: nowTs
+          })
+        });
+        const j = await res.json();
+        if (!res.ok || !j.ok) throw new Error(j.error || `HTTP ${res.status}`);
+        for (const id of (j.savedPhotoIds || [])) {
+          if (PHOTOS[id]) {
+            PHOTOS[id].cloudSynced = true;
+            await idbPut('photos', PHOTOS[id]);
+          }
+        }
+        APP.lastCloudUpdatedAt = Number(j.updatedAt || nowTs);
+        APP.lastSyncAt = new Date().toISOString();
+        CLOUD_SYNC_STATE.status = 'SYNCED';
+        CLOUD_SYNC_STATE.lastPushedAt = Date.now();
+        CLOUD_SYNC_STATE.hasLocalEdit = false;
+        CLOUD_SYNC_STATE.remoteExists = true;
+        CLOUD_SYNC_STATE.lastError = '';
+        await idbPut('state', APP);
+        if (!silent) showToast(`☁️ 클라우드 금고 동기화 완료! (${j.photoCount || Object.keys(photoIndex).length}장 사진 포함)`);
+        return true;
+      } catch (err) {
+        CLOUD_SYNC_STATE.status = navigator.onLine ? 'ERROR' : 'OFFLINE';
+        CLOUD_SYNC_STATE.lastError = err.message;
+        if (!silent) showToast('❌ 클라우드 동기화 실패: ' + err.message);
+        return false;
+      } finally {
+        CLOUD_SYNC_STATE.syncing = false;
+        updateTopStatusMetrics();
+      }
+    };
+
+    window.pullFromCloudVault = async (silent = true, force = false) => {
+      if (!APP) return { pulled: false, exists: false };
+      if (CLOUD_SYNC_STATE.syncing && !force) return { pulled: false, exists: CLOUD_SYNC_STATE.remoteExists };
+      CLOUD_SYNC_STATE.syncing = true;
+      CLOUD_SYNC_STATE.status = 'SYNCING';
+      updateTopStatusMetrics();
+      try {
+        const knownIds = Object.keys(PHOTOS).join(',');
+        const sinceTs = force ? 0 : Number(APP.lastCloudUpdatedAt || 0);
+        const url = `${CLOUD_SYNC_BASE}/api/notes-vault/cloud?since=${sinceTs}&knownPhotos=${encodeURIComponent(knownIds)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
+        CLOUD_SYNC_STATE.remoteExists = Boolean(data.exists);
+        CLOUD_SYNC_STATE.lastPulledAt = Date.now();
+
+        if (!data.exists) {
+          CLOUD_SYNC_STATE.status = 'SYNCED';
+          return { pulled: false, exists: false };
+        }
+        if (!data.syncNeeded || !data.app) {
+          CLOUD_SYNC_STATE.status = 'SYNCED';
+          return { pulled: false, exists: true };
+        }
+        const remoteUpdated = Number(data.updatedAt || 0);
+        const localUpdated = Number(APP.lastCloudUpdatedAt || 0);
+        const canAcceptRemote = force || !hasMeaningfulLocalData(APP) || (!CLOUD_SYNC_STATE.hasLocalEdit && remoteUpdated > localUpdated);
+        if (!canAcceptRemote) {
+          CLOUD_SYNC_STATE.status = 'SYNCED';
+          return { pulled: false, exists: true };
+        }
+
+        if (Array.isArray(data.missingPhotoIds) && data.missingPhotoIds.length) {
+          await downloadMissingCloudPhotos(data.missingPhotoIds, data.photoIndex || {});
+        }
+        APP = data.app;
+        APP.lastCloudUpdatedAt = remoteUpdated;
+        migrateAppState();
+        await saveAppState(false, true);
+        CLOUD_SYNC_STATE.status = 'SYNCED';
+        CLOUD_SYNC_STATE.hasLocalEdit = false;
+        CLOUD_SYNC_STATE.lastError = '';
+        renderAll();
+        if (!silent) showToast('☁️ 클라우드에서 최신 데이터를 불러왔습니다!');
+        else if (CLOUD_SYNC_STATE.bootPulled) showToast('☁️ 다른 기기의 최신 변경사항을 반영했습니다!');
+        return { pulled: true, exists: true };
+      } catch (err) {
+        CLOUD_SYNC_STATE.status = navigator.onLine ? 'IDLE' : 'OFFLINE';
+        CLOUD_SYNC_STATE.lastError = err.message;
+        if (!silent) showToast('❌ 클라우드 불러오기 실패: ' + err.message);
+        return { pulled: false, exists: CLOUD_SYNC_STATE.remoteExists, error: err.message };
+      } finally {
+        CLOUD_SYNC_STATE.syncing = false;
+        updateTopStatusMetrics();
+      }
+    };
+
+    async function saveAppState(triggerAutoSync = true, skipCloudPush = false) {
       if (!APP) return;
+      pruneWorkspaceBloatLocal(APP);
       try {
         await idbPut('state', APP);
         localStorage.setItem('ora_notion_backup_lite', JSON.stringify({ updatedAt: Date.now(), pages: APP.pages.length, projects: (APP.projects || []).length }));
@@ -4293,11 +4626,32 @@
         console.warn('IndexedDB save:', err);
       }
       updateTopStatusMetrics();
-      if (triggerAutoSync && APP.autoSyncMode === '15S' && (getLocalSecret('ora_vault_gh_token') || VAULT_BRIDGE_AVAILABLE || IS_APP_SERVER)) {
-        clearTimeout(autoSyncDebounce);
-        autoSyncDebounce = setTimeout(() => { syncToGithubVault(true); }, 15000);
+      if (triggerAutoSync && !skipCloudPush) {
+        CLOUD_SYNC_STATE.hasLocalEdit = true;
+        clearTimeout(cloudPushDebounce);
+        cloudPushDebounce = setTimeout(() => { syncToCloudVault(true); }, 2500);
+        if (APP.autoSyncMode === '15S' && (getLocalSecret('ora_vault_gh_token') || VAULT_BRIDGE_AVAILABLE)) {
+          clearTimeout(autoSyncDebounce);
+          autoSyncDebounce = setTimeout(() => { syncToGithubVault(true); }, 15000);
+        }
       }
     }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && CLOUD_SYNC_STATE.bootPulled && !CLOUD_SYNC_STATE.hasLocalEdit) {
+        pullFromCloudVault(true);
+      }
+    });
+    window.addEventListener('focus', () => {
+      if (CLOUD_SYNC_STATE.bootPulled && !CLOUD_SYNC_STATE.hasLocalEdit) {
+        pullFromCloudVault(true);
+      }
+    });
+    setInterval(() => {
+      if (document.visibilityState === 'visible' && APP && CLOUD_SYNC_STATE.bootPulled && !CLOUD_SYNC_STATE.hasLocalEdit) {
+        pullFromCloudVault(true);
+      }
+    }, 35000);
 
     function debouncedSave() {
       clearTimeout(saveDebounce);
@@ -5391,10 +5745,33 @@
 
       const sbSync = document.getElementById('sbSyncBadge');
       const hdrSync = document.getElementById('hdrVaultStatus');
-      if (APP.lastSyncAt) {
-        const tm = APP.lastSyncAt.slice(11, 16);
-        if (sbSync) sbSync.textContent = `Git 동기화 ${tm}`;
-        if (hdrSync) hdrSync.textContent = `☁️ Git 비공개 금고 (${tm})`;
+      const tmStr = APP.lastCloudUpdatedAt
+        ? new Date(APP.lastCloudUpdatedAt).toTimeString().slice(0, 5)
+        : (APP.lastSyncAt ? APP.lastSyncAt.slice(11, 16) : '');
+      if (hdrSync) {
+        hdrSync.classList.remove('synced', 'syncing', 'offline');
+        if (CLOUD_SYNC_STATE.syncing || CLOUD_SYNC_STATE.status === 'SYNCING') {
+          hdrSync.classList.add('syncing');
+          hdrSync.textContent = '⏳ 클라우드 동기화 중...';
+        } else if (CLOUD_SYNC_STATE.status === 'OFFLINE') {
+          hdrSync.classList.add('offline');
+          hdrSync.textContent = '📴 오프라인 로컬 저장중';
+        } else if (APP.lastCloudUpdatedAt || APP.lastSyncAt) {
+          hdrSync.classList.add('synced');
+          hdrSync.textContent = `☁️ 자동 동기화 완료 (${tmStr || '방금'})`;
+        } else {
+          hdrSync.textContent = '☁️ 클라우드 · Git 금고';
+        }
+      }
+      if (sbSync && (tmStr || APP.lastSyncAt)) {
+        sbSync.textContent = `자동 동기화 ${tmStr || 'ON'}`;
+      }
+      const statsBox = document.getElementById('cloudVaultStatsBox');
+      if (statsBox) {
+        const jsonKb = Math.round((JSON.stringify(APP || {}).length) / 1024);
+        const phCnt = Object.keys(PHOTOS || {}).length;
+        const verCnt = Object.values(APP?.pageVersions || {}).reduce((s, arr) => s + (Array.isArray(arr) ? arr.length : 0), 0);
+        statsBox.innerHTML = `현재 워크스페이스 <b>${jsonKb} KB</b> · 사진 <b>${phCnt}장</b> · 보관 버전 <b>${verCnt}개</b> (자동 경량화 적용)${tmStr ? ` · 최근 동기화 <b>${tmStr}</b>` : ''}<br><span style="color:var(--ink-3);">수정 후 2.5초마다 자동 반영되며, 다른 기기에서 열면 최신 데이터가 자동으로 내려옵니다.</span>`;
       }
     }
 
@@ -7291,12 +7668,16 @@
             </div>
           </div>
 
-          <!-- 2단 일 / 애들 드래그 가능 할일 보드 -->
-          <div class="today-columns">
-            <div class="notion-lane-card" data-today-lane="WORK">
+          <!-- 2단 일 / 애들 드래그 가능 할일 보드 (B-5 낮 업무 ↔ 저녁/주말 가족 자동 순서 전환) -->
+          ${(() => {
+            const effMode = getEffectiveFocusMode();
+            const isKidsFocus = effMode === 'KIDS';
+            const workLaneHtml = `
+            <div class="notion-lane-card ${!isKidsFocus ? 'priority-spotlight' : ''}" data-today-lane="WORK">
               <div class="lane-header">
                 <span style="font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:6px;">
                   💼 오늘 일 · 업무 <span class="ntag ntag-blue">${workTodos.filter(x=>x.checked).length}/${workTodos.length}</span>
+                  ${!isKidsFocus ? '<span class="ntag ntag-green" style="font-size:10.5px;">⭐ 지금 집중</span>' : ''}
                 </span>
                 <span style="font-size:11.5px;color:var(--ink-3);">⋮⋮ 끌어 순서/칸 이동</span>
               </div>
@@ -7307,12 +7688,13 @@
               </div>
               <div id="nlpPreview_WORK" class="live-nlp-preview" style="display:none;margin-bottom:8px;"></div>
               ${workTodos.length ? workTodos.map(b => renderTodoItem(b, 'WORK')).join('') : '<div style="font-size:12.5px;color:var(--ink-3);padding:14px 4px;">등록된 업무 할 일이 없습니다.</div>'}
-            </div>
-
-            <div class="notion-lane-card" data-today-lane="KIDS">
+            </div>`;
+            const kidsLaneHtml = `
+            <div class="notion-lane-card ${isKidsFocus ? 'priority-spotlight' : ''}" data-today-lane="KIDS">
               <div class="lane-header">
                 <span style="font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:6px;">
                   👨‍👧‍👦 오늘 애들 · 가족 <span class="ntag ntag-orange">${kidsTodos.filter(x=>x.checked).length}/${kidsTodos.length}</span>
+                  ${isKidsFocus ? '<span class="ntag ntag-orange" style="font-size:10.5px;">⭐ 지금 집중</span>' : ''}
                 </span>
                 <span style="font-size:11.5px;color:var(--ink-3);">⋮⋮ 끌어 순서/칸 이동</span>
               </div>
@@ -7322,8 +7704,20 @@
               </div>
               <div id="nlpPreview_KIDS" class="live-nlp-preview" style="display:none;margin-bottom:8px;"></div>
               ${kidsTodos.length ? kidsTodos.map(b => renderTodoItem(b, 'KIDS')).join('') : '<div style="font-size:12.5px;color:var(--ink-3);padding:14px 4px;">등록된 아이·가족 할 일이 없습니다.</div>'}
-            </div>
-          </div>
+            </div>`;
+            const famBanner = isKidsFocus ? `
+              <div class="evening-family-banner">
+                <div style="font-size:12.5px;color:#9a3412;">
+                  <strong>👨‍👧‍👦 저녁 · 주말 가족 집중 모드 활성</strong> — 애들·가족 보드를 앞쪽에 배치했습니다. (상단 버튼으로 💼 업무 우선 전환 가능)
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <button type="button" class="n-btn" style="font-size:11.5px;padding:4px 9px;background:#fff;" onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 1줄 가족일기 쓰기</button>
+                  <button type="button" class="n-btn" style="font-size:11.5px;padding:4px 9px;background:#fff;" onclick="setMainView('JOURNAL');setJournalSubTab('KIDS')">👶 아이 성장기록</button>
+                  <button type="button" class="n-btn" style="font-size:11.5px;padding:4px 9px;background:#fff;" onclick="openEveningShutdownModal()">🌙 하루 마감 (${escHtml(getResolvedTgSettings().eveningReportTime || '22:00')} 자동)</button>
+                </div>
+              </div>` : '';
+            return `${famBanner}<div class="today-columns">${isKidsFocus ? (kidsLaneHtml + workLaneHtml) : (workLaneHtml + kidsLaneHtml)}</div>`;
+          })()}
 
           <!-- 진행 중인 프로젝트 바로가기 카드 -->
           <div style="margin-bottom:22px;">
@@ -8929,8 +9323,9 @@
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
               <button class="n-btn" onclick="setMainView('PLANNER')">🗓️ 주간·일간 타임블록</button>
               <button class="n-btn" onclick="openAlarmModal('', APP.selectedCalDate || todayStr(0))">🔔 이 날 알람</button>
+              <button class="n-btn" onclick="openIcsSubscribeModal()">📡 캘린더 라이브 구독</button>
               <button class="n-btn" onclick="document.getElementById('icsImportInput').click()">📤 .ics 가져오기</button>
-              <button class="n-btn-primary" onclick="exportAlarmsToIcs()">📥 .ics 전체 내보내기</button>
+              <button class="n-btn-primary" onclick="exportAlarmsToIcs()">📥 .ics 파일 저장</button>
             </div>
           </div>
           <div class="cal-grid">
@@ -9299,7 +9694,7 @@
 
     function b64EncodeUnicode(str) { return btoa(unescape(encodeURIComponent(str))); }
     function b64DecodeUnicode(b64) { return decodeURIComponent(escape(atob(String(b64).replace(/\s/g, '')))); }
-    const VAULT_BRIDGE_BASE = IS_APP_SERVER ? '' : 'https://naver-store-ai-manager-production.up.railway.app';
+    const VAULT_BRIDGE_BASE = CLOUD_SYNC_BASE;
 
     function normalizeGithubToken(raw) {
       return String(raw || '')
@@ -9623,6 +10018,13 @@
         if (!silent) showToast('❌ 동기화 오류: ' + err.message);
       }
     };
+    function b64DecodeUtf8Large(b64) {
+      const bin = atob(String(b64 || '').replace(/\s/g, ''));
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new TextDecoder('utf-8').decode(bytes);
+    }
+
     window.pullFromGithubVault = async (commitSha = null) => {
       const token = normalizeGithubToken(getLocalSecret('ora_vault_gh_token', ''));
       if (!token) {
@@ -9632,18 +10034,37 @@
       }
       try {
         const { owner, repoName, branch } = await ensurePrivateVaultRepo(token, APP.vaultRepo || 'seonyu-eunyu-notes-vault');
-        const refQ = commitSha ? `?ref=${commitSha}` : `?ref=${branch}`;
-        const wsRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/contents/vault/workspace.json${refQ}`);
-        if (!wsRes.ok || !wsRes.data.content) throw new Error('저장소 백업이 아직 없습니다.');
-        const parsed = JSON.parse(b64DecodeUnicode(wsRes.data.content));
+        let targetCommitSha = commitSha;
+        if (!targetCommitSha) {
+          const refRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/ref/heads/${branch}`);
+          if (!refRes.ok || !refRes.data?.object?.sha) throw new Error('저장소 백업이 아직 없습니다.');
+          targetCommitSha = refRes.data.object.sha;
+        }
+        const commitRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/commits/${targetCommitSha}`);
+        const treeSha = commitRes.data?.tree?.sha;
+        if (!treeSha) throw new Error('커밋 트리 정보를 찾을 수 없습니다.');
+        // Git Trees + Blobs API 사용으로 1MB 초과 workspace.json도 제한 없이 복원
+        const treeRes = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/trees/${treeSha}?recursive=1`);
+        const entries = treeRes.data?.tree || [];
+        const wsEntry = entries.find(e => e.path === 'vault/workspace.json');
+        if (!wsEntry?.sha) throw new Error('저장소 백업(workspace.json)이 아직 없습니다.');
+        const wsBlob = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/blobs/${wsEntry.sha}`);
+        if (!wsBlob.ok || !wsBlob.data?.content) throw new Error('Git Blob 데이터를 읽을 수 없습니다.');
+        const parsed = JSON.parse(b64DecodeUtf8Large(wsBlob.data.content));
         for (const m of Object.values(parsed.photoIndex || {})) {
           if (!PHOTOS[m.id]) {
-            const pr = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/contents/vault/photos/${m.id}.jpg${refQ}`);
-            if (pr.ok && pr.data.content) { PHOTOS[m.id] = { ...m, dataUrl: 'data:image/jpeg;base64,' + pr.data.content.replace(/\s/g, ''), synced: true }; await idbPut('photos', PHOTOS[m.id]); }
+            const pEntry = entries.find(e => e.path === `vault/photos/${m.id}.jpg`);
+            if (pEntry?.sha) {
+              const pb = await ghApiCall(token, 'GET', `/repos/${owner}/${repoName}/git/blobs/${pEntry.sha}`);
+              if (pb.ok && pb.data?.content) {
+                PHOTOS[m.id] = { ...m, dataUrl: 'data:image/jpeg;base64,' + pb.data.content.replace(/\s/g, ''), synced: true, cloudSynced: false };
+                await idbPut('photos', PHOTOS[m.id]);
+              }
+            }
           }
         }
         APP = parsed.app; migrateAppState(); APP.lastSyncAt = new Date().toISOString();
-        await saveAppState(false); renderAll(); closeModal('historyModal');
+        await saveAppState(true); renderAll(); closeModal('historyModal');
         showToast(commitSha ? '🕰️ 선택한 시점으로 복원되었습니다!' : '✅ 최신 데이터를 불러왔습니다!');
       } catch (err) {
         setSyncDebugHtml(`❌ 불러오기 실패: ${escHtml(err.message)}`);
@@ -9960,38 +10381,101 @@
     };
 
     window.openTelegramModal = () => {
-      document.getElementById('cfgTgToken').value = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
-      document.getElementById('cfgTgChatId').value = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
+      const cfg = getResolvedTgSettings();
+      const tokEl = document.getElementById('cfgTgToken');
+      const wkEl = document.getElementById('cfgTgChatWork');
+      const kdEl = document.getElementById('cfgTgChatKids');
+      const tmEl = document.getElementById('cfgTgEveningTime');
+      const enEl = document.getElementById('cfgTgEveningEnabled');
+      if (tokEl) tokEl.value = cfg.botToken;
+      if (wkEl) wkEl.value = cfg.chatIdWork;
+      if (kdEl) kdEl.value = cfg.chatIdKids;
+      if (tmEl) tmEl.value = cfg.eveningReportTime || '22:00';
+      if (enEl) enEl.value = cfg.eveningReportEnabled === false ? 'OFF' : 'ON';
+      const out = document.getElementById('tgResultBox');
+      if (out) out.textContent = '';
       openModal('telegramModal');
     };
-    window.saveTelegramSettings = () => {
-      const tok = document.getElementById('cfgTgToken').value.trim();
-      const chat = document.getElementById('cfgTgChatId').value.trim();
+    window.saveTelegramSettings = async () => {
+      const tok = (document.getElementById('cfgTgToken')?.value || '').trim();
+      const chatWork = (document.getElementById('cfgTgChatWork')?.value || '').trim();
+      const chatKids = (document.getElementById('cfgTgChatKids')?.value || '').trim();
+      const eveningTime = (document.getElementById('cfgTgEveningTime')?.value || '22:00').trim() || '22:00';
+      const eveningEnabled = (document.getElementById('cfgTgEveningEnabled')?.value || 'ON') !== 'OFF';
       setLocalSecret('ora_notion_tg_token', tok);
       setLocalSecret('ora_tg_token', tok);
-      setLocalSecret('ora_notion_tg_chat', chat);
-      setLocalSecret('ora_tg_chat', chat);
-      showToast('💾 텔레그램 설정이 저장되었습니다.');
+      setLocalSecret('ora_notion_tg_chat_work', chatWork);
+      setLocalSecret('ora_notion_tg_chat', chatWork);
+      setLocalSecret('ora_tg_chat', chatWork);
+      setLocalSecret('ora_notion_tg_chat_kids', chatKids);
+      if (APP) {
+        APP.tgConfig = { botToken: tok, chatIdWork: chatWork, chatIdKids: chatKids, eveningReportTime: eveningTime, eveningReportEnabled: eveningEnabled };
+        await saveAppState(true);
+        CLOUD_SYNC_STATE.bootPulled = true;
+        await syncToCloudVault(true, { force: true });
+      }
+      const out = document.getElementById('tgResultBox');
+      if (out) out.innerHTML = `<span style="color:#047857;font-weight:600;">✅ 저장 및 서버 24시간 스케줄러 동기화 완료!</span> (업무방: ${escHtml(chatWork || '서버기본')} · 가족방: ${escHtml(chatKids || '업무방과 동일')} · 밤 마감: ${eveningEnabled ? eveningTime + ' ON' : 'OFF'})`;
+      showToast('💾 텔레그램 2채널 & 서버 무인 알림 설정 저장됨!');
+      if (APP?.activeView === 'ALARMS') renderAlarmsView();
+    };
+    window.testTelegramChannel = async (space = 'WORK', mode = 'TEST') => {
+      const tok = (document.getElementById('cfgTgToken')?.value || '').trim() || getResolvedTgSettings().botToken;
+      const chatId = space === 'KIDS'
+        ? ((document.getElementById('cfgTgChatKids')?.value || '').trim() || (document.getElementById('cfgTgChatWork')?.value || '').trim())
+        : (document.getElementById('cfgTgChatWork')?.value || '').trim();
+      const out = document.getElementById('tgResultBox');
+      if (out) out.textContent = '⏳ 텔레그램 서버 테스트 발송 중...';
+      try {
+        if (APP && mode === 'EVENING') {
+          await syncToCloudVault(true, { force: true });
+        }
+        const res = await fetch(`${CLOUD_SYNC_BASE}/api/notes-vault/test-telegram`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ space, mode, botToken: tok, chatId })
+        });
+        const j = await res.json();
+        if (!res.ok || !j.ok) throw new Error(j.error || `HTTP ${res.status}`);
+        if (out) out.innerHTML = `<span style="color:#047857;font-weight:600;">✅ ${escHtml(j.message)}</span>`;
+        showToast('✅ ' + j.message);
+      } catch (err) {
+        if (out) out.innerHTML = `<span style="color:#b91c1c;">❌ ${escHtml(err.message)}</span>`;
+        showToast('❌ 텔레그램 테스트 실패: ' + err.message);
+      }
     };
     window.sendDailySummaryToTelegram = async () => {
-      const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
-      const chat = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
+      const cfg = getResolvedTgSettings();
       const out = document.getElementById('tgResultBox');
-      if (!tok || !chat) { if (out) out.textContent = '봇 토큰과 채팅 ID를 입력하세요.'; return; }
+      if (!cfg.botToken || !cfg.chatIdWork) { if (out) out.textContent = '봇 토큰과 회사·업무 Chat ID를 먼저 입력하거나 서버 기본 봇을 확인하세요.'; return; }
       const todos = ensureTodayDailyPage().blocks.filter(b => b.type === 'todo');
-      const msg = `🌅 [서뉴으뉴 노션 (${todayStr(0)})]\n\n` + (todos.map(t => `${t.checked ? '✅' : '⬜'} [${t.space==='KIDS'?'애들':'일'}] ${t.text}`).join('\n') || '할일 없음');
-      const r = await fetch(`https://api.telegram.org/bot${tok}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chat, text: msg }) });
-      const j = await r.json(); if (out) out.textContent = j.ok ? '✅ 전송 완료!' : '❌ ' + j.description;
+      const workList = todos.filter(t => t.space !== 'KIDS');
+      const kidsList = todos.filter(t => t.space === 'KIDS');
+      const msgWork = `🌅 [서뉴으뉴 노션 업무 (${todayStr(0)})]\n\n` + (workList.map(t => `${t.checked ? '✅' : '⬜'} ${t.text}`).join('\n') || '업무 할일 없음');
+      const r = await fetch(`https://api.telegram.org/bot${cfg.botToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: cfg.chatIdWork, text: msgWork }) });
+      const j = await r.json();
+      let extra = '';
+      if (cfg.chatIdKids && cfg.chatIdKids !== cfg.chatIdWork && kidsList.length) {
+        const msgKids = `👨‍👧‍👦 [서뉴·으뉴 오늘 가족 (${todayStr(0)})]\n\n` + kidsList.map(t => `${t.checked ? '✅' : '⬜'} ${t.text}`).join('\n');
+        await fetch(`https://api.telegram.org/bot${cfg.botToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: cfg.chatIdKids, text: msgKids }) }).catch(() => {});
+        extra = ' (+가족방 별도 전송)';
+      }
+      if (out) out.textContent = j.ok ? `✅ 전송 완료!${extra}` : '❌ ' + j.description;
     };
     window.pullTelegramInbox = async () => {
-      const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', ''), out = document.getElementById('tgResultBox');
-      if (!tok) return;
-      const r = await fetch(`https://api.telegram.org/bot${tok}/getUpdates?limit=10`), j = await r.json();
+      const cfg = getResolvedTgSettings(), tok = cfg.botToken, out = document.getElementById('tgResultBox');
+      if (!tok) { if (out) out.textContent = 'Bot Token이 필요합니다.'; return; }
+      const r = await fetch(`https://api.telegram.org/bot${tok}/getUpdates?limit=15`), j = await r.json();
       const tdPage = ensureTodayDailyPage(); let lastId = Number(getLocalSecret('ora_tg_last_uid', '0')), cnt = 0;
+      const kidsChat = String(cfg.chatIdKids || '');
       for (const u of (j.result || [])) {
         if (u.update_id <= lastId || !u.message) continue; lastId = Math.max(lastId, u.update_id);
         const t = u.message.caption || u.message.text;
-        if (t) { tdPage.blocks.push(createBlock('todo', { text: `[텔레그램] ${t}`, space: /애|아이|준비물/.test(t) ? 'KIDS' : 'WORK', dueDate: todayStr(0) })); cnt++; }
+        const fromKidsRoom = kidsChat && String(u.message.chat?.id || '') === kidsChat;
+        if (t && !t.startsWith('/')) {
+          tdPage.blocks.push(createBlock('todo', { text: `[텔레그램] ${t}`, space: (fromKidsRoom || /애|아이|서뉴|으뉴|준비물|하원/.test(t)) ? 'KIDS' : 'WORK', dueDate: todayStr(0) }));
+          cnt++;
+        }
       }
       setLocalSecret('ora_tg_last_uid', String(lastId)); if (cnt) { saveAppState(); renderAll(); }
       if (out) out.textContent = `📥 새 메모 ${cnt}건을 가져왔습니다.`;
@@ -10374,15 +10858,16 @@
       } catch (_) {}
     }
     async function sendAlarmToTelegram(alm, prefix = '🔔 [알람]') {
-      const tok = getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', '');
-      const chat = getLocalSecret('ora_notion_tg_chat', '') || getLocalSecret('ora_tg_chat', '');
-      if (!tok || !chat) return false;
-      const spLabel = alm.space === 'KIDS' ? '👨‍👧‍👦 가족/애들' : (alm.space === 'PERSONAL' ? '🔒 개인' : '🏢 회사·업무');
+      const cfg = getResolvedTgSettings();
+      const tok = cfg.botToken;
+      const targetChat = alm.space === 'KIDS' ? (cfg.chatIdKids || cfg.chatIdWork) : cfg.chatIdWork;
+      if (!tok || !targetChat) return false;
+      const spLabel = alm.space === 'KIDS' ? '👨‍👧‍👦 가족/애들' : (alm.space === 'PERSONAL' ? '🔒 개인' : '💼 회사·업무');
       const text = `${prefix} ${spLabel} (${alm.category || ''})\n⏰ ${alm.time} · ${alm.title}${alm.note ? `\n📝 ${alm.note}` : ''}`;
       try {
         const r = await fetch(`https://api.telegram.org/bot${tok}/sendMessage`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: chat, text })
+          body: JSON.stringify({ chat_id: targetChat, text })
         });
         const j = await r.json();
         return !!j.ok;
@@ -10550,10 +11035,35 @@
       showToast(`✅ '${alm.title}' 알람 완료 기록됨!`);
     };
 
+    function getEffectiveFocusMode() {
+      const pref = APP?.focusContextMode || 'AUTO';
+      if (pref === 'WORK' || pref === 'KIDS') return pref;
+      const d = new Date();
+      const hr = d.getHours();
+      const wd = d.getDay();
+      if (wd === 0 || wd === 6 || hr >= 18 || hr < 6) return 'KIDS';
+      return 'WORK';
+    }
+    window.setFocusContextMode = (mode) => {
+      if (!APP) return;
+      APP.focusContextMode = mode;
+      saveAppState();
+      renderAll();
+      const resolved = getEffectiveFocusMode();
+      showToast(mode === 'AUTO'
+        ? `🔄 자동 집중 모드 (${resolved === 'KIDS' ? '👨‍👧‍👦 저녁·주말 가족 우선' : '💼 낮 업무 우선'})`
+        : (resolved === 'KIDS' ? '👨‍👧‍👦 가족 · 저녁 집중 모드로 전환되었습니다!' : '💼 회사 · 업무 집중 모드로 전환되었습니다!'));
+    };
+
     // ----- V5 Today Executive Hero HTML -----
     function renderV5TodayHeroHtml(td, tdPage, todos, workTodos, kidsTodos) {
       const hr = new Date().getHours();
-      const greet = hr < 11 ? '☀️ 좋은 아침입니다 · 서뉴으뉴 노션' : (hr < 17 ? '✨ 오늘도 행복한 하루 · 서뉴으뉴 노션' : '🌙 오늘 하루도 수고했어요 · 서뉴으뉴 노션');
+      const modePref = APP?.focusContextMode || 'AUTO';
+      const activeMode = getEffectiveFocusMode();
+      const isKidsFocus = activeMode === 'KIDS';
+      const greet = isKidsFocus
+        ? (hr >= 18 || hr < 6 ? '👨‍👧‍👦 저녁엔 가족 시간 · 서뉴으뉴 노션' : '🧺 주말 가족 집중 모드 · 서뉴으뉴 노션')
+        : (hr < 11 ? '☀️ 좋은 아침입니다 · 서뉴으뉴 노션' : '💼 낮 업무 집중 모드 · 서뉴으뉴 노션');
       const doneCnt = todos.filter(x => x.checked).length;
       const pct = todos.length ? Math.round((doneCnt / todos.length) * 100) : 0;
       const ringDash = 113.1;
@@ -10571,9 +11081,14 @@
         <div class="v5-hero-card">
           <div class="v5-hero-top">
             <div>
-              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px;">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
                 <span class="v5-hero-clock">🕒 <span id="v5LiveClock">${new Date().toTimeString().slice(0,5)}</span></span>
                 <span style="font-size:12.5px;color:var(--ink-2);font-weight:600;">${fmtKorDate(td)}</span>
+                <div class="focus-mode-bar" title="시간대(평일 06~18시 업무 / 저녁·주말 가족) 자동 전환 또는 수동 고정">
+                  <button type="button" class="focus-mode-pill ${modePref==='AUTO'?'active'+(isKidsFocus?' kids-mode':''):''}" onclick="setFocusContextMode('AUTO')">🔄 자동(${isKidsFocus?'가족':'업무'})</button>
+                  <button type="button" class="focus-mode-pill ${modePref==='WORK'?'active':''}" onclick="setFocusContextMode('WORK')">💼 업무</button>
+                  <button type="button" class="focus-mode-pill ${modePref==='KIDS'?'active kids-mode':''}" onclick="setFocusContextMode('KIDS')">👨‍👧‍👦 가족</button>
+                </div>
               </div>
               <h1 style="margin:0;font-size:25px;font-weight:800;letter-spacing:-0.025em;line-height:1.25;">${greet}</h1>
             </div>
@@ -10651,7 +11166,9 @@
           return (x.next?.ts || 9e15) - (y.next?.ts || 9e15);
         });
       const pushState = ('Notification' in window) ? Notification.permission : 'unsupported';
-      const hasTg = !!(getLocalSecret('ora_notion_tg_token', '') || getLocalSecret('ora_tg_token', ''));
+      const tgCfg = getResolvedTgSettings();
+      const hasTgWork = !!(tgCfg.chatIdWork);
+      const hasTgKids = !!(tgCfg.chatIdKids);
 
       document.getElementById('mainViewContainer').innerHTML = `
         <div class="ws-canvas wide-view">
@@ -10664,7 +11181,8 @@
               <button class="v5-action-chip primary" onclick="openAlarmModal()">＋ 새 알람 등록</button>
               <button class="v5-action-chip" onclick="installAlarmPresetPack('WORK')">🏢 회사 필수 5종 추가</button>
               <button class="v5-action-chip" onclick="installAlarmPresetPack('KIDS')">👨‍👧‍👦 가족 필수 5종 추가</button>
-              <button class="v5-action-chip" onclick="exportAlarmsToIcs()">📥 .ics 폰 캘린더 내보내기</button>
+              <button class="v5-action-chip" onclick="openIcsSubscribeModal()">📡 .ics 캘린더 라이브 구독</button>
+              <button class="v5-action-chip" onclick="exportAlarmsToIcs()">📥 .ics 파일 저장</button>
             </div>
           </div>
 
@@ -10675,11 +11193,18 @@
               <span class="ntag ${pushState === 'granted' ? 'ntag-green' : 'ntag-yellow'}" style="cursor:pointer;" onclick="requestOsNotificationPermission()">
                 📲 OS 푸시: ${pushState === 'granted' ? '허용됨 ✅' : (pushState === 'denied' ? '차단됨' : '클릭해 허용')}
               </span>
-              <span class="ntag ${hasTg ? 'ntag-blue' : 'ntag-gray'}" style="cursor:pointer;" onclick="openTelegramModal()">
-                ✈️ 텔레그램 폰 푸시: ${hasTg ? '연동됨 ✅' : '미설정 (클릭)'}
+              <span class="ntag ${hasTgWork ? 'ntag-blue' : 'ntag-gray'}" style="cursor:pointer;" onclick="openTelegramModal()">
+                ✈️ 업무방 푸시: ${hasTgWork ? '연동됨 ✅' : '서버 기본 / 설정'}
+              </span>
+              <span class="ntag ${hasTgKids ? 'ntag-orange' : 'ntag-gray'}" style="cursor:pointer;" onclick="openTelegramModal()">
+                👨‍👧‍👦 가족방 푸시: ${hasTgKids ? '분리됨 ✅' : '업무방 통합 (분리 가능)'}
+              </span>
+              <span class="ntag ntag-purple" style="cursor:pointer;" onclick="openTelegramModal()">
+                🌙 밤 마감 보고: ${tgCfg.eveningReportEnabled !== false ? escHtml(tgCfg.eveningReportTime || '22:00') + ' ON' : 'OFF'}
               </span>
             </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="n-btn" style="font-size:12px;" onclick="openTelegramModal()">✈️ 텔레그램 설정</button>
               <button class="n-btn" style="font-size:12px;" onclick="testAlarmRingSample()">🔊 알람 테스트 울리기</button>
             </div>
           </div>
@@ -10927,6 +11452,55 @@
       saveAppState();
       renderAll();
       showToast(added ? `🔔 ${packSpace === 'KIDS' ? '가족' : '회사'} 필수 알람 ${added}종을 자동 등록했습니다!` : '이미 모든 필수 알람이 등록되어 있습니다.');
+    };
+
+    window.getLiveIcsOrigin = () => {
+      if (location.hostname.endsWith('.up.railway.app')) return location.origin;
+      return 'https://naver-store-ai-manager-production.up.railway.app';
+    };
+
+    window.copyIcsFeedUrl = async (space = 'ALL') => {
+      const url = `${window.getLiveIcsOrigin()}/api/notes/calendar.ics?space=${encodeURIComponent(space)}`;
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast(`📋 ${space === 'KIDS' ? '가족·아이 전용' : (space === 'WORK' ? '회사·업무 전용' : '전체 통합')} 구독 주소 복사 완료!`);
+      } catch (_) {
+        const el = document.getElementById(`icsUrlInput_${space}`);
+        if (el) { el.select(); document.execCommand('copy'); }
+        showToast('📋 구독 주소를 선택했습니다. 복사해 붙여넣으세요!');
+      }
+    };
+
+    window.openIcsSubscribeModal = async () => {
+      if (APP) syncToCloudVault(true, { force: true }).catch(() => {});
+      const pubOrigin = window.getLiveIcsOrigin();
+      const testOrigin = CLOUD_SYNC_BASE || location.origin;
+      const rows = [
+        { space: 'ALL', badge: '🌐 전체 통합 (회사+가족+알람+D-Day)', cls: 'ntag-blue' },
+        { space: 'WORK', badge: '💼 회사·업무 일정·마감일 전용', cls: 'ntag-purple' },
+        { space: 'KIDS', badge: '👨‍👧‍👦 가족·아이·준비물·배우자 공유용', cls: 'ntag-orange' }
+      ];
+      const box = document.getElementById('icsFeedRows');
+      if (box) {
+        box.innerHTML = rows.map(r => {
+          const httpUrl = `${pubOrigin}/api/notes/calendar.ics?space=${r.space}`;
+          const webcalUrl = httpUrl.replace(/^https?:\/\//i, 'webcal://');
+          const previewUrl = `${testOrigin}/api/notes/calendar.ics?space=${r.space}`;
+          return `
+            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface-card);">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+                <span class="ntag ${r.cls}">${r.badge}</span>
+                <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                  <button type="button" class="n-btn-primary" style="font-size:11.5px;padding:4px 9px;" onclick="copyIcsFeedUrl('${r.space}')">📋 주소 복사</button>
+                  <a href="${webcalUrl}" class="n-btn" style="font-size:11.5px;padding:4px 9px;text-decoration:none;">📆 바로 구독 열기</a>
+                  <a href="${previewUrl}" target="_blank" class="n-btn" style="font-size:11.5px;padding:4px 9px;text-decoration:none;">🔍 미리보기</a>
+                </div>
+              </div>
+              <input id="icsUrlInput_${r.space}" type="text" readonly class="field-input" style="font-size:11.5px;font-family:var(--font-mono);background:var(--bg-subtle);" value="${escHtml(httpUrl)}" onclick="this.select()" />
+            </div>`;
+        }).join('');
+      }
+      openModal('icsSubscribeModal');
     };
 
     window.exportAlarmsToIcs = () => {
@@ -12661,8 +13235,9 @@
                 <button type="button" class="v5-action-chip primary" onclick="openPlanMyDayModal()">☀️ 오늘 계획하기</button>
                 <button type="button" class="v5-action-chip" onclick="runMotionAutoSchedule()">🤖 빈시간 자동배치</button>
                 <button type="button" class="v5-action-chip" onclick="editWorkHoursSetting()">⚙️ 가용시간</button>
+                <button type="button" class="v5-action-chip" onclick="openIcsSubscribeModal()">📡 라이브 구독</button>
                 <button type="button" class="v5-action-chip" onclick="document.getElementById('icsImportInput').click()">📤 .ics 가져오기</button>
-                <button type="button" class="v5-action-chip" onclick="exportAlarmsToIcs()">📥 .ics 내보내기</button>
+                <button type="button" class="v5-action-chip" onclick="exportAlarmsToIcs()">📥 .ics 저장</button>
               </div>
             </div>
             <div class="v5-subtabs" style="margin-bottom:0;">
@@ -12996,7 +13571,22 @@
 
         renderAll();
 
-        // 4) Probe Vault Bridge & Live Oratech Summary asynchronously
+        // 4) 크로스디바이스 자동 동기화 초기 부트스트랩 (새 기기에서는 먼저 클라우드를 당겨오고, 첫 기기이고 데이터가 있으면 시드 업로드)
+        (async () => {
+          try {
+            const pullRes = await pullFromCloudVault(true);
+            CLOUD_SYNC_STATE.bootPulled = true;
+            if (pullRes && pullRes.exists === false && hasMeaningfulLocalData(APP)) {
+              await syncToCloudVault(true, { force: true });
+            } else {
+              updateTopStatusMetrics();
+            }
+          } catch (_) {
+            CLOUD_SYNC_STATE.bootPulled = true;
+          }
+        })();
+
+        // 5) Probe Vault Bridge & Live Oratech Summary asynchronously
         probeLocalErpVaultBridge().catch(() => {});
         // Clean standalone workspace boot
         applyWorkspaceThemeDom(APP.theme || 'craft');
