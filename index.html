@@ -2139,9 +2139,268 @@
       .cal-grid { font-size: 11px; }
     }
     @media print {
-      .mobile-bottom-nav, .mobile-fab, .fab-sheet-bg, .theme-dot-group { display: none !important; }
+      .mobile-bottom-nav, .mobile-fab, .fab-sheet-bg, .theme-dot-group, .bulk-action-bar { display: none !important; }
     }
 
+    /* ==================== v6 ALL-IN-ONE PAID SUITE (Todoist + TickTick + ClickUp + Monday + Motion + Structured) ==================== */
+    .karma-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+      background: linear-gradient(135deg, rgba(245,158,11,0.16), rgba(249,115,22,0.14));
+      border: 1px solid rgba(245,158,11,0.35); color: #b45309; cursor: pointer;
+    }
+    .capacity-strip {
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; flex-wrap: wrap; box-shadow: var(--shadow-card);
+    }
+    .capacity-meter {
+      flex: 1; min-width: 150px; height: 8px; border-radius: 999px;
+      background: var(--bg-sand); overflow: hidden;
+    }
+    .capacity-fill {
+      height: 100%; border-radius: 999px; background: linear-gradient(90deg, #10b981, #3b82f6);
+      transition: width 0.25s ease;
+    }
+    .capacity-fill.warn { background: linear-gradient(90deg, #f59e0b, #f97316); }
+    .capacity-fill.over { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+    .top3-spotlight {
+      background: linear-gradient(135deg, rgba(251,191,36,0.14) 0%, rgba(254,243,199,0.35) 100%);
+      border: 1px solid rgba(245,158,11,0.42); border-radius: 14px; padding: 12px 14px; margin-bottom: 14px;
+    }
+    .top3-chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+    .top3-pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 9px;
+      background: var(--surface-card); border: 1px solid rgba(245,158,11,0.45);
+      font-size: 12.5px; font-weight: 600; cursor: pointer;
+    }
+    .top3-pill.done { opacity: 0.55; text-decoration: line-through; }
+
+    /* Subtasks Drawer inside Todo Cards */
+    .subtasks-drawer {
+      margin-top: 8px; padding: 8px 10px; border-radius: 8px;
+      background: var(--bg-subtle); border: 1px dashed var(--border-strong);
+      display: grid; gap: 5px;
+    }
+    .subtask-row {
+      display: flex; align-items: center; gap: 7px; font-size: 12px;
+      padding: 3px 4px; border-radius: 6px;
+    }
+    .subtask-row:hover { background: var(--bg-hover); }
+    .subtask-progress-mini {
+      display: inline-flex; align-items: center; gap: 4px; padding: 1px 6px;
+      border-radius: 999px; font-size: 10.5px; font-weight: 700; cursor: pointer;
+      background: var(--bg-sand); color: var(--ink-2); border: 1px solid var(--border);
+    }
+    .subtask-progress-mini.all-done { background: var(--tag-green-bg); color: var(--tag-green-ink); }
+    .dep-lock-badge {
+      display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px;
+      border-radius: 999px; font-size: 10.5px; font-weight: 700;
+      background: var(--tag-red-bg); color: var(--tag-red-ink);
+    }
+    .bulk-select-chk {
+      width: 15px; height: 15px; accent-color: #2563eb; cursor: pointer; flex-shrink: 0; margin-top: 3px;
+    }
+    .todo-card-item.bulk-selected {
+      outline: 2px solid var(--blue); background: rgba(37,99,235,0.05) !important;
+    }
+
+    /* ClickUp / Monday Sticky Bulk Action Floating Bar */
+    .bulk-action-bar {
+      position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 410;
+      background: #0f172a; color: #f8fafc; border: 1px solid rgba(148,163,184,0.28);
+      border-radius: 14px; padding: 8px 12px; box-shadow: 0 18px 40px rgba(0,0,0,0.38);
+      display: none; align-items: center; gap: 6px; flex-wrap: wrap; max-width: calc(100vw - 24px);
+    }
+    .bulk-action-bar.open { display: flex; }
+    .bulk-bar-btn {
+      border: 1px solid rgba(255,255,255,0.16); background: rgba(255,255,255,0.08); color: #f8fafc;
+      border-radius: 8px; padding: 5px 9px; font-size: 11.5px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    }
+    .bulk-bar-btn:hover { background: rgba(255,255,255,0.18); }
+    .bulk-bar-btn.danger { background: rgba(239,68,68,0.24); border-color: rgba(248,113,113,0.45); color: #fecaca; }
+
+    /* Planner Toolbar & Subviews (Structured + TickTick + Todoist + Monday) */
+    .planner-header {
+      background: var(--hero-grad); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 18px; margin-bottom: 14px; box-shadow: var(--shadow-elev);
+    }
+    .st-layout {
+      display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.85fr); gap: 14px; align-items: start;
+    }
+    .st-timeline-card, .st-backlog-card {
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 14px 16px; box-shadow: var(--shadow-elev);
+    }
+    .st-now-divider {
+      display: flex; align-items: center; gap: 8px; margin: 6px 0; color: #dc2626; font-size: 11px; font-weight: 800;
+    }
+    .st-now-divider::after {
+      content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, #ef4444, rgba(239,68,68,0.1));
+    }
+    .st-event-row {
+      display: flex; align-items: flex-start; gap: 10px; padding: 9px 11px;
+      border-radius: 11px; border: 1px solid var(--border); background: var(--bg-subtle);
+      margin-bottom: 7px; border-left: 4px solid var(--blue); transition: transform 0.12s;
+    }
+    .st-event-row.kind-alarm { border-left-color: #f97316; background: rgba(251,146,60,0.08); }
+    .st-event-row.kind-ext { border-left-color: #8b5cf6; background: rgba(139,92,246,0.08); }
+    .st-event-row.kind-kids { border-left-color: #ea580c; }
+    .st-event-row.is-conflict { border-color: #ef4444; box-shadow: 0 0 0 2px rgba(239,68,68,0.16); }
+    .st-event-row.is-done { opacity: 0.55; }
+    .st-time-col {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 700; min-width: 78px; color: var(--ink-2);
+      font-variant-numeric: tabular-nums; flex-shrink: 0;
+    }
+    .st-free-gap {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+      padding: 7px 11px; margin-bottom: 7px; border-radius: 9px;
+      border: 1px dashed rgba(16,185,129,0.5); background: rgba(16,185,129,0.07);
+      font-size: 12px; color: #047857; cursor: pointer; transition: all 0.14s;
+    }
+    .st-free-gap:hover { background: rgba(16,185,129,0.14); border-color: #059669; }
+
+    /* TickTick / Motion Weekly Timeblock Grid */
+    .wk-layout {
+      display: grid; grid-template-columns: 245px minmax(0, 1fr); gap: 12px; align-items: start;
+    }
+    .wk-grid-scroll {
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 14px;
+      overflow: auto; max-height: 74vh; box-shadow: var(--shadow-elev);
+    }
+    .wk-table-wrap { min-width: 760px; }
+    .wk-head-row {
+      display: grid; grid-template-columns: 54px repeat(7, minmax(96px, 1fr));
+      position: sticky; top: 0; z-index: 6; background: var(--surface-card); border-bottom: 1px solid var(--border);
+    }
+    .wk-head-cell {
+      padding: 8px 6px; text-align: center; font-size: 12px; font-weight: 700;
+      border-left: 1px solid var(--border);
+    }
+    .wk-head-cell.is-today { background: var(--accent-soft); color: var(--accent); }
+    .wk-body-row {
+      display: grid; grid-template-columns: 54px repeat(7, minmax(96px, 1fr));
+      border-bottom: 1px solid var(--border); min-height: 52px;
+    }
+    .wk-hour-lbl {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--ink-3);
+      padding: 4px 6px; text-align: right; background: var(--bg-subtle);
+    }
+    .wk-slot-cell {
+      border-left: 1px solid var(--border); padding: 3px; display: flex; flex-direction: column; gap: 3px;
+      min-height: 52px; position: relative; transition: background 0.12s; cursor: pointer;
+    }
+    .wk-slot-cell:hover { background: var(--bg-hover); }
+    .wk-slot-cell.col-drop-active { background: var(--blue-soft) !important; outline: 2px dashed var(--blue); }
+    .wk-pill {
+      padding: 4px 6px; border-radius: 7px; font-size: 11px; font-weight: 600; line-height: 1.3;
+      border-left: 3px solid #2563eb; background: #eff6ff; color: #1e3a8a;
+      display: flex; flex-direction: column; gap: 2px; cursor: grab; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .wk-pill.space-KIDS { border-left-color: #ea580c; background: #fff7ed; color: #9a3412; }
+    .wk-pill.space-PERSONAL { border-left-color: #7c3aed; background: #f5f3ff; color: #5b21b6; }
+    .wk-pill.kind-alarm { border-left-color: #dc2626; background: #fef2f2; color: #991b1b; cursor: pointer; }
+    .wk-pill.kind-ext { border-left-color: #7c3aed; background: #ede9fe; color: #4c1d95; cursor: default; }
+    .wk-pill.is-done { opacity: 0.5; text-decoration: line-through; }
+
+    /* Todoist Upcoming Overdue + 7-Day */
+    .up-overdue-banner {
+      background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #dc2626;
+      border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;
+    }
+    .up-days-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;
+    }
+    .up-day-card {
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 13px;
+      padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow-card);
+    }
+    .up-day-card.is-today { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+
+    /* Monday.com Full-Color Status & Priority My Work Board */
+    .mon-group {
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 13px;
+      overflow: hidden; margin-bottom: 14px; box-shadow: var(--shadow-elev);
+    }
+    .mon-group-hd {
+      padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+      font-size: 13.5px; font-weight: 800; border-bottom: 1px solid var(--border);
+    }
+    .mon-table-scroll { overflow-x: auto; }
+    .mon-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 720px; }
+    .mon-table th {
+      text-align: left; padding: 7px 10px; font-size: 11px; font-weight: 700; color: var(--ink-3);
+      background: var(--bg-subtle); border-bottom: 1px solid var(--border);
+    }
+    .mon-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .mon-pill-btn {
+      width: 100%; min-width: 78px; padding: 6px 8px; border: none; border-radius: 6px;
+      font-size: 11.5px; font-weight: 700; color: #fff; cursor: pointer; text-align: center;
+      transition: filter 0.12s;
+    }
+    .mon-pill-btn:hover { filter: brightness(0.92); }
+    .mon-st-TODO { background: #94a3b8; }
+    .mon-st-DOING { background: #3b82f6; }
+    .mon-st-WAIT { background: #f59e0b; }
+    .mon-st-DONE { background: #10b981; }
+    .mon-pr-HIGH { background: #e11d48; }
+    .mon-pr-MID { background: #f59e0b; }
+    .mon-pr-LOW { background: #64748b; }
+
+    /* Fullscreen Focus Mode Overlay (TickTick / Forest Style) */
+    .focus-overlay-bg {
+      position: fixed; inset: 0; z-index: 540;
+      background: radial-gradient(circle at 50% 25%, #1e293b 0%, #090d16 70%, #020617 100%);
+      color: #f8fafc; display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px; text-align: center;
+    }
+    .focus-overlay-bg.open { display: flex; }
+    .focus-overlay-card {
+      max-width: 560px; width: 100%; background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 24px;
+      padding: 28px 24px; backdrop-filter: blur(20px); box-shadow: 0 24px 70px rgba(0,0,0,0.65);
+    }
+    .focus-flip-clock {
+      font-family: var(--font-mono); font-size: clamp(54px, 11vw, 86px); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1.05; font-variant-numeric: tabular-nums;
+      color: #ffffff; margin: 14px 0; text-shadow: 0 6px 24px rgba(56,189,248,0.28);
+    }
+
+    /* Midnight Dark Theme Overrides for New v6 Components */
+    [data-theme="midnight"] .st-timeline-card,
+    [data-theme="midnight"] .st-backlog-card,
+    [data-theme="midnight"] .wk-grid-scroll,
+    [data-theme="midnight"] .up-day-card,
+    [data-theme="midnight"] .mon-group,
+    [data-theme="midnight"] .capacity-strip {
+      background: var(--surface-card) !important; border-color: var(--border) !important; color: var(--ink) !important;
+    }
+    [data-theme="midnight"] .wk-head-row,
+    [data-theme="midnight"] .wk-hour-lbl,
+    [data-theme="midnight"] .mon-table th,
+    [data-theme="midnight"] .st-event-row,
+    [data-theme="midnight"] .subtasks-drawer {
+      background: var(--surface-elevated) !important; color: var(--ink) !important; border-color: var(--border) !important;
+    }
+    [data-theme="midnight"] .up-overdue-banner {
+      background: rgba(127,29,29,0.34) !important; border-color: rgba(248,113,113,0.45) !important;
+    }
+    [data-theme="midnight"] .wk-pill { background: rgba(37,99,235,0.25); color: #bfdbfe; }
+    [data-theme="midnight"] .wk-pill.space-KIDS { background: rgba(234,88,12,0.25); color: #fed7aa; }
+    [data-theme="midnight"] .wk-pill.kind-alarm { background: rgba(220,38,38,0.25); color: #fecaca; }
+    [data-theme="midnight"] .st-free-gap { color: #6ee7b7; background: rgba(16,185,129,0.12); }
+
+    @media (max-width: 900px) {
+      .st-layout, .wk-layout { grid-template-columns: 1fr !important; }
+      .wk-table-wrap.mode-3day { min-width: 100% !important; }
+      .wk-head-row.mode-3day, .wk-body-row.mode-3day { grid-template-columns: 46px repeat(3, minmax(0, 1fr)) !important; }
+    }
+    @media (max-width: 768px) {
+      .bulk-action-bar { bottom: calc(70px + env(safe-area-inset-bottom, 0px)); padding: 8px 10px; }
+      .karma-pill { font-size: 10.5px; padding: 3px 8px; }
+      .st-time-col { min-width: 64px; font-size: 11px; }
+    }
   </style>
 </head>
 <body>
@@ -2190,6 +2449,10 @@
         <button type="button" class="sb-item" id="sbNavHome" onclick="setMainView('TODAY')">
           <span class="sb-item-left"><span class="sb-item-icon">🏠</span><span class="sb-item-title">홈 · 오늘 보드</span></span>
           <span id="sbTodayRemain" class="sb-item-count">0</span>
+        </button>
+        <button type="button" class="sb-item" id="sbNavPlanner" onclick="setMainView('PLANNER')">
+          <span class="sb-item-left"><span class="sb-item-icon">🗓️</span><span class="sb-item-title">통합 플래너 · 주간시간표</span></span>
+          <span id="sbPlannerCount" class="sb-item-count">0</span>
         </button>
         <button type="button" class="sb-item" id="sbNavAlarms" onclick="setMainView('ALARMS')">
           <span class="sb-item-left"><span class="sb-item-icon">🔔</span><span class="sb-item-title">알람 · 반복 리마인더</span></span>
@@ -2316,6 +2579,7 @@
       <div class="view-switcher-strip">
         <div class="view-pills" id="mainViewTabs">
           <button type="button" class="view-pill" data-view="TODAY" onclick="setMainView('TODAY')">🏠 홈 · 오늘</button>
+          <button type="button" class="view-pill" data-view="PLANNER" onclick="setMainView('PLANNER')">🗓️ 플래너</button>
           <button type="button" class="view-pill" data-view="ALARMS" onclick="setMainView('ALARMS')">🔔 알람센터</button>
           <button type="button" class="view-pill" data-view="JOURNAL" onclick="setMainView('JOURNAL')">📓 가족·기록·금고</button>
           <button type="button" class="view-pill" data-view="CALENDAR" onclick="setMainView('CALENDAR')">📅 캘린더</button>
@@ -2542,6 +2806,9 @@
       </div>
       <textarea id="qcInputBox" rows="3" class="field-textarea" placeholder="날짜(오늘/내일/모레), 시간(오후 3시/15:00), !긴급, #일/#애들 자동 인식..." oninput="updateQuickCapturePreview()"></textarea>
       <div id="qcPreviewChips" class="live-nlp-preview" style="margin-top:8px;"></div>
+      <label style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--ink-2);cursor:pointer;">
+        <input type="checkbox" id="qcInboxMode" /> 📥 날짜 미정 <b>수집함(Inbox)</b>으로 넣어두고 나중에 배치하기
+      </label>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
         <div style="display:flex;gap:6px;">
           <button type="button" id="btnVoiceCapture" class="n-btn" onclick="toggleVoiceCapture()">🎙️ 음성 받아쓰기</button>
@@ -2990,22 +3257,24 @@
   <!-- [v5.0] 모바일 하단 네이티브 5탭 네비게이션 + 플로팅 빠른입력 FAB -->
   <nav class="mobile-bottom-nav" id="mobileBottomNav">
     <button type="button" class="mob-tab-btn" data-mview="TODAY" onclick="setMainView('TODAY')"><span class="mob-ico">🏠</span><span>오늘</span></button>
+    <button type="button" class="mob-tab-btn" data-mview="PLANNER" onclick="setMainView('PLANNER')"><span class="mob-ico">🗓️</span><span>플래너</span></button>
     <button type="button" class="mob-tab-btn" data-mview="ALARMS" onclick="setMainView('ALARMS')"><span class="mob-ico">🔔</span><span>알람</span><span id="mobAlarmBadge" class="mob-tab-badge" style="display:none;">0</span></button>
     <button type="button" class="mob-tab-btn" data-mview="JOURNAL" onclick="setMainView('JOURNAL')"><span class="mob-ico">📓</span><span>가족·기록</span></button>
     <button type="button" class="mob-tab-btn" data-mview="CALENDAR" onclick="setMainView('CALENDAR')"><span class="mob-ico">📅</span><span>캘린더</span></button>
-    <button type="button" class="mob-tab-btn" data-mview="EDITOR" onclick="setMainView('EDITOR')"><span class="mob-ico">📝</span><span>페이지</span></button>
   </nav>
   <button type="button" class="mobile-fab" onclick="toggleMobileFabSheet(true)" title="빠른 알람·기록·캡처">＋</button>
   <div id="mobileFabSheetBg" class="fab-sheet-bg" onclick="if(event.target===this) toggleMobileFabSheet(false)">
     <div class="fab-sheet">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-        <strong style="font-size:15px;">⚡ 빠른 알람 · 기록 추가</strong>
+        <strong style="font-size:15px;">⚡ 빠른 실행 · 스케줄 허브</strong>
         <button type="button" class="icon-btn" onclick="toggleMobileFabSheet(false)">✕</button>
       </div>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openQuickCaptureModal()">⚡ <span><strong>자연어 · 음성 할일 캡처</strong><div style="font-size:11.5px;color:var(--ink-3);">말하면 요일·시간·일/애들 자동 분류</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openPlanMyDayModal()">☀️ <span><strong>오늘 계획하기 (Plan My Day)</strong><div style="font-size:11.5px;color:var(--ink-3);">어제 이월·TOP3 선정·빈시간 자동배치</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openFullscreenFocusOverlay()">🎯 <span><strong>풀스크린 몰입 타이머</strong><div style="font-size:11.5px;color:var(--ink-3);">대형 타이머·하위단계·빗소리 백색소음</div></span></button>
       <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openAlarmModal()">🔔 <span><strong>회사·가족 알람 예약</strong><div style="font-size:11.5px;color:var(--ink-3);">반복·사전경보·음성·텔레그램 푸시</div></span></button>
-      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 <span><strong>오늘 1줄 일기 · 가족 기록</strong><div style="font-size:11.5px;color:var(--ink-3);">기분·사진·음성 메모 바로 남기기</div></span></button>
-      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openQuickCaptureModal()">⚡ <span><strong>자연어 · 음성 할일 캡처</strong><div style="font-size:11.5px;color:var(--ink-3);">말하면 일/애들 보드로 자동 분류</div></span></button>
-      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);setMainView('JOURNAL');setJournalSubTab('LEDGER')">💰 <span><strong>1초 회사경비 · 가족지출 기록</strong><div style="font-size:11.5px;color:var(--ink-3);">화물비·법인카드·육아/외식 즉시 기록</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 <span><strong>오늘 1줄 일기 · 가계부 · 금고</strong><div style="font-size:11.5px;color:var(--ink-3);">가족 기록·지출·비밀번호 금고 바로가기</div></span></button>
+      <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);setMainView('EDITOR')">📝 <span><strong>문서 페이지 · 프로젝트 열기</strong><div style="font-size:11.5px;color:var(--ink-3);">블록 에디터 및 데이터베이스 보기</div></span></button>
       <button type="button" class="fab-sheet-btn" onclick="toggleMobileFabSheet(false);openEveningShutdownModal()">🌙 <span><strong>하루 마감 리추얼</strong><div style="font-size:11.5px;color:var(--ink-3);">미완료 이월 + 3줄 회고 + 텔레그램 보고</div></span></button>
     </div>
   </div>
@@ -3047,6 +3316,49 @@
           <button type="button" class="n-btn" onclick="closeModal('lightboxModal')">닫기</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- [v6.0] ClickUp 다중선택 일괄처리 플로팅 바 + .ics 가져오기 + TickTick 모닝 플래너 + 풀스크린 몰입 + 빈 슬롯 피커 -->
+  <div id="bulkActionBar" class="bulk-action-bar"></div>
+  <input type="file" id="icsImportInput" accept=".ics,text/calendar" multiple style="display:none;" onchange="importIcsCalendarFiles(this.files)" />
+
+  <div id="planMyDayModal" class="modal-bg" onclick="if(event.target===this) closeModal('planMyDayModal')">
+    <div class="modal-card" style="max-width:620px;max-height:88vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:17px;font-weight:800;">☀️ 오늘 계획하기 (Plan My Day · TickTick + Motion)</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('planMyDayModal')">✕</button>
+      </div>
+      <div id="planMyDayBody" style="display:grid;gap:12px;"></div>
+    </div>
+  </div>
+
+  <div id="slotPickerModal" class="modal-bg" onclick="if(event.target===this) closeModal('slotPickerModal')">
+    <div class="modal-card" style="max-width:480px;max-height:82vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 id="slotPickerTitle" style="margin:0;font-size:16px;font-weight:800;">⏰ 빈 시간에 할 일 끼워넣기</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('slotPickerModal')">✕</button>
+      </div>
+      <div id="slotPickerBody" style="display:grid;gap:8px;"></div>
+    </div>
+  </div>
+
+  <div id="fullscreenFocusModal" class="focus-overlay-bg">
+    <div class="focus-overlay-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+        <span style="font-size:12px;font-weight:700;color:#7dd3fc;letter-spacing:0.04em;">🎯 DEEP FOCUS SESSION</span>
+        <button type="button" onclick="closeFullscreenFocusOverlay()" style="border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;">닫기 (Esc)</button>
+      </div>
+      <div id="focusTargetTitle" style="font-size:20px;font-weight:800;margin-top:12px;line-height:1.35;">지금 집중할 작업</div>
+      <div id="focusClockBig" class="focus-flip-clock">25:00</div>
+      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <button type="button" id="focusStartPauseBtn" onclick="togglePomodoroTimer();refreshFullscreenFocusUi()" style="border:none;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;">▶️ 집중 시작</button>
+        <button type="button" onclick="resetPomodoroTimer(25);refreshFullscreenFocusUi()" style="border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);color:#fff;border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;">25분</button>
+        <button type="button" onclick="resetPomodoroTimer(50);refreshFullscreenFocusUi()" style="border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);color:#fff;border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;">50분</button>
+        <button type="button" id="focusSoundToggleBtn" onclick="cycleAmbientFocusSound();refreshFullscreenFocusUi()" style="border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.08);color:#fff;border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;">🎧 배경음</button>
+      </div>
+      <div id="focusSubtasksBox" style="text-align:left;max-height:180px;overflow-y:auto;margin-bottom:14px;"></div>
+      <div id="focusActionRow" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;"></div>
     </div>
   </div>
 
@@ -3276,6 +3588,10 @@
         remFiredDate: overrides.remFiredDate || '',
         nagRemind: Boolean(overrides.nagRemind),
         repeatRule: overrides.repeatRule || 'NONE',
+        subtasks: Array.isArray(overrides.subtasks) ? overrides.subtasks : [],
+        blockedBy: overrides.blockedBy || '',
+        top3: Boolean(overrides.top3),
+        inboxOnly: Boolean(overrides.inboxOnly),
         supertagData: overrides.supertagData && typeof overrides.supertagData === 'object' ? overrides.supertagData : {},
         gdrivePreviewOpen: Boolean(overrides.gdrivePreviewOpen),
         quoteCustomer: overrides.quoteCustomer || '',
@@ -3311,6 +3627,7 @@
       let estMinutes = 0;
       let repeatRule = 'NONE';
       let remindAt = '';
+      let inboxOnly = false;
       const tokensFound = [];
 
       // 공간 해시태그 (#일, #업무, #애들, #가족, #육아, #개인) - 슈퍼태그(#출고,#준비물 등)는 본문에 유지!
@@ -3320,32 +3637,79 @@
       else if (/#(준비물|병원)/.test(text)) { space = 'KIDS'; tokensFound.push('👨‍👧‍👦 애들'); }
       else if (/#(출고|미팅)/.test(text)) { space = 'WORK'; tokensFound.push('💼 일'); }
 
+      // 수집함/나중에 (Inbox Routing)
+      if (/(^|\s)#?(수집함|인박스|백로그|미정)(?=\s|$)/.test(text)) {
+        dueDate = ''; inboxOnly = true; tokensFound.push('📥 수집함');
+        text = text.replace(/(^|\s)#?(수집함|인박스|백로그|미정)(?=\s|$)/g, ' ');
+      }
+
       // 우선순위 (!긴급, !높음, !p1, !보통, !여유, !p3)
       if (/!(긴급|높음|중요|p1)/i.test(text)) { priority = 'HIGH'; tokensFound.push('🔴 긴급'); text = text.replace(/!(긴급|높음|중요|p1)/ig, ''); }
       else if (/!(여유|낮음|나중|p3)/i.test(text)) { priority = 'LOW'; tokensFound.push('⚪ 여유'); text = text.replace(/!(여유|낮음|나중|p3)/ig, ''); }
       else if (/!(보통|p2)/i.test(text)) { priority = 'MID'; tokensFound.push('🟡 보통'); text = text.replace(/!(보통|p2)/ig, ''); }
 
-      // 반복 규칙 (매일, 평일, 매주, 매월)
+      // 반복 규칙 (매일, 평일, 주말마다, 매주, 매월)
       if (/(^|\s)매일(\s|$)/.test(text)) { repeatRule = 'DAILY'; tokensFound.push('🔁 매일'); text = text.replace(/(^|\s)매일(?=\s|$)/g, ' '); }
-      else if (/(^|\s)(평일|매주평일)(\s|$)/.test(text)) { repeatRule = 'WEEKDAYS'; tokensFound.push('🔁 평일'); text = text.replace(/(^|\s)(평일|매주평일)(?=\s|$)/g, ' '); }
+      else if (/(^|\s)(평일|매주평일|주중)(\s|$)/.test(text)) { repeatRule = 'WEEKDAYS'; tokensFound.push('🔁 평일'); text = text.replace(/(^|\s)(평일|매주평일|주중)(?=\s|$)/g, ' '); }
+      else if (/매주\s*(월|화|수|목|금|토|일)요일(?=\s|$)/.test(text)) { repeatRule = 'WEEKLY'; tokensFound.push('🔁 매주'); }
       else if (/(^|\s)매주(\s|$)/.test(text)) { repeatRule = 'WEEKLY'; tokensFound.push('🔁 매주'); text = text.replace(/(^|\s)매주(?=\s|$)/g, ' '); }
       else if (/(^|\s)매월(\s|$)/.test(text)) { repeatRule = 'MONTHLY'; tokensFound.push('🔁 매월'); text = text.replace(/(^|\s)매월(?=\s|$)/g, ' '); }
 
-      // 날짜 키워드
-      if (/(^|\s)모레(\s|$)/.test(text)) { dueDate = todayStr(2); tokensFound.push(`📅 ${dueDate}(모레)`); text = text.replace(/(^|\s)모레(?=\s|$)/g, ' '); }
-      else if (/(^|\s)내일(\s|$)/.test(text)) { dueDate = todayStr(1); tokensFound.push(`📅 ${dueDate}(내일)`); text = text.replace(/(^|\s)내일(?=\s|$)/g, ' '); }
-      else if (/(^|\s)다음주(\s|$)/.test(text)) { dueDate = todayStr(7); tokensFound.push(`📅 ${dueDate}(+7일)`); text = text.replace(/(^|\s)다음주(?=\s|$)/g, ' '); }
-      else if (/(^|\s)오늘(\s|$)/.test(text)) { dueDate = todayStr(0); tokensFound.push(`📅 오늘`); text = text.replace(/(^|\s)오늘(?=\s|$)/g, ' '); }
-      else {
-        const mDate = text.match(/(\d{4}-\d{2}-\d{2})|(\d{1,2})월\s*(\d{1,2})일/);
-        if (mDate) {
-          if (mDate[1]) dueDate = mDate[1];
-          else {
-            const yr = new Date().getFullYear();
-            dueDate = `${yr}-${String(mDate[2]).padStart(2, '0')}-${String(mDate[3]).padStart(2, '0')}`;
+      // 고도화 한국어 날짜 + 요일 파서 (이번주/다음주/다다음주 X요일, N일 뒤, 주말, 글피 등)
+      const wdMap = { '일': 0, '월': 1, '화': 2, '수': 3, '목': 4, '금': 5, '토': 6 };
+      const resolveKoreanWeekday = (prefix, wdChar) => {
+        const now = new Date();
+        const curWd = now.getDay();
+        const targetWd = wdMap[wdChar];
+        let diff = (targetWd - curWd + 7) % 7;
+        if (/다음\s*주|내주/.test(prefix || '')) {
+          diff = (targetWd === 0 ? 7 : targetWd) - (curWd === 0 ? 7 : curWd) + 7;
+        } else if (/다다음\s*주/.test(prefix || '')) {
+          diff = (targetWd === 0 ? 7 : targetWd) - (curWd === 0 ? 7 : curWd) + 14;
+        } else if (/이번\s*주|금주/.test(prefix || '')) {
+          diff = targetWd - curWd;
+          if (diff < 0) diff += 7;
+        } else if (diff === 0) {
+          diff = 0;
+        }
+        return diff;
+      };
+      const mRelDays = text.match(/(^|\s)(\d+)\s*일\s*(?:뒤|후)(?=\s|$)/);
+      const mRelWeeks = text.match(/(^|\s)(\d+)\s*주\s*(?:뒤|후)(?=\s|$)/);
+      const mWeekday = text.match(/(?:(다다음\s*주|다음\s*주|내주|이번\s*주|금주)\s*)?(월|화|수|목|금|토|일)요일(?=\s|$)/);
+      const mWeekend = text.match(/(^|\s)(다음\s*주말|이번\s*주말|주말)(?=\s|$)/);
+      if (!inboxOnly) {
+        if (/(^|\s)글피(?=\s|$)/.test(text)) { dueDate = todayStr(3); tokensFound.push(`📅 ${dueDate}(글피)`); text = text.replace(/(^|\s)글피(?=\s|$)/g, ' '); }
+        else if (/(^|\s)모레(?=\s|$)/.test(text)) { dueDate = todayStr(2); tokensFound.push(`📅 ${dueDate}(모레)`); text = text.replace(/(^|\s)모레(?=\s|$)/g, ' '); }
+        else if (/(^|\s)내일(?=\s|$)/.test(text)) { dueDate = todayStr(1); tokensFound.push(`📅 ${dueDate}(내일)`); text = text.replace(/(^|\s)내일(?=\s|$)/g, ' '); }
+        else if (mRelDays) {
+          const d = Number(mRelDays[2]);
+          dueDate = todayStr(d); tokensFound.push(`📅 ${dueDate}(+${d}일)`); text = text.replace(mRelDays[0], ' ');
+        } else if (mRelWeeks) {
+          const d = Number(mRelWeeks[2]) * 7;
+          dueDate = todayStr(d); tokensFound.push(`📅 ${dueDate}(+${mRelWeeks[2]}주)`); text = text.replace(mRelWeeks[0], ' ');
+        } else if (mWeekday) {
+          const d = resolveKoreanWeekday(mWeekday[1], mWeekday[2]);
+          dueDate = todayStr(d); tokensFound.push(`📅 ${dueDate}(${mWeekday[2]}요일)`);
+          text = text.replace(new RegExp(`(?:매주\\s*)?${mWeekday[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`), ' ');
+        } else if (mWeekend) {
+          const curWd = new Date().getDay();
+          let diff = (6 - curWd + 7) % 7;
+          if (/다음/.test(mWeekend[2])) diff += 7;
+          dueDate = todayStr(diff); tokensFound.push(`📅 ${dueDate}(주말)`); text = text.replace(mWeekend[0], ' ');
+        } else if (/(^|\s)다음\s*주(?=\s|$)/.test(text)) { dueDate = todayStr(7); tokensFound.push(`📅 ${dueDate}(+7일)`); text = text.replace(/(^|\s)다음\s*주(?=\s|$)/g, ' '); }
+        else if (/(^|\s)오늘(?=\s|$)/.test(text)) { dueDate = todayStr(0); tokensFound.push(`📅 오늘`); text = text.replace(/(^|\s)오늘(?=\s|$)/g, ' '); }
+        else {
+          const mDate = text.match(/(\d{4}-\d{2}-\d{2})|(\d{1,2})월\s*(\d{1,2})일/);
+          if (mDate) {
+            if (mDate[1]) dueDate = mDate[1];
+            else {
+              const yr = new Date().getFullYear();
+              dueDate = `${yr}-${String(mDate[2]).padStart(2, '0')}-${String(mDate[3]).padStart(2, '0')}`;
+            }
+            tokensFound.push(`📅 ${dueDate}`);
+            text = text.replace(mDate[0], '');
           }
-          tokensFound.push(`📅 ${dueDate}`);
-          text = text.replace(mDate[0], '');
         }
       }
 
@@ -3366,10 +3730,15 @@
         text = text.replace(mColonTime[0], ' ');
       }
 
-      // 예상 소요시간 (30분, 1시간, 45m) - 시각 파싱 후 추출!
+      // 예상 소요시간 (1시간 30분, 1.5시간, 45분, 30m) - 시각 파싱 후 추출!
+      const mDurHM = text.match(/(^|\s)(\d+)\s*시간\s*(\d+)\s*분(?=\s|$)/);
       const mDurH = text.match(/(^|\s)(\d+(?:\.\d+)?)\s*시간(?=\s|$)/);
       const mDurM = text.match(/(^|\s)(\d+)\s*(?:분|m)(?=\s|$)/i);
-      if (mDurH) {
+      if (mDurHM) {
+        estMinutes = Number(mDurHM[2]) * 60 + Number(mDurHM[3]);
+        tokensFound.push(`⏳ ${estMinutes}분`);
+        text = text.replace(mDurHM[0], ' ');
+      } else if (mDurH) {
         estMinutes = Math.round(Number(mDurH[2]) * 60);
         tokensFound.push(`⏳ ${estMinutes}분`);
         text = text.replace(mDurH[0], ' ');
@@ -3387,7 +3756,7 @@
       }
 
       const cleanText = text.replace(/\s+/g, ' ').trim();
-      return { cleanText: cleanText || rawInput.trim(), space, priority, dueDate, dueTime, estMinutes, repeatRule, remindAt, tokensFound };
+      return { cleanText: cleanText || rawInput.trim(), space, priority, dueDate, dueTime, estMinutes, repeatRule, remindAt, inboxOnly, tokensFound };
     }
 
     function createDefaultCanvas() {
@@ -3425,6 +3794,13 @@
         activeKidId: '',
         vaultCards: [],
         quickLedger: [],
+        externalEvents: [],
+        plannerSubTab: 'TIMELINE',
+        plannerDate: td,
+        plannerWeekOffset: 0,
+        weekGridMode: '',
+        workHours: { start: 9, end: 18, dailyCapMin: 480 },
+        karma: { points: 0, streakDays: 0, lastActiveDate: '', dailyGoal: 5, weeklyGoal: 25, completedLog: {} },
         syncedGroups: {},
         canvas: { cards: [], edges: [], sections: [] },
         canvases: [{ id: 'cv_main', title: '🗺️ 자유 보드', cards: [], edges: [], sections: [] }],
@@ -3517,6 +3893,14 @@
       if (!APP.activeKidId && APP.kidsProfiles[0]) APP.activeKidId = APP.kidsProfiles[0].id;
       if (!Array.isArray(APP.vaultCards)) APP.vaultCards = [];
       if (!Array.isArray(APP.quickLedger)) APP.quickLedger = [];
+      if (!Array.isArray(APP.externalEvents)) APP.externalEvents = [];
+      if (!APP.plannerSubTab) APP.plannerSubTab = 'TIMELINE';
+      if (!APP.plannerDate) APP.plannerDate = todayStr(0);
+      if (APP.plannerWeekOffset === undefined) APP.plannerWeekOffset = 0;
+      if (APP.weekGridMode === undefined) APP.weekGridMode = '';
+      if (!APP.workHours || typeof APP.workHours !== 'object') APP.workHours = { start: 9, end: 18, dailyCapMin: 480 };
+      if (!APP.karma || typeof APP.karma !== 'object') APP.karma = { points: 0, streakDays: 0, lastActiveDate: '', dailyGoal: 5, weeklyGoal: 25, completedLog: {} };
+      if (!APP.karma.completedLog || typeof APP.karma.completedLog !== 'object') APP.karma.completedLog = {};
       if (!APP.selectedCalDate) APP.selectedCalDate = todayStr(0);
       (APP.pages || []).forEach(p => {
         if (p.coverTheme && COVER_ALIAS[p.coverTheme]) p.coverTheme = COVER_ALIAS[p.coverTheme];
@@ -3532,6 +3916,10 @@
           if (b.actualMinutes === undefined) b.actualMinutes = 0;
           if (b.remindAt === undefined) b.remindAt = '';
           if (b.repeatRule === undefined) b.repeatRule = 'NONE';
+          if (!Array.isArray(b.subtasks)) b.subtasks = [];
+          if (b.blockedBy === undefined) b.blockedBy = '';
+          if (b.top3 === undefined) b.top3 = false;
+          if (b.inboxOnly === undefined) b.inboxOnly = false;
           if (!b.supertagData || typeof b.supertagData !== 'object') b.supertagData = {};
         });
       });
@@ -4105,6 +4493,13 @@
           dndState.dropMode = pos;
         }
       } else if (dndState.kind === 'board-card') {
+        const wkSlot = elUnder.closest('[data-week-slot]');
+        if (wkSlot) {
+          wkSlot.classList.add('col-drop-active');
+          dndState.hoverEl = wkSlot;
+          dndState.dropMode = 'weekslot';
+          return;
+        }
         const tbSlot = elUnder.closest('[data-tb-hour]');
         if (tbSlot) {
           tbSlot.classList.add('col-drop-active');
@@ -4264,8 +4659,17 @@
           const sIdx = sPage ? sPage.blocks.findIndex(b => b.id === srcData.itemId) : -1;
           if (!sPage || sIdx < 0) return;
           const blk = sPage.blocks[sIdx];
-          if (dropMode === 'timeblock') {
+          if (dropMode === 'weekslot') {
+            const newDate = hoverEl.dataset.weekDate;
+            const newTime = hoverEl.dataset.weekHour;
+            if (newDate) blk.dueDate = newDate;
+            if (newTime) blk.dueTime = newTime;
+            blk.inboxOnly = false;
+            if (!blk.estMinutes) blk.estMinutes = 30;
+            showToast(`📆 ${blk.dueDate} ${blk.dueTime} 타임블록에 배정했습니다.`);
+          } else if (dropMode === 'timeblock') {
             blk.dueTime = hoverEl.dataset.tbHour;
+            blk.inboxOnly = false;
             if (!blk.dueDate) blk.dueDate = todayStr(0);
             showToast(`⏰ ${blk.dueTime} 타임블록으로 배정했습니다.`);
           } else if (dropMode === 'matrix') {
@@ -4854,6 +5258,7 @@
 
       // Active highlight on quick nav
       document.getElementById('sbNavHome')?.classList.toggle('active', APP.activeView === 'TODAY' && !APP.activeFilterId);
+      document.getElementById('sbNavPlanner')?.classList.toggle('active', APP.activeView === 'PLANNER');
       document.getElementById('sbNavAlarms')?.classList.toggle('active', APP.activeView === 'ALARMS');
       document.getElementById('sbNavJournal')?.classList.toggle('active', APP.activeView === 'JOURNAL');
       document.getElementById('sbNavInbox')?.classList.toggle('active', APP.activeView === 'KANBAN' || APP.activeView === 'CALENDAR');
@@ -4947,6 +5352,10 @@
       const remain = tdPage.blocks.filter(b => b.type === 'todo' && !b.checked).length;
       const bdg = document.getElementById('sbTodayRemain');
       if (bdg) bdg.textContent = remain;
+      const allOpenTodos = [];
+      APP.pages.filter(p => !p.archived).forEach(p => (p.blocks || []).forEach(b => { if (b.type === 'todo' && !b.checked) allOpenTodos.push(b); }));
+      const plEl = document.getElementById('sbPlannerCount');
+      if (plEl) plEl.textContent = allOpenTodos.length;
       const trashCnt = APP.pages.filter(p => p.archived).length + (APP.projects || []).filter(p => p.archived).length;
       const tEl = document.getElementById('sbTrashCount');
       if (tEl) tEl.textContent = trashCnt;
@@ -5045,6 +5454,7 @@
       const v = APP.activeView || 'TODAY';
       let res;
       if (v === 'TODAY') res = renderTodayView();
+      else if (v === 'PLANNER') res = renderPlannerView();
       else if (v === 'ALARMS') res = renderAlarmsView();
       else if (v === 'JOURNAL') res = renderJournalHubView();
       else if (v === 'PROJECT') res = renderProjectView();
@@ -5815,6 +6225,7 @@
       b.status = chk ? 'DONE' : 'TODO';
       b.updatedAt = Date.now();
       if (chk && APP.activeStopwatch?.blockId === bid) stopActiveStopwatch(true);
+      if (typeof awardTodoKarma === 'function') awardTodoKarma(b, Boolean(chk));
       if (chk && b.repeatRule && b.repeatRule !== 'NONE' && !b._repeatSpawned) {
         b._repeatSpawned = true;
         const nextDate = calcNextRepeatDate(b.dueDate || todayStr(0), b.repeatRule);
@@ -6699,10 +7110,23 @@
       }
       const totalEstMin = todos.reduce((s, x) => s + Number(x.estMinutes || 0), 0);
       const totalActMin = todos.reduce((s, x) => s + Number(x.actualMinutes || 0), 0);
+      const dailyCapMin = Number(APP.workHours?.dailyCapMin || 480);
+      const capPct = Math.min(100, Math.round((totalEstMin / Math.max(60, dailyCapMin)) * 100));
+      const capCls = totalEstMin > dailyCapMin ? 'over' : (capPct >= 82 ? 'warn' : '');
+      const top3List = [];
+      APP.pages.filter(p => !p.archived).forEach(pg => (pg.blocks || []).forEach(b => { if (b.type === 'todo' && b.top3) top3List.push({ pgId: pg.id, b }); }));
+      const scheduledToday = getUnifiedTimelineForDate(td);
+      const conflictCount = scheduledToday.conflicts || 0;
 
       const renderTodoItem = (b, laneSpace, ctxId = tdPage.id) => {
         const supertags = detectTodoSupertags(b.text);
         const isDrawerOpen = openSupertagIds.has(b.id);
+        const isSubOpen = openSubtaskIds.has(b.id);
+        const isSel = selectedTodoIds.has(`${ctxId}::${b.id}`);
+        const subs = Array.isArray(b.subtasks) ? b.subtasks : [];
+        const subDone = subs.filter(s => s.done).length;
+        const blocker = b.blockedBy ? findGlobalTodoById(b.blockedBy) : null;
+        const isBlocked = blocker && !blocker.block.checked;
         const isSwActive = APP.activeStopwatch?.blockId === b.id;
         let swText = '▶';
         if (isSwActive) {
@@ -6710,23 +7134,27 @@
           swText = `⏹️ ${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`;
         }
         return `
-        <div class="todo-card-item dnd-target" data-dnd-target="today-todo" data-block-id="${b.id}" data-lane-space="${laneSpace}" style="flex-direction:column;align-items:stretch;">
+        <div class="todo-card-item dnd-target ${isSel ? 'bulk-selected' : ''}" data-dnd-target="today-todo" data-block-id="${b.id}" data-lane-space="${laneSpace}" style="flex-direction:column;align-items:stretch;${b.top3 ? 'border-color:#f59e0b;box-shadow:0 0 0 1px rgba(245,158,11,0.35);' : ''}" onclick="if(event.shiftKey){toggleTodoBulkSelect('${ctxId}','${b.id}')}">
           <div style="display:flex;align-items:flex-start;gap:8px;">
+            ${bulkSelectMode ? `<input type="checkbox" class="bulk-select-chk" ${isSel ? 'checked' : ''} onclick="event.stopPropagation();toggleTodoBulkSelect('${ctxId}','${b.id}')" />` : `
             <span class="todo-drag-dots" data-drag-handle="1"
                   onpointerdown="startNotionDrag(event,'today-todo',{blockId:'${b.id}',space:'${laneSpace}'},'${escJsStr((b.text||'할일').slice(0,22))}')"
-                  title="드래그하여 순서 변경 또는 일↔애들 보드로 이동">${DRAG_SVG}</span>
+                  title="드래그하여 순서 변경 또는 일↔애들 보드로 이동">${DRAG_SVG}</span>`}
             <input type="checkbox" class="n-chk" style="margin-top:3px;" ${b.checked ? 'checked' : ''} onchange="toggleTodoBlock('${ctxId}','${b.id}',this.checked)" />
             <div style="flex:1;min-width:0;">
               <input value="${escHtml(b.text)}" placeholder="할 일 입력..."
                      oninput="updateBlockFieldSilent('${ctxId}','${b.id}','text',this.value)"
-                     style="width:100%;border:none;outline:none;background:transparent;font-size:13.5px;line-height:1.45;${b.checked ? 'text-decoration:line-through;color:var(--ink-3);' : 'color:var(--ink);'}" />
+                     style="width:100%;border:none;outline:none;background:transparent;font-size:13.5px;line-height:1.45;${b.checked ? 'text-decoration:line-through;color:var(--ink-3);' : 'color:var(--ink);'}${isBlocked ? 'opacity:0.65;' : ''}" />
               <div style="display:flex;align-items:center;gap:5px;margin-top:4px;font-size:11px;color:var(--ink-3);flex-wrap:wrap;">
+                ${b.top3 ? `<span class="ntag ntag-yellow" style="padding:1px 5px;font-size:10.5px;">🌟 TOP3</span>` : ''}
                 <span>${b.priority === 'HIGH' ? '🔴 긴급' : (b.priority === 'LOW' ? '⚪ 여유' : '🟡 보통')}</span>
-                ${b.dueDate ? `<span>📅 ${escHtml(b.dueDate)}</span>` : ''}
+                ${b.dueDate ? `<span>📅 ${escHtml(b.dueDate)}</span>` : `<span class="ntag ntag-gray" style="padding:1px 5px;font-size:10px;">📥 수집함</span>`}
                 ${b.dueTime ? `<span class="ntag ntag-purple" style="padding:1px 5px;font-size:10.5px;">⏰ ${escHtml(b.dueTime)}</span>` : ''}
                 ${b.estMinutes ? `<span class="ntag ntag-green" style="padding:1px 5px;font-size:10.5px;">예상 ${b.estMinutes}분</span>` : ''}
                 ${b.actualMinutes ? `<span class="ntag ntag-blue" style="padding:1px 5px;font-size:10.5px;">실제 ${b.actualMinutes}분</span>` : ''}
                 ${b.repeatRule && b.repeatRule !== 'NONE' ? `<span class="ntag ntag-blue" style="padding:1px 5px;font-size:10.5px;">🔁 ${b.repeatRule}</span>` : ''}
+                ${subs.length ? `<button type="button" class="subtask-progress-mini ${subDone===subs.length?'all-done':''}" onclick="toggleSubtaskDrawer('${b.id}')" title="하위 작업 보기/편집">🌿 ${subDone}/${subs.length}</button>` : `<button type="button" class="n-btn-ghost" style="padding:0 4px;font-size:10.5px;" onclick="toggleSubtaskDrawer('${b.id}')" title="하위 단계 추가/AI 쪼개기">+하위</button>`}
+                ${isBlocked ? `<span class="dep-lock-badge" title="선행 작업 완료 후 진행 권장">🔒 선행: ${escHtml((blocker.block.text||'').slice(0,12))}</span>` : ''}
                 ${supertags.map(tag => {
                   const st = APP.supertags?.[tag];
                   return `<button type="button" class="supertag-chip ${st?.cls || 'tag-shipping'}" onclick="toggleTodoSupertagDrawer('${b.id}')" title="슈퍼태그 필드 열기">${escHtml(tag)}</button>`;
@@ -6740,12 +7168,34 @@
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:2px;flex-shrink:0;">
+              <button type="button" class="n-btn-ghost" style="padding:2px 4px;font-size:11.5px;${b.top3?'color:#f59e0b;':'opacity:0.45;'}" onclick="toggleTodoTop3('${ctxId}','${b.id}')" title="오늘 TOP 3 핵심 목표 지정">${b.top3 ? '★' : '☆'}</button>
               <button type="button" class="n-btn-ghost" data-sw-badge="${b.id}" style="padding:2px 5px;font-size:11px;${isSwActive?'color:#d44c47;font-weight:700;':''}" onclick="toggleTodoStopwatch('${ctxId}','${b.id}')" title="스톱워치 집중 측정 (Sunsama)">${swText}</button>
               <button type="button" class="n-btn-ghost" style="padding:2px 4px;font-size:11px;" onclick="cycleTodoRepeatRule('${ctxId}','${b.id}')" title="반복 주기 설정">🔁</button>
-              <button type="button" class="n-btn-ghost" style="padding:2px 5px;font-size:11px;" onclick="startFocusForTodo('${escJsStr(b.text)}')" title="25분 뽀모도로">⏱️</button>
+              <button type="button" class="n-btn-ghost" style="padding:2px 5px;font-size:11px;" onclick="openFullscreenFocusOverlay('${ctxId}','${b.id}')" title="풀스크린 몰입 타이머 시작">🎯</button>
               <button type="button" class="n-btn-ghost" style="padding:2px 5px;font-size:11px;color:var(--ink-3);" onclick="deleteBlock('${ctxId}','${b.id}')" title="삭제">✕</button>
             </div>
           </div>
+          ${isSubOpen ? `
+            <div class="subtasks-drawer">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">
+                <span style="font-size:11px;font-weight:700;color:var(--ink-2);">🌿 세부 실행 단계 (${subDone}/${subs.length})</span>
+                <div style="display:flex;gap:4px;">
+                  <button type="button" class="n-btn" style="padding:2px 7px;font-size:10.5px;" onclick="aiSplitTodoSubtasks('${ctxId}','${b.id}')">✨ AI 자동 쪼개기</button>
+                  <button type="button" class="n-btn" style="padding:2px 7px;font-size:10.5px;" onclick="promptBlockDependency('${ctxId}','${b.id}')">🔒 선행작업 연결</button>
+                </div>
+              </div>
+              ${subs.map(st => `
+                <div class="subtask-row">
+                  <input type="checkbox" ${st.done ? 'checked' : ''} onchange="toggleSubtaskDone('${ctxId}','${b.id}','${st.id}',this.checked)" />
+                  <input value="${escHtml(st.text)}" oninput="updateSubtaskTextSilent('${ctxId}','${b.id}','${st.id}',this.value)"
+                         style="flex:1;border:none;outline:none;background:transparent;font-size:12px;${st.done?'text-decoration:line-through;color:var(--ink-3);':''}" />
+                  <button type="button" class="sb-act-mini" onclick="deleteSubtaskItem('${ctxId}','${b.id}','${st.id}')">×</button>
+                </div>`).join('')}
+              <div style="display:flex;gap:5px;margin-top:2px;">
+                <input id="subIn_${b.id}" class="field-input" style="padding:4px 8px;font-size:11.5px;" placeholder="+ 다음 세부 단계 추가 (Enter)..." onkeydown="if(event.key==='Enter') addSubtaskItem('${ctxId}','${b.id}')" />
+                <button type="button" class="n-btn" style="padding:4px 9px;font-size:11.5px;" onclick="addSubtaskItem('${ctxId}','${b.id}')">추가</button>
+              </div>
+            </div>` : ''}
           ${isDrawerOpen && supertags.length ? `
             <div class="supertag-fields-box">
               ${supertags.map(tag => {
@@ -6765,6 +7215,37 @@
       document.getElementById('mainViewContainer').innerHTML = `
         <div class="ws-canvas wide-view">
           ${renderV5TodayHeroHtml(td, tdPage, todos, workTodos, kidsTodos)}
+
+          ${top3List.length ? `
+            <div class="top3-spotlight">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                <strong style="font-size:13px;color:#92400e;">🌟 오늘 꼭 끝낼 TOP 3 핵심 목표 (${top3List.filter(x=>x.b.checked).length}/${top3List.length})</strong>
+                <button type="button" class="n-btn" style="padding:2px 8px;font-size:11px;" onclick="openPlanMyDayModal()">☀️ 조정하기</button>
+              </div>
+              <div class="top3-chip-row">
+                ${top3List.map(x => `
+                  <div class="top3-pill ${x.b.checked?'done':''}" onclick="toggleTodoBlock('${x.pgId}','${x.b.id}',${!x.b.checked})">
+                    <span>${x.b.checked ? '✅' : '🎯'}</span>
+                    <span>${escHtml(x.b.text)}</span>
+                    ${x.b.dueTime ? `<span style="font-size:10.5px;color:var(--ink-3);">⏰${escHtml(x.b.dueTime)}</span>` : ''}
+                  </div>`).join('')}
+              </div>
+            </div>` : ''}
+
+          <div class="capacity-strip">
+            <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:220px;flex-wrap:wrap;">
+              <span style="font-size:12.5px;font-weight:700;">⏳ 일일 용량 <span style="color:var(--accent);">${formatMinutesKor(totalEstMin)}</span> / ${formatMinutesKor(dailyCapMin)}</span>
+              <div class="capacity-meter"><div class="capacity-fill ${capCls}" style="width:${capPct}%;"></div></div>
+              <span style="font-size:11.5px;color:var(--ink-2);">실집중 <b>${totalActMin}분</b>${conflictCount ? ` · <span style="color:#dc2626;font-weight:700;">⚠️ 일정 겹침 ${conflictCount}건</span>` : ''}</span>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;">
+              <button type="button" class="n-btn ${bulkSelectMode?'n-btn-primary':''}" style="padding:4px 9px;font-size:11.5px;" onclick="toggleBulkSelectMode()">${bulkSelectMode ? '☑️ 선택 종료' : '☑️ 다중선택'}</button>
+              <button type="button" class="n-btn" style="padding:4px 9px;font-size:11.5px;" onclick="runMotionAutoSchedule()">🤖 빈시간 자동배치</button>
+              <button type="button" class="n-btn" style="padding:4px 9px;font-size:11.5px;" onclick="APP.plannerSubTab='TIMELINE';setMainView('PLANNER')">🗓️ 시간표 타임라인 →</button>
+            </div>
+          </div>
+
+          ${renderTodayCompactTimelineStripHtml(scheduledToday)}
 
           ${activeFilterObj ? `
             <div id="activeFilterPanel" style="background:#f4f8fd;border:1px solid #bfdbfe;border-radius:8px;padding:12px 14px;margin-bottom:14px;">
@@ -6916,11 +7397,12 @@
         text: parsed.cleanText || txt,
         space: targetSpace,
         priority: parsed.priority || (targetSpace === 'KIDS' ? 'MID' : 'HIGH'),
-        dueDate: parsed.dueDate || todayStr(0),
+        dueDate: parsed.inboxOnly ? '' : (parsed.dueDate || todayStr(0)),
         dueTime: parsed.dueTime || '',
         estMinutes: parsed.estMinutes || 0,
         remindAt: parsed.remindAt || '',
-        repeatRule: parsed.repeatRule || 'NONE'
+        repeatRule: parsed.repeatRule || 'NONE',
+        inboxOnly: Boolean(parsed.inboxOnly)
       }));
       tdPage.updatedAt = Date.now();
       logActivity('자연어 할 일 추가', `${parsed.cleanText || txt} (${targetSpace})`, tdPage.id);
@@ -6982,26 +7464,30 @@
       if (qcVoiceRecog && qcVoiceActive) { try { qcVoiceRecog.stop(); } catch (_) {} }
       pushUndoSnapshot('빠른 캡처 저장');
       const defSp = APP.activeSpace === 'KIDS' ? 'KIDS' : (APP.activeSpace === 'PERSONAL' ? 'PERSONAL' : 'WORK');
+      const forceInbox = Boolean(document.getElementById('qcInboxMode')?.checked);
       const tdPage = ensureTodayDailyPage();
       const added = lines.map(ln => {
         const p = parseSmartKoreanTodo(ln, defSp);
+        const asInbox = forceInbox || p.inboxOnly;
         return createBlock('todo', {
           text: p.cleanText || ln,
           space: p.space || defSp,
           priority: p.priority || (p.space === 'KIDS' ? 'MID' : 'HIGH'),
-          dueDate: p.dueDate || todayStr(0),
+          dueDate: asInbox ? '' : (p.dueDate || todayStr(0)),
           dueTime: p.dueTime || '',
           estMinutes: p.estMinutes || 0,
           remindAt: p.remindAt || '',
-          repeatRule: p.repeatRule || 'NONE'
+          repeatRule: p.repeatRule || 'NONE',
+          inboxOnly: asInbox
         });
       });
       tdPage.blocks = [...added, ...tdPage.blocks];
       tdPage.updatedAt = Date.now();
       saveAppState();
       closeModal('quickCaptureModal');
+      if (document.getElementById('qcInboxMode')) document.getElementById('qcInboxMode').checked = false;
       renderAll();
-      showToast(`⚡ 빠른 캡처 ${added.length}건을 오늘 보드에 추가했습니다.`);
+      showToast(forceInbox ? `📥 수집함(Inbox)에 ${added.length}건을 담아두었습니다.` : `⚡ 빠른 캡처 ${added.length}건을 보드에 추가했습니다.`);
     };
     window.toggleVoiceCapture = function() {
       const btn = document.getElementById('btnVoiceCapture');
@@ -8402,9 +8888,10 @@
         });
         const ddays = (APP.ddays || []).filter(dd => dd.date === iso);
         const dayAlarms = getAlarmsOccurringOnDate(iso);
+        const dayExt = (APP.externalEvents || []).filter(ev => ev.date === iso);
         const dayJournals = (APP.journal || []).filter(j => j.date === iso);
         const dayPhotos = Object.values(PHOTOS).filter(ph => ph.noteDate === iso);
-        cells.push({ day: d, iso, todos, pRows, ddays, dayAlarms, dayJournals, photoCount: dayPhotos.length });
+        cells.push({ day: d, iso, todos, pRows, ddays, dayAlarms, dayExt, dayJournals, photoCount: dayPhotos.length });
       }
       const selCell = cells.find(c => !c.empty && c.iso === selIso) || cells.find(c => !c.empty && c.iso === td) || cells.find(c => !c.empty);
       document.getElementById('mainViewContainer').innerHTML = `
@@ -8417,8 +8904,10 @@
               <button class="n-btn" onclick="calCursor={year:new Date().getFullYear(),month:new Date().getMonth()};APP.selectedCalDate=todayStr(0);renderCalendarView()">오늘</button>
             </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="n-btn" onclick="setMainView('PLANNER')">🗓️ 주간·일간 타임블록</button>
               <button class="n-btn" onclick="openAlarmModal('', APP.selectedCalDate || todayStr(0))">🔔 이 날 알람</button>
-              <button class="n-btn-primary" onclick="exportAlarmsToIcs()">📥 .ics 폰 캘린더 동기화</button>
+              <button class="n-btn" onclick="document.getElementById('icsImportInput').click()">📤 .ics 가져오기</button>
+              <button class="n-btn-primary" onclick="exportAlarmsToIcs()">📥 .ics 전체 내보내기</button>
             </div>
           </div>
           <div class="cal-grid">
@@ -8430,6 +8919,7 @@
                   <span style="font-size:10.5px;color:var(--ink-3);">${c.dayJournals.length ? '📓' : ''}${c.photoCount ? `📷${c.photoCount}` : ''}</span>
                 </div>
                 ${c.ddays.map(dd => `<div class="cal-pill ntag-yellow">${escHtml(dd.emoji)} ${escHtml(dd.title)}</div>`).join('')}
+                ${(c.dayExt || []).slice(0, 1).map(ev => `<div class="cal-pill ntag-purple" title="${escHtml(ev.location || '')}">🗓️ ${ev.startTime ? escHtml(ev.startTime)+' ' : ''}${escHtml(ev.title)}</div>`).join('')}
                 ${c.dayAlarms.slice(0, 2).map(al => `<div class="cal-pill ${al.space==='KIDS'?'ntag-orange':'ntag-red'}" onclick="event.stopPropagation();openAlarmModal('${al.id}')">🔔 ${escHtml(al.time)} ${escHtml(al.title)}</div>`).join('')}
                 ${c.pRows.slice(0, 1).map(x => `<div class="cal-pill ntag-purple" data-drag-handle="1" onpointerdown="startNotionDrag(event,'cal-item',{calKind:'project-row',projectId:'${x.projId}',rowId:'${x.r.id}'},'${escJsStr(x.r.title)}')" onclick="event.stopPropagation();openSidePeek('${x.projId}','${x.r.id}')">📁 ${escHtml(x.r.title)}</div>`).join('')}
                 ${c.todos.slice(0, 2).map(x => `<div class="cal-pill ${x.b.space==='KIDS'?'ntag-orange':'ntag-blue'}" data-drag-handle="1" onpointerdown="startNotionDrag(event,'cal-item',{calKind:'page-todo',pageId:'${x.pageId}',blockId:'${x.b.id}'},'${escJsStr(x.b.text)}')" onclick="event.stopPropagation();selectPage('${x.pageId}')" style="${x.b.checked?'text-decoration:line-through;opacity:0.6;':''}">${escHtml(x.b.text)}</div>`).join('')}
@@ -8440,6 +8930,7 @@
               <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
                 <strong style="font-size:15.5px;">📌 ${fmtKorDate(selCell.iso)} 상세 일정 · 기록</strong>
                 <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <button class="n-btn" style="font-size:12px;" onclick="APP.plannerDate='${selCell.iso}';APP.plannerSubTab='TIMELINE';setMainView('PLANNER')">⏳ 이 날 타임라인</button>
                   <button class="n-btn" style="font-size:12px;" onclick="openAlarmModal('', '${selCell.iso}')">🔔 알람 추가</button>
                   <button class="n-btn" style="font-size:12px;" onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 일기 작성</button>
                   <button class="n-btn-primary" style="font-size:12px;" onclick="openOrCreateDatePage('${selCell.iso}')">📝 데일리 노트 열기</button>
@@ -8447,8 +8938,10 @@
               </div>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;">
                 <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
-                  <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px;">🔔 예정 알람 (${selCell.dayAlarms.length}건)</div>
-                  ${selCell.dayAlarms.length ? selCell.dayAlarms.map(a => `<div onclick="openAlarmModal('${a.id}')" style="cursor:pointer;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border);display:flex;justify-content:space-between;gap:6px;"><span><b>${escHtml(a.time)}</b> ${escHtml(a.title)}</span><span class="ntag ${a.space==='KIDS'?'ntag-orange':'ntag-blue'}">${a.space==='KIDS'?'가족':'회사'}</span></div>`).join('') : '<div style="font-size:12px;color:var(--ink-3);">예정된 알람이 없습니다.</div>'}
+                  <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px;">🔔 예정 알람 · 외부 캘린더 (${selCell.dayAlarms.length + (selCell.dayExt||[]).length}건)</div>
+                  ${selCell.dayAlarms.map(a => `<div onclick="openAlarmModal('${a.id}')" style="cursor:pointer;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border);display:flex;justify-content:space-between;gap:6px;"><span><b>${escHtml(a.time)}</b> ${escHtml(a.title)}</span><span class="ntag ${a.space==='KIDS'?'ntag-orange':'ntag-blue'}">${a.space==='KIDS'?'가족':'회사'}</span></div>`).join('')}
+                  ${(selCell.dayExt||[]).map(ev => `<div style="font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border);display:flex;justify-content:space-between;gap:6px;"><span>🗓️ <b>${escHtml(ev.startTime || '종일')}</b> ${escHtml(ev.title)}</span><span class="ntag ntag-purple">.ics</span></div>`).join('')}
+                  ${(!selCell.dayAlarms.length && !(selCell.dayExt||[]).length) ? '<div style="font-size:12px;color:var(--ink-3);">예정된 알람/외부 일정이 없습니다.</div>' : ''}
                 </div>
                 <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
                   <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px;">☑️ 할 일 · 프로젝트 (${selCell.todos.length + selCell.pRows.length}건)</div>
@@ -8548,14 +9041,16 @@
       const ss = String(pomoState.remaining % 60).padStart(2, '0');
       document.getElementById('mainViewContainer').innerHTML = `
         <div class="ws-canvas wide-view" style="display:grid;gap:16px;">
+          ${renderKarmaDashboardCardHtml()}
           <div class="today-columns" style="margin:0;">
             <div class="notion-lane-card">
               <div class="lane-header"><strong>⏱️ 25분 집중 포모도로</strong><span style="font-size:12px;color:var(--ink-3);">오늘 ${pomoState.completedSessions}세션</span></div>
               <div style="text-align:center;padding:8px 0;">
                 <div style="font-size:46px;font-weight:700;font-variant-numeric:tabular-nums;">${mm}:${ss}</div>
-                <div style="font-size:12.5px;color:var(--ink-3);margin:4px 0 12px 0;">${pomoState.targetText ? escHtml(pomoState.targetText) : '할 일 옆 ⏱️ 버튼을 눌러 집중을 시작하세요.'}</div>
-                <div style="display:flex;justify-content:center;gap:6px;">
+                <div style="font-size:12.5px;color:var(--ink-3);margin:4px 0 12px 0;">${pomoState.targetText ? escHtml(pomoState.targetText) : '할 일 옆 🎯 버튼을 눌러 몰입을 시작하세요.'}</div>
+                <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
                   <button class="n-btn-primary" onclick="togglePomodoroTimer()">${pomoState.running ? '⏸️ 일시정지' : '▶️ 집중 시작'}</button>
+                  <button class="n-btn" onclick="openFullscreenFocusOverlay()">🎯 풀스크린 몰입</button>
                   <button class="n-btn" onclick="resetPomodoroTimer(25)">25분</button>
                   <button class="n-btn" onclick="resetPomodoroTimer(5)">5분 휴식</button>
                 </div>
@@ -8646,15 +9141,22 @@
         pomoState.running = true;
         pomoState.timer = setInterval(() => {
           pomoState.remaining--;
-          if (pomoState.remaining <= 0) { clearInterval(pomoState.timer); pomoState.running = false; pomoState.completedSessions++; showToast('🎉 25분 집중 완료!'); pomoState.remaining = 300; }
-          const el = document.getElementById('topPomoClock');
-          if (el) el.textContent = `${String(Math.floor(pomoState.remaining / 60)).padStart(2, '0')}:${String(pomoState.remaining % 60).padStart(2, '0')}`;
+          if (pomoState.remaining <= 0) {
+            clearInterval(pomoState.timer); pomoState.running = false; pomoState.completedSessions++;
+            if (typeof addKarmaPoints === 'function') addKarmaPoints(25, '포모도로 집중 완료');
+            showToast('🎉 집중 세션 완료! (+25 카르마 XP)');
+            pomoState.remaining = 300;
+          }
+          const txt = `${String(Math.floor(pomoState.remaining / 60)).padStart(2, '0')}:${String(pomoState.remaining % 60).padStart(2, '0')}`;
+          const el = document.getElementById('topPomoClock'); if (el) el.textContent = txt;
+          const big = document.getElementById('focusClockBig'); if (big) big.textContent = txt;
           if (APP.activeView === 'HABITS') renderHabitsView();
         }, 1000);
       }
+      if (typeof refreshFullscreenFocusUi === 'function') refreshFullscreenFocusUi();
       if (APP.activeView === 'HABITS') renderHabitsView();
     };
-    window.resetPomodoroTimer = (m) => { clearInterval(pomoState.timer); pomoState.running = false; pomoState.remaining = m * 60; const el = document.getElementById('topPomoClock'); if (el) el.textContent = `${String(m).padStart(2, '0')}:00`; if (APP.activeView === 'HABITS') renderHabitsView(); };
+    window.resetPomodoroTimer = (m) => { clearInterval(pomoState.timer); pomoState.running = false; pomoState.remaining = m * 60; const txt = `${String(m).padStart(2, '0')}:00`; const el = document.getElementById('topPomoClock'); if (el) el.textContent = txt; const big = document.getElementById('focusClockBig'); if (big) big.textContent = txt; if (typeof refreshFullscreenFocusUi === 'function') refreshFullscreenFocusUi(); if (APP.activeView === 'HABITS') renderHabitsView(); };
     window.addNewRoutine = () => { const t = document.getElementById('newRtText')?.value.trim(); if (!t) return; APP.routines.push({ id: uid('rt'), text: t, space: document.getElementById('newRtSpace').value, priority: 'MID', freq: document.getElementById('newRtFreq').value, active: true }); saveAppState(); renderHabitsView(); };
     window.deleteRoutine = (id) => { APP.routines = APP.routines.filter(r => r.id !== id); saveAppState(); renderHabitsView(); };
     window.addNewDday = () => { const t = document.getElementById('newDdayTitle')?.value.trim(); if (!t) return; const sp = document.getElementById('newDdaySpace').value; APP.ddays.push({ id: uid('dd'), title: t, date: document.getElementById('newDdayDate').value || todayStr(7), space: sp, emoji: sp === 'KIDS' ? '🎂' : '🏢' }); saveAppState(); renderAll(); };
@@ -8662,12 +9164,21 @@
 
     // ==================== 17. 검색·커맨드 팔레트 (Ctrl+K) · PIN · GitHub Private 동기화 · 텔레그램 · Carbon AI ====================
     const COMMAND_PALETTE_ACTIONS = [
+      { id: 'cmd_plan_day', icon: '☀️', title: '> 오늘 계획하기 (Plan My Day · 어제이월/TOP3)', run: () => openPlanMyDayModal() },
+      { id: 'cmd_auto_sched', icon: '🤖', title: '> Motion 빈 시간 자동 배치 실행 (Auto-Schedule)', run: () => runMotionAutoSchedule() },
+      { id: 'cmd_planner_timeline', icon: '⏳', title: '> 일간 타임라인 · 빈 시간 슬롯 보기 (Structured)', run: () => { APP.plannerSubTab = 'TIMELINE'; setMainView('PLANNER'); } },
+      { id: 'cmd_planner_week', icon: '📆', title: '> 주간 타임블록 7일 시간표 (TickTick)', run: () => { APP.plannerSubTab = 'WEEK'; setMainView('PLANNER'); } },
+      { id: 'cmd_planner_upcoming', icon: '🔭', title: '> 다가오는 7일 & 지연 작업 (Todoist Upcoming)', run: () => { APP.plannerSubTab = 'UPCOMING'; setMainView('PLANNER'); } },
+      { id: 'cmd_planner_mywork', icon: '📊', title: '> My Work 통합 상태 테이블 (Monday.com)', run: () => { APP.plannerSubTab = 'MYWORK'; setMainView('PLANNER'); } },
+      { id: 'cmd_planner_inbox', icon: '📥', title: '> 수집함(Inbox) 정리하기', run: () => { APP.plannerSubTab = 'INBOX'; setMainView('PLANNER'); } },
+      { id: 'cmd_focus_full', icon: '🎯', title: '> 풀스크린 몰입 타이머 열기 (TickTick Focus)', run: () => openFullscreenFocusOverlay() },
+      { id: 'cmd_ics_import', icon: '📤', title: '> .ics 외부 캘린더 파일 가져오기 (구글·애플·네이버)', run: () => document.getElementById('icsImportInput')?.click() },
+      { id: 'cmd_ics', icon: '📥', title: '> 모든 일정·알람 .ics 파일 내보내기', run: () => exportAlarmsToIcs() },
       { id: 'cmd_alarm_new', icon: '🔔', title: '> 새 회사·가족 프로 알람 등록하기', run: () => openAlarmModal() },
       { id: 'cmd_alarm_view', icon: '⏰', title: '> 알람 · 반복 리마인더 센터 열기', run: () => setMainView('ALARMS') },
       { id: 'cmd_journal', icon: '📓', title: '> 가족 성장 · 일기 · 중요금고 · 가계부 열기', run: () => setMainView('JOURNAL') },
       { id: 'cmd_shutdown', icon: '🌙', title: '> 하루 마감 리추얼 (Evening Shutdown)', run: () => openEveningShutdownModal() },
       { id: 'cmd_weekly', icon: '📰', title: '> Gemini 4 Carbon 주간 매거진 리포트 생성', run: () => runCarbonWeeklyReview() },
-      { id: 'cmd_ics', icon: '📥', title: '> 알람·기념일 .ics 폰 캘린더 파일 내보내기', run: () => exportAlarmsToIcs() },
       { id: 'cmd_dark', icon: '🎨', title: '> 미드나잇 다크 ↔ 웜 크래프트 테마 전환', run: () => setWorkspaceTheme(APP.theme === 'midnight' ? 'craft' : 'midnight') },
       { id: 'cmd_qc', icon: '⚡', title: '> 빠른 자연어 캡처 열기 (Ctrl+Shift+Space)', run: () => openQuickCaptureModal() },
       { id: 'cmd_split', icon: '◫', title: '> 좌우 분할 화면 (Split View) 토글', run: () => toggleSplitPane() },
@@ -8702,12 +9213,20 @@
           <span class="pop-item-left"><span>${c.icon}</span><span>${escHtml(c.title)}</span></span>
           <span class="ntag ntag-purple">명령어</span>
         </button>`).join('');
+      const todoHits = (!isCmdMode && kw) ? getAllGlobalTodos()
+        .filter(({ block }) => (block.text || '').toLowerCase().includes(kw) || (block.subtasks || []).some(s => (s.text || '').toLowerCase().includes(kw)))
+        .slice(0, 6)
+        .map(({ page, block }) => `
+          <button class="pop-item" onclick="closeModal('searchModal');${block.dueDate ? `APP.plannerDate='${block.dueDate}';APP.plannerSubTab='TIMELINE';setMainView('PLANNER')` : `selectPage('${page.id}')`}">
+            <span class="pop-item-left"><span>${block.checked ? '✅' : '☑️'}</span><span>${escHtml(block.text)}</span></span>
+            <span class="ntag ${block.space==='KIDS'?'ntag-orange':'ntag-blue'}">${escHtml(block.dueDate || '할 일')}</span>
+          </button>`).join('') : '';
       const docHtml = docHits.map(h => `
         <button class="pop-item" onclick="closeModal('searchModal');${h.kind === 'project' ? `selectProject('${h.p.id}')` : `selectPage('${h.p.id}')`}">
           <span class="pop-item-left"><span>${escHtml(h.p.icon)}</span><span>${escHtml(h.p.title)}</span></span>
           <span class="ntag ${h.kind === 'project' ? 'ntag-purple' : 'ntag-gray'}">${h.kind === 'project' ? '프로젝트' : `${h.p.blocks.length}블록`}</span>
         </button>`).join('');
-      document.getElementById('globalSearchResults').innerHTML = (cmdHtml + docHtml) || '<div style="text-align:center;padding:18px;color:var(--ink-3);">검색 결과가 없습니다.</div>';
+      document.getElementById('globalSearchResults').innerHTML = (cmdHtml + todoHits + docHtml) || '<div style="text-align:center;padding:18px;color:var(--ink-3);">검색 결과가 없습니다.</div>';
     };
     document.addEventListener('keydown', (ev) => {
       const mod = ev.ctrlKey || ev.metaKey;
@@ -8720,6 +9239,7 @@
       }
       if (ev.key === 'Escape') {
         closeAllPopovers();
+        if (document.getElementById('fullscreenFocusModal')?.classList.contains('open')) closeFullscreenFocusOverlay();
         if (document.body.classList.contains('zen-focus-mode')) toggleZenFocusMode();
       }
     });
@@ -10034,7 +10554,12 @@
               </div>
               <h1 style="margin:0;font-size:25px;font-weight:800;letter-spacing:-0.025em;line-height:1.25;">${greet}</h1>
             </div>
-            <div style="display:flex;align-items:center;gap:12px;">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+              <div class="karma-pill" onclick="setMainView('HABITS')" title="Todoist 카르마 등급 · 일간/주간 달성 목표">
+                <span>🏆 ${Number(APP.karma?.points || 0)} XP</span>
+                <span style="opacity:0.7;">|</span>
+                <span>🔥 ${Number(APP.karma?.streakDays || 0)}일</span>
+              </div>
               <div style="position:relative;width:48px;height:48px;flex-shrink:0;" title="오늘 전체 완료율">
                 <svg viewBox="0 0 44 44" width="48" height="48" style="transform:rotate(-90deg);">
                   <circle cx="22" cy="22" r="18" fill="none" stroke="var(--border)" stroke-width="4.5" />
@@ -10073,11 +10598,14 @@
           </div>
 
           <div class="v5-quick-bar">
-            <button type="button" class="v5-action-chip primary" onclick="openAlarmModal()">🔔 알람 예약</button>
-            <button type="button" class="v5-action-chip" onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 1줄 일기·기록</button>
-            <button type="button" class="v5-action-chip" onclick="openEveningShutdownModal()">🌙 하루 마감 리추얼</button>
+            <button type="button" class="v5-action-chip primary" onclick="openPlanMyDayModal()">☀️ 오늘 계획하기</button>
+            <button type="button" class="v5-action-chip" onclick="runMotionAutoSchedule()">🤖 빈시간 자동배치</button>
+            <button type="button" class="v5-action-chip" onclick="APP.plannerSubTab='WEEK';setMainView('PLANNER')">🗓️ 주간 시간표</button>
+            <button type="button" class="v5-action-chip" onclick="openFullscreenFocusOverlay()">🎯 몰입 타이머</button>
+            <button type="button" class="v5-action-chip" onclick="openAlarmModal()">🔔 알람 예약</button>
+            <button type="button" class="v5-action-chip" onclick="setMainView('JOURNAL');setJournalSubTab('DIARY')">📓 1줄 일기</button>
+            <button type="button" class="v5-action-chip" onclick="openEveningShutdownModal()">🌙 하루 마감</button>
             <button type="button" class="v5-action-chip" onclick="speakTodayDailyBriefing()">🗣️ 음성 브리핑</button>
-            <button type="button" class="v5-action-chip" onclick="runCarbonWeeklyReview()">✨ Carbon 주간리포트</button>
             <button type="button" class="v5-action-chip" onclick="selectPage('${tdPage.id}')">📝 오늘 문서</button>
           </div>
         </div>`;
@@ -10410,13 +10938,39 @@
         const dt = (d.date || todayStr(0)).replace(/-/g, '');
         lines.push('BEGIN:VEVENT', `UID:${d.id}@seonyu-eunyu-notion`, `DTSTART;VALUE=DATE:${dt}`, `SUMMARY:${d.emoji||'📌'} ${d.title}`, 'END:VEVENT');
       });
+      // 날짜/시간이 배정된 할일 + 프로젝트 일정도 함께 .ics로 내보내기 (Todoist / TickTick 호환)
+      APP.pages.filter(p => !p.archived).forEach(pg => {
+        (pg.blocks || []).forEach(b => {
+          if (b.type === 'todo' && !b.checked && b.dueDate) {
+            const dt = b.dueDate.replace(/-/g, '');
+            const sum = `[${b.space==='KIDS'?'가족':(b.space==='PERSONAL'?'개인':'회사')}] ${String(b.text||'').replace(/\r?\n/g,' ')}`;
+            if (b.dueTime) {
+              const sMin = Number(b.dueTime.slice(0,2)) * 60 + Number(b.dueTime.slice(3,5));
+              const eMin = Math.min(23 * 60 + 59, sMin + Number(b.estMinutes || 30));
+              const tm1 = `${String(Math.floor(sMin/60)).padStart(2,'0')}${String(sMin%60).padStart(2,'0')}00`;
+              const tm2 = `${String(Math.floor(eMin/60)).padStart(2,'0')}${String(eMin%60).padStart(2,'0')}00`;
+              lines.push('BEGIN:VEVENT', `UID:${b.id}@seonyu-eunyu-notion`, `DTSTART:${dt}T${tm1}`, `DTEND:${dt}T${tm2}`, `SUMMARY:${sum}`, 'END:VEVENT');
+            } else {
+              lines.push('BEGIN:VEVENT', `UID:${b.id}@seonyu-eunyu-notion`, `DTSTART;VALUE=DATE:${dt}`, `SUMMARY:${sum}`, 'END:VEVENT');
+            }
+          }
+        });
+      });
+      (APP.projects || []).filter(p => !p.archived).forEach(pr => {
+        (pr.rows || []).forEach(r => {
+          if (r.dueDate && r.status !== '완료') {
+            const dt = r.dueDate.replace(/-/g, '');
+            lines.push('BEGIN:VEVENT', `UID:${r.id}@seonyu-eunyu-notion`, `DTSTART;VALUE=DATE:${dt}`, `SUMMARY:[${pr.title}] ${String(r.title||'').replace(/\r?\n/g,' ')}`, 'END:VEVENT');
+          }
+        });
+      });
       lines.push('END:VCALENDAR');
       const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `서뉴으뉴_노션_알람캘린더_${todayStr(0)}.ics`;
+      a.download = `서뉴으뉴_노션_통합캘린더_${todayStr(0)}.ics`;
       a.click();
-      showToast('📥 .ics 캘린더 파일 저장 완료! 아이폰·갤럭시·구글 캘린더에서 열면 즉시 등록됩니다.');
+      showToast('📥 알람·할일·프로젝트 .ics 통합 캘린더 저장 완료! 구글·아이폰·갤럭시 캘린더에 바로 가져갈 수 있습니다.');
     };
 
     window.startVoiceIntoInput = (inputId) => {
@@ -11087,6 +11641,1282 @@
       closeModal('syncModal');
       renderAll();
       showToast('🧹 모든 내용을 비우고 깨끗한 서뉴으뉴 노션으로 초기화했습니다!');
+    };
+
+    // ==================== 17.15 v6.0 ALL-IN-ONE PAID PRODUCTIVITY ENGINE ====================
+    // (Todoist Pro + TickTick + ClickUp + Monday.com + Motion + Structured + Fantastical)
+    const openSubtaskIds = new Set();
+    const selectedTodoIds = new Set();
+    let bulkSelectMode = false;
+    let myWorkFilterSpace = 'ALL';
+    let myWorkSearchQ = '';
+    let todayTimelineCollapsed = false;
+    let plannerWeekModeOverride = '';
+    let activeFocusRef = null;
+
+    function formatMinutesKor(min) {
+      const m = Math.max(0, Math.round(Number(min || 0)));
+      if (m < 60) return `${m}분`;
+      const h = Math.floor(m / 60), r = m % 60;
+      return r ? `${h}시간 ${r}분` : `${h}시간`;
+    }
+    function timeToMin(hhmm) {
+      const m = String(hhmm || '').match(/^(\d{1,2}):(\d{2})$/);
+      if (!m) return null;
+      return Number(m[1]) * 60 + Number(m[2]);
+    }
+    function minToTime(totalMin) {
+      const clamped = Math.max(0, Math.min(23 * 60 + 55, Math.round(totalMin)));
+      return `${String(Math.floor(clamped / 60)).padStart(2, '0')}:${String(clamped % 60).padStart(2, '0')}`;
+    }
+    function getAllGlobalTodos(includeArchived = false) {
+      const out = [];
+      (APP.pages || []).forEach(pg => {
+        if (!includeArchived && pg.archived) return;
+        (pg.blocks || []).forEach(b => {
+          if (b.type === 'todo') out.push({ page: pg, block: b });
+        });
+      });
+      return out;
+    }
+    function findGlobalTodoById(bid) {
+      for (const pg of (APP.pages || [])) {
+        if (pg.archived) continue;
+        const found = (pg.blocks || []).find(b => b.id === bid);
+        if (found) return { page: pg, block: found };
+      }
+      return null;
+    }
+    function cycleTodoSpaceOrPriority(pageId, blockId, field, value) {
+      const found = findBlockDeep(getContextObj(pageId), blockId);
+      if (!found) return;
+      found.block[field] = value;
+      found.block.updatedAt = Date.now();
+      saveAppState();
+      renderAll();
+    }
+
+    // ---------- 1) Todoist Karma & Streaks ----------
+    window.addKarmaPoints = (pts, reason = '') => {
+      if (!APP.karma) APP.karma = { points: 0, streakDays: 0, lastActiveDate: '', dailyGoal: 5, weeklyGoal: 25, completedLog: {} };
+      APP.karma.points = Math.max(0, Number(APP.karma.points || 0) + Number(pts || 0));
+      const td = todayStr(0);
+      if (pts > 0) {
+        if (APP.karma.lastActiveDate !== td) {
+          const yest = todayStr(-1);
+          APP.karma.streakDays = (APP.karma.lastActiveDate === yest) ? Number(APP.karma.streakDays || 0) + 1 : Math.max(1, Number(APP.karma.streakDays || 0));
+          APP.karma.lastActiveDate = td;
+        }
+      }
+      saveAppState(false);
+    };
+    window.awardTodoKarma = (block, checked) => {
+      if (!APP.karma) APP.karma = { points: 0, streakDays: 0, lastActiveDate: '', dailyGoal: 5, weeklyGoal: 25, completedLog: {} };
+      if (!APP.karma.completedLog) APP.karma.completedLog = {};
+      const td = todayStr(0);
+      const delta = checked ? (block?.priority === 'HIGH' ? 15 : 10) : -10;
+      APP.karma.completedLog[td] = Math.max(0, Number(APP.karma.completedLog[td] || 0) + (checked ? 1 : -1));
+      if (!APP.historyStats) APP.historyStats = {};
+      APP.historyStats[td] = Math.max(0, Number(APP.historyStats[td] || 0) + (checked ? 1 : -1));
+      addKarmaPoints(delta, block?.text || '할일 완료');
+    };
+    function getKarmaLevelInfo(pts) {
+      const p = Number(pts || 0);
+      if (p >= 5000) return { tier: '그랜드마스터', next: 10000, ico: '👑' };
+      if (p >= 2000) return { tier: '시간 마스터', next: 5000, ico: '💎' };
+      if (p >= 800) return { tier: '프로 실행가', next: 2000, ico: '🚀' };
+      if (p >= 250) return { tier: '숙련 플래너', next: 800, ico: '🔥' };
+      return { tier: '입문 플래너', next: 250, ico: '🌱' };
+    }
+    function renderKarmaDashboardCardHtml() {
+      const k = APP.karma || { points: 0, streakDays: 0, dailyGoal: 5, weeklyGoal: 25, completedLog: {} };
+      const lvl = getKarmaLevelInfo(k.points);
+      const td = todayStr(0);
+      const todayDone = Number(k.completedLog?.[td] || APP.historyStats?.[td] || 0);
+      const weekDates = Array.from({ length: 7 }, (_, i) => todayStr(i - 6));
+      const weekDone = weekDates.reduce((s, d) => s + Number(k.completedLog?.[d] || APP.historyStats?.[d] || 0), 0);
+      const maxBar = Math.max(5, Number(k.dailyGoal || 5), ...weekDates.map(d => Number(k.completedLog?.[d] || APP.historyStats?.[d] || 0)));
+      const pctToNext = Math.min(100, Math.round(((Number(k.points || 0)) / Math.max(1, lvl.next)) * 100));
+      return `
+        <div class="v5-card" style="display:grid;gap:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#ea580c);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;">${lvl.ico}</div>
+              <div>
+                <div style="font-size:15px;font-weight:800;">🏆 Todoist 카르마 · ${lvl.tier} (${Number(k.points || 0).toLocaleString()} XP)</div>
+                <div style="font-size:12px;color:var(--ink-3);">연속 달성 <b>${Number(k.streakDays || 0)}일</b> · 오늘 목표 <b>${todayDone}/${k.dailyGoal || 5}</b> · 이번주 <b>${weekDone}/${k.weeklyGoal || 25}</b></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <label style="font-size:11.5px;color:var(--ink-2);">일간 목표
+                <input type="number" min="1" max="50" value="${k.dailyGoal || 5}" onchange="APP.karma.dailyGoal=Math.max(1,Number(this.value||5));saveAppState(false);renderHabitsView()" style="width:46px;padding:3px 5px;border:1px solid var(--border);border-radius:6px;font-size:12px;" />
+              </label>
+              <label style="font-size:11.5px;color:var(--ink-2);">주간 목표
+                <input type="number" min="1" max="200" value="${k.weeklyGoal || 25}" onchange="APP.karma.weeklyGoal=Math.max(1,Number(this.value||25));saveAppState(false);renderHabitsView()" style="width:52px;padding:3px 5px;border:1px solid var(--border);border-radius:6px;font-size:12px;" />
+              </label>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:78px;padding-top:8px;">
+            ${weekDates.map(d => {
+              const v = Number(k.completedLog?.[d] || APP.historyStats?.[d] || 0);
+              const h = Math.max(6, Math.round((v / maxBar) * 46));
+              const isTd = d === td;
+              const dtObj = new Date(d + 'T00:00:00');
+              const wkLbl = ['일','월','화','수','목','금','토'][dtObj.getDay()];
+              return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+                <span style="font-size:10px;font-weight:700;color:${v?'var(--accent)':'var(--ink-4)'};">${v}</span>
+                <div style="width:100%;max-width:34px;height:${h}px;border-radius:6px;background:${isTd?'var(--accent-grad)':(v?'#34d399':'var(--bg-sand)')};"></div>
+                <span style="font-size:10.5px;font-weight:${isTd?'800':'500'};color:${isTd?'var(--accent)':'var(--ink-3)'};">${wkLbl}</span>
+              </div>`;
+            }).join('')}
+          </div>
+          <div style="font-size:11.5px;color:var(--ink-3);">다음 등급(${lvl.next.toLocaleString()} XP)까지 ${pctToNext}% 달성</div>
+        </div>`;
+    }
+
+    // ---------- 2) TOP 3 Spotlight, Subtasks, AI 쪼개기 & 선행작업(Dependency) ----------
+    window.toggleTodoTop3 = (ctxId, bid) => {
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      if (!found) return;
+      if (!found.block.top3) {
+        const curTop3 = getAllGlobalTodos().filter(x => x.block.top3 && !x.block.checked);
+        if (curTop3.length >= 3) {
+          showToast('🌟 오늘 핵심 TOP 3는 최대 3개까지 추천합니다. 기존 1개를 해제하거나 그대로 진행하세요.');
+        }
+      }
+      found.block.top3 = !found.block.top3;
+      saveAppState();
+      renderAll();
+    };
+    window.toggleSubtaskDrawer = (bid) => {
+      if (openSubtaskIds.has(bid)) openSubtaskIds.delete(bid); else openSubtaskIds.add(bid);
+      renderAll();
+      setTimeout(() => document.getElementById(`subIn_${bid}`)?.focus(), 30);
+    };
+    window.addSubtaskItem = (ctxId, bid) => {
+      const inp = document.getElementById(`subIn_${bid}`);
+      const txt = (inp?.value || '').trim();
+      if (!txt) return;
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      if (!found) return;
+      if (!Array.isArray(found.block.subtasks)) found.block.subtasks = [];
+      found.block.subtasks.push({ id: uid('sub'), text: txt, done: false });
+      openSubtaskIds.add(bid);
+      saveAppState();
+      renderAll();
+      setTimeout(() => document.getElementById(`subIn_${bid}`)?.focus(), 30);
+    };
+    window.toggleSubtaskDone = (ctxId, bid, subId, chk) => {
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      if (!found || !Array.isArray(found.block.subtasks)) return;
+      const st = found.block.subtasks.find(s => s.id === subId);
+      if (!st) return;
+      st.done = Boolean(chk);
+      addKarmaPoints(chk ? 5 : -5, '세부 단계 체크');
+      saveAppState();
+      renderAll();
+      if (document.getElementById('fullscreenFocusModal')?.classList.contains('open')) refreshFullscreenFocusUi();
+    };
+    window.updateSubtaskTextSilent = (ctxId, bid, subId, val) => {
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      const st = found?.block?.subtasks?.find(s => s.id === subId);
+      if (st) { st.text = val; debouncedSave(); }
+    };
+    window.deleteSubtaskItem = (ctxId, bid, subId) => {
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      if (!found || !Array.isArray(found.block.subtasks)) return;
+      found.block.subtasks = found.block.subtasks.filter(s => s.id !== subId);
+      saveAppState();
+      renderAll();
+    };
+    window.aiSplitTodoSubtasks = async (ctxId, bid) => {
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      if (!found) return;
+      const title = (found.block.text || '').trim();
+      if (!title) { showToast('먼저 할 일 제목을 입력해 주세요.'); return; }
+      openSubtaskIds.add(bid);
+      showToast('✨ 세부 실행 단계 쪼개는 중...');
+      let steps = [];
+      try {
+        const res = await callCarbonJson(`할 일 "${title}"을(를) 바로 실행할 수 있는 구체적 한국어 체크리스트 3~4단계로 쪼개서 JSON {"steps":["1단계","2단계","3단계"]} 로만 반환하세요. 군더더기 수식어 없이 짧고 명확하게 작성하세요.`);
+        if (Array.isArray(res?.steps) && res.steps.length) steps = res.steps.map(s => String(s).trim()).filter(Boolean).slice(0, 5);
+      } catch (_) {}
+      if (!steps.length) {
+        if (/견적|발주|출고|납품|세금계산서/.test(title)) {
+          steps = ['규격·단가 및 보유 재고 확인', '견적서/거래명세서 작성 및 발송', '입금 확인 후 화물 상차 및 계산서 발행'];
+        } else if (/병원|소아과|치과|접종|진료/.test(title)) {
+          steps = ['병원 접수/예약 시간 확인', '건강보험증·처방전·아기수첩 챙기기', '진료 후 약 수령 및 다음 방문 일정 기록'];
+        } else if (/준비물|등원|학교|행사|소풍/.test(title)) {
+          steps = ['필요 물품 목록 확인 및 장보기', '이름표 부착 및 가방 사전 챙기기', '전날 밤 현관 앞에 최종 준비 완료'];
+        } else {
+          steps = [`'${title.slice(0, 16)}' 관련 필요 자료·준비물 확인`, '핵심 실행 작업 진행 (25분 집중)', '최종 검토 후 완료 처리 및 다음 일정 연결'];
+        }
+      }
+      if (!Array.isArray(found.block.subtasks)) found.block.subtasks = [];
+      steps.forEach(st => found.block.subtasks.push({ id: uid('sub'), text: st, done: false }));
+      saveAppState();
+      renderAll();
+      showToast(`🌿 '${title.slice(0, 14)}' 세부 단계 ${steps.length}개를 추가했습니다!`);
+    };
+    window.promptBlockDependency = (ctxId, bid) => {
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      if (!found) return;
+      const candidates = getAllGlobalTodos().filter(x => x.block.id !== bid && !x.block.checked);
+      document.getElementById('slotPickerTitle').textContent = '🔒 선행 작업 (Blocked-By) 연결';
+      document.getElementById('slotPickerBody').innerHTML = `
+        <div style="font-size:12.5px;color:var(--ink-2);margin-bottom:6px;">이 작업을 시작하기 전에 먼저 완료해야 할 선행 작업을 선택하세요.</div>
+        <button type="button" class="n-btn" style="justify-content:center;" onclick="setTodoDependency('${ctxId}','${bid}','')">🔓 선행 작업 연결 해제</button>
+        <div style="display:grid;gap:6px;max-height:300px;overflow-y:auto;margin-top:4px;">
+          ${candidates.map(c => `
+            <button type="button" class="fab-sheet-btn" style="padding:8px 10px;font-size:12.5px;${found.block.blockedBy===c.block.id?'border-color:var(--accent);background:var(--accent-soft);':''}" onclick="setTodoDependency('${ctxId}','${bid}','${c.block.id}')">
+              <span>${c.block.space==='KIDS'?'👨‍👧‍👦':'💼'}</span>
+              <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(c.block.text)}</span>
+              <span style="font-size:11px;color:var(--ink-3);">${escHtml(c.block.dueDate || '미정')}</span>
+            </button>`).join('') || '<div style="font-size:12px;color:var(--ink-3);text-align:center;padding:16px;">연결할 다른 미완료 작업이 없습니다.</div>'}
+        </div>`;
+      openModal('slotPickerModal');
+    };
+    window.setTodoDependency = (ctxId, bid, depBid) => {
+      const found = findBlockDeep(getContextObj(ctxId), bid);
+      if (!found) return;
+      found.block.blockedBy = depBid || '';
+      saveAppState();
+      closeModal('slotPickerModal');
+      renderAll();
+      showToast(depBid ? '🔒 선행 작업을 연결했습니다.' : '🔓 선행 작업 연결을 해제했습니다.');
+    };
+
+    // ---------- 3) ClickUp / Monday Multi-Select Bulk Action Bar ----------
+    window.toggleBulkSelectMode = () => {
+      bulkSelectMode = !bulkSelectMode;
+      if (!bulkSelectMode) selectedTodoIds.clear();
+      renderBulkActionBar();
+      renderAll();
+    };
+    window.toggleTodoBulkSelect = (ctxId, bid) => {
+      const key = `${ctxId}::${bid}`;
+      if (selectedTodoIds.has(key)) selectedTodoIds.delete(key);
+      else selectedTodoIds.add(key);
+      if (selectedTodoIds.size > 0 && !bulkSelectMode) bulkSelectMode = true;
+      renderBulkActionBar();
+      renderAll();
+    };
+    window.clearBulkSelection = () => {
+      selectedTodoIds.clear();
+      bulkSelectMode = false;
+      renderBulkActionBar();
+      renderAll();
+    };
+    window.selectAllTodayTodosForBulk = () => {
+      const tdPage = ensureTodayDailyPage();
+      (tdPage.blocks || []).filter(b => b.type === 'todo' && !b.checked).forEach(b => selectedTodoIds.add(`${tdPage.id}::${b.id}`));
+      bulkSelectMode = true;
+      renderBulkActionBar();
+      renderAll();
+    };
+    function renderBulkActionBar() {
+      const bar = document.getElementById('bulkActionBar');
+      if (!bar) return;
+      if (selectedTodoIds.size === 0) { bar.classList.remove('open'); return; }
+      bar.classList.add('open');
+      bar.innerHTML = `
+        <span style="font-size:12px;font-weight:800;color:#7dd3fc;padding:0 4px;">☑️ ${selectedTodoIds.size}건 선택</span>
+        <button type="button" class="bulk-bar-btn" onclick="selectAllTodayTodosForBulk()">전체선택</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('DONE')">✅ 완료</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('TODAY')">📅 오늘</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('TOMORROW')">📆 내일</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('NEXT_WEEK')">🗓️ +7일</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('HIGH')">🔴 긴급</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('WORK')">💼 일</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('KIDS')">👨‍👧‍👦 애들</button>
+        <button type="button" class="bulk-bar-btn" onclick="applyBulkAction('AUTOSCHEDULE')">🤖 자동배치</button>
+        <button type="button" class="bulk-bar-btn danger" onclick="applyBulkAction('DELETE')">🗑️ 삭제</button>
+        <button type="button" class="bulk-bar-btn" onclick="clearBulkSelection()">✕ 해제</button>`;
+    }
+    window.applyBulkAction = (action) => {
+      if (!selectedTodoIds.size) return;
+      if (action === 'AUTOSCHEDULE') {
+        const pickedIds = Array.from(selectedTodoIds).map(k => k.split('::')[1]);
+        runMotionAutoSchedule(pickedIds);
+        clearBulkSelection();
+        return;
+      }
+      pushUndoSnapshot(`일괄 처리 (${action})`);
+      let cnt = 0;
+      Array.from(selectedTodoIds).forEach(key => {
+        const [pgId, bid] = key.split('::');
+        const pg = APP.pages.find(p => p.id === pgId);
+        if (!pg) return;
+        const idx = pg.blocks.findIndex(b => b.id === bid);
+        if (idx < 0) return;
+        const b = pg.blocks[idx];
+        cnt++;
+        if (action === 'DELETE') { pg.blocks.splice(idx, 1); return; }
+        if (action === 'DONE') { if (!b.checked) awardTodoKarma(b, true); b.checked = true; b.status = 'DONE'; }
+        else if (action === 'TODAY') { b.dueDate = todayStr(0); b.inboxOnly = false; }
+        else if (action === 'TOMORROW') { b.dueDate = todayStr(1); b.inboxOnly = false; }
+        else if (action === 'NEXT_WEEK') { b.dueDate = todayStr(7); b.inboxOnly = false; }
+        else if (action === 'HIGH') { b.priority = 'HIGH'; }
+        else if (action === 'WORK') { b.space = 'WORK'; }
+        else if (action === 'KIDS') { b.space = 'KIDS'; }
+        b.updatedAt = Date.now();
+      });
+      saveAppState();
+      clearBulkSelection();
+      showToast(`⚡ ${cnt}건 일괄 처리 완료! (Ctrl+Z로 취소 가능)`);
+    };
+
+    // ---------- 4) Structured Unified Day Timeline, Conflict Detector & Free Gap Slots ----------
+    function getUnifiedTimelineForDate(isoDate) {
+      const items = [];
+      const allDayItems = [];
+      // Alarms
+      getAlarmsOccurringOnDate(isoDate).forEach(al => {
+        const sMin = timeToMin(al.time);
+        if (sMin !== null) {
+          items.push({ kind: 'alarm', id: al.id, title: al.title, space: al.space || 'WORK', startMin: sMin, durMin: 20, endMin: sMin + 20, timeStr: al.time, ref: al });
+        }
+      });
+      // External .ics Events
+      (APP.externalEvents || []).filter(ev => ev.date === isoDate).forEach(ev => {
+        const sMin = ev.startTime ? timeToMin(ev.startTime) : null;
+        if (!ev.allDay && sMin !== null) {
+          const eMin = ev.endTime ? Math.max(sMin + 15, timeToMin(ev.endTime) || (sMin + 60)) : (sMin + 60);
+          items.push({ kind: 'ext', id: ev.id, title: ev.title, location: ev.location || '', space: 'PERSONAL', startMin: sMin, durMin: eMin - sMin, endMin: eMin, timeStr: ev.startTime, ref: ev });
+        } else {
+          allDayItems.push({ kind: 'ext', id: ev.id, title: ev.title, icon: '🗓️' });
+        }
+      });
+      // Scheduled Todos on isoDate
+      getAllGlobalTodos().forEach(({ page, block }) => {
+        if (block.dueDate === isoDate && block.dueTime) {
+          const sMin = timeToMin(block.dueTime);
+          if (sMin !== null) {
+            const dur = Math.max(15, Number(block.estMinutes || 30));
+            items.push({ kind: 'todo', id: block.id, pageId: page.id, title: block.text, space: block.space || 'WORK', checked: Boolean(block.checked), startMin: sMin, durMin: dur, endMin: sMin + dur, timeStr: block.dueTime, block, page });
+          }
+        }
+      });
+      // Project Deadlines & D-Days as All-Day Strip
+      (APP.projects || []).filter(p => !p.archived).forEach(pr => {
+        (pr.rows || []).forEach(r => { if (r.dueDate === isoDate) allDayItems.push({ kind: 'proj', projId: pr.id, rowId: r.id, title: `${pr.title} · ${r.title}`, icon: r.icon || '📁' }); });
+      });
+      (APP.ddays || []).forEach(d => { if (d.date === isoDate) allDayItems.push({ kind: 'dday', title: d.title, icon: d.emoji || '📌' }); });
+
+      items.sort((a, b) => a.startMin - b.startMin);
+      let conflicts = 0;
+      let prevEnd = -1;
+      items.forEach(it => {
+        if (it.startMin < prevEnd) { it.isConflict = true; conflicts++; }
+        prevEnd = Math.max(prevEnd, it.endMin);
+      });
+
+      // Compute Free Gaps across working window (08:00 ~ 21:30)
+      const dayStart = Math.min(8 * 60, (APP.workHours?.start || 9) * 60);
+      const dayEnd = Math.max(21 * 60 + 30, (APP.workHours?.end || 18) * 60);
+      const freeGaps = [];
+      let cursor = dayStart;
+      items.forEach(it => {
+        if (it.startMin - cursor >= 25) {
+          freeGaps.push({ startMin: cursor, endMin: it.startMin, durMin: it.startMin - cursor, startStr: minToTime(cursor), endStr: minToTime(it.startMin) });
+        }
+        cursor = Math.max(cursor, it.endMin);
+      });
+      if (dayEnd - cursor >= 25) {
+        freeGaps.push({ startMin: cursor, endMin: dayEnd, durMin: dayEnd - cursor, startStr: minToTime(cursor), endStr: minToTime(dayEnd) });
+      }
+      return { date: isoDate, items, allDayItems, freeGaps, conflicts };
+    }
+    function renderTodayCompactTimelineStripHtml(tl) {
+      if (!tl.items.length && !tl.allDayItems.length) return '';
+      return `
+        <div class="v5-card" style="padding:11px 14px;margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;" onclick="todayTimelineCollapsed=!todayTimelineCollapsed;renderTodayView()">
+            <span style="font-size:13px;font-weight:700;">⏳ 오늘 시간순 타임라인 (${tl.items.length}건${tl.allDayItems.length ? ` · 종일 ${tl.allDayItems.length}` : ''}${tl.conflicts ? ` · ⚠️ 겹침 ${tl.conflicts}` : ''})</span>
+            <span style="font-size:11.5px;color:var(--accent);font-weight:700;">${todayTimelineCollapsed ? '펼치기 ▾' : '접기 ▴'}</span>
+          </div>
+          ${todayTimelineCollapsed ? '' : `
+            <div style="display:flex;gap:7px;overflow-x:auto;padding-top:9px;scrollbar-width:thin;">
+              ${tl.items.slice(0, 8).map(it => `
+                <div style="flex:0 0 auto;padding:6px 10px;border-radius:9px;border:1px solid ${it.isConflict?'#ef4444':'var(--border)'};background:${it.kind==='alarm'?'rgba(251,146,60,0.10)':(it.kind==='ext'?'rgba(139,92,246,0.10)':'var(--bg-subtle)')};font-size:11.5px;${it.checked?'opacity:0.55;text-decoration:line-through;':''}">
+                  <b style="font-family:var(--font-mono);color:var(--accent);">${escHtml(it.timeStr)}</b> · ${it.kind==='alarm'?'🔔':(it.kind==='ext'?'🗓️':'☑️')} ${escHtml((it.title||'').slice(0,18))}
+                </div>`).join('')}
+              ${tl.freeGaps.slice(0, 2).map(g => `
+                <button type="button" onclick="openSlotPickerForGap('${tl.date}','${g.startStr}',${g.durMin})" style="flex:0 0 auto;padding:6px 10px;border-radius:9px;border:1px dashed #10b981;background:rgba(16,185,129,0.08);color:#047857;font-size:11.5px;font-weight:700;cursor:pointer;">
+                  + ${g.startStr}~${g.endStr} 여유 (${formatMinutesKor(g.durMin)})
+                </button>`).join('')}
+            </div>`}
+        </div>`;
+    }
+
+    // ---------- 5) Free Gap / Empty Slot Picker Modal ----------
+    window.openSlotPickerForGap = (isoDate, startTime, maxMin = 60) => {
+      const candidates = getAllGlobalTodos().filter(x => !x.block.checked && !x.block.dueTime);
+      document.getElementById('slotPickerTitle').textContent = `⏰ ${isoDate} ${startTime} 일정 배정`;
+      document.getElementById('slotPickerBody').innerHTML = `
+        <div style="display:grid;gap:7px;background:var(--bg-subtle);padding:10px;border-radius:10px;border:1px solid var(--border);">
+          <label class="field-label" style="margin:0;">⚡ 이 시간에 새 할 일 바로 등록 (${startTime})</label>
+          <div style="display:flex;gap:6px;">
+            <input id="slotQuickTitle" class="field-input" placeholder="예: 견적서 검토 및 발송" onkeydown="if(event.key==='Enter') createTodoAtSlot('${isoDate}','${startTime}')" />
+            <select id="slotQuickDur" class="field-select" style="width:92px;">
+              <option value="15">15분</option>
+              <option value="30" selected>30분</option>
+              <option value="60">1시간</option>
+              <option value="90">1시간반</option>
+              <option value="120">2시간</option>
+            </select>
+            <button type="button" class="n-btn-primary" onclick="createTodoAtSlot('${isoDate}','${startTime}')">배정</button>
+          </div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-2);margin-top:4px;">📥 미배정 할 일 · 수집함에서 끼워넣기 (${candidates.length}건 · 최대 ${formatMinutesKor(maxMin)} 여유)</div>
+        <div style="display:grid;gap:6px;max-height:260px;overflow-y:auto;">
+          ${candidates.map(c => `
+            <button type="button" class="fab-sheet-btn" style="padding:8px 10px;font-size:12.5px;" onclick="assignTodoToSlot('${c.page.id}','${c.block.id}','${isoDate}','${startTime}',${Number(c.block.estMinutes||30)})">
+              <span>${c.block.space==='KIDS'?'👨‍👧‍👦':'💼'}</span>
+              <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(c.block.text)}</span>
+              <span class="ntag ntag-green">${c.block.estMinutes || 30}분</span>
+            </button>`).join('') || '<div style="font-size:12px;color:var(--ink-3);text-align:center;padding:12px;">시간 미정인 대기 작업이 없습니다.</div>'}
+        </div>`;
+      openModal('slotPickerModal');
+      setTimeout(() => document.getElementById('slotQuickTitle')?.focus(), 40);
+    };
+    window.assignTodoToSlot = (pageId, blockId, isoDate, startTime, durMin = 30) => {
+      const found = findBlockDeep(getContextObj(pageId), blockId);
+      if (!found) return;
+      pushUndoSnapshot('타임블록 배정');
+      found.block.dueDate = isoDate;
+      found.block.dueTime = startTime;
+      found.block.inboxOnly = false;
+      if (!found.block.estMinutes) found.block.estMinutes = durMin;
+      found.block.updatedAt = Date.now();
+      saveAppState();
+      closeModal('slotPickerModal');
+      renderAll();
+      showToast(`⏰ ${isoDate} ${startTime}에 배정했습니다.`);
+    };
+    window.createTodoAtSlot = (isoDate, startTime) => {
+      const inp = document.getElementById('slotQuickTitle');
+      const txt = (inp?.value || '').trim();
+      if (!txt) return;
+      const dur = Number(document.getElementById('slotQuickDur')?.value || 30);
+      pushUndoSnapshot('슬롯 할일 등록');
+      const parsed = parseSmartKoreanTodo(txt, APP.activeSpace === 'KIDS' ? 'KIDS' : 'WORK');
+      const tdPage = ensureTodayDailyPage();
+      tdPage.blocks.unshift(createBlock('todo', {
+        text: parsed.cleanText || txt,
+        space: parsed.space,
+        priority: parsed.priority,
+        dueDate: isoDate,
+        dueTime: startTime,
+        estMinutes: parsed.estMinutes || dur,
+        inboxOnly: false
+      }));
+      saveAppState();
+      closeModal('slotPickerModal');
+      renderAll();
+      showToast(`✅ ${isoDate} ${startTime} 일정 등록 완료!`);
+    };
+
+    // ---------- 6) Motion Pro Auto-Schedule AI Engine (빈 시간 자동 배치) ----------
+    window.runMotionAutoSchedule = (onlyBlockIds = null) => {
+      const td = todayStr(0);
+      const targetSet = Array.isArray(onlyBlockIds) ? new Set(onlyBlockIds) : null;
+      const all = getAllGlobalTodos();
+      const unscheduled = all.filter(x => {
+        if (x.block.checked) return false;
+        if (targetSet) return targetSet.has(x.block.id);
+        return !x.block.dueTime;
+      });
+      if (!unscheduled.length) {
+        showToast('ℹ️ 빈 시간에 새로 배치할 시간 미정 할 일이 없습니다.');
+        return;
+      }
+      pushUndoSnapshot('Motion 빈 시간 자동 배치');
+      const prioScore = p => (p === 'HIGH' ? 3 : (p === 'LOW' ? 1 : 2));
+      unscheduled.sort((a, b) => {
+        const aTop = a.block.top3 ? 1 : 0, bTop = b.block.top3 ? 1 : 0;
+        if (aTop !== bTop) return bTop - aTop;
+        const aOver = (a.block.dueDate && a.block.dueDate < td) ? 1 : 0;
+        const bOver = (b.block.dueDate && b.block.dueDate < td) ? 1 : 0;
+        if (aOver !== bOver) return bOver - aOver;
+        if (prioScore(a.block.priority) !== prioScore(b.block.priority)) return prioScore(b.block.priority) - prioScore(a.block.priority);
+        return (a.block.estMinutes || 30) - (b.block.estMinutes || 30);
+      });
+
+      const workStart = Math.max(6, Number(APP.workHours?.start || 9)) * 60;
+      const workEnd = Math.min(23, Number(APP.workHours?.end || 18)) * 60;
+      const dayBusyCache = {};
+      const getBusyForDay = (iso) => {
+        if (dayBusyCache[iso]) return dayBusyCache[iso];
+        const tl = getUnifiedTimelineForDate(iso);
+        const intervals = tl.items.map(it => [it.startMin, it.endMin]);
+        dayBusyCache[iso] = intervals;
+        return intervals;
+      };
+
+      const now = new Date();
+      const nowRoundedMin = Math.ceil((now.getHours() * 60 + now.getMinutes() + 10) / 15) * 15;
+      let scheduledCount = 0;
+
+      unscheduled.forEach(({ block }) => {
+        const dur = Math.max(15, Number(block.estMinutes || 30));
+        const blocker = block.blockedBy ? findGlobalTodoById(block.blockedBy) : null;
+        let minStartDayOffset = (blocker && !blocker.block.checked) ? 1 : 0;
+
+        for (let dOff = minStartDayOffset; dOff < 7; dOff++) {
+          const iso = todayStr(dOff);
+          const busy = getBusyForDay(iso);
+          const winRanges = block.space === 'KIDS'
+            ? [[7 * 60 + 30, 9 * 60], [17 * 60 + 30, 21 * 60 + 30]]
+            : [[workStart, workEnd], [Math.max(workEnd, 19 * 60), 21 * 60]];
+
+          let placed = false;
+          for (const [wStart, wEnd] of winRanges) {
+            let tStart = (dOff === 0) ? Math.max(wStart, nowRoundedMin) : wStart;
+            while (tStart + dur <= wEnd) {
+              const tEnd = tStart + dur;
+              const hit = busy.find(([bs, be]) => tStart < be && tEnd > bs);
+              if (!hit) {
+                block.dueDate = iso;
+                block.dueTime = minToTime(tStart);
+                block.inboxOnly = false;
+                if (!block.estMinutes) block.estMinutes = dur;
+                block.updatedAt = Date.now();
+                busy.push([tStart, tEnd]);
+                scheduledCount++;
+                placed = true;
+                break;
+              }
+              tStart = Math.ceil(hit[1] / 15) * 15;
+            }
+            if (placed) break;
+          }
+          if (placed) break;
+        }
+      });
+
+      logActivity('Motion 빈시간 자동배치', `${scheduledCount}건 최적 시간대 배정`);
+      saveAppState();
+      renderAll();
+      showToast(`🤖 ${scheduledCount}건의 할 일을 기존 알람·일정을 피해 빈 시간에 자동 배치했습니다! (Ctrl+Z로 취소 가능)`);
+    };
+
+    window.resolveTodayTimeConflicts = (isoDate = todayStr(0)) => {
+      const tl = getUnifiedTimelineForDate(isoDate);
+      if (!tl.conflicts) { showToast('✅ 겹치는 일정이 없습니다.'); return; }
+      pushUndoSnapshot('일정 겹침 자동 정리');
+      let lastEnd = 0;
+      let fixed = 0;
+      tl.items.forEach(it => {
+        if (it.kind === 'todo' && it.startMin < lastEnd) {
+          const nextStart = Math.ceil(lastEnd / 15) * 15;
+          it.block.dueTime = minToTime(nextStart);
+          lastEnd = nextStart + it.durMin;
+          fixed++;
+        } else {
+          lastEnd = Math.max(lastEnd, it.endMin);
+        }
+      });
+      saveAppState();
+      renderAll();
+      showToast(`🤖 겹쳐 있던 작업 ${fixed}건의 시각을 뒤 빈 시간으로 자동 조정했습니다.`);
+    };
+
+    // ---------- 7) Flagship Planner Hub View (Timeline / Week / Upcoming / Monday My Work / Inbox) ----------
+    window.setPlannerSubTab = (tab) => {
+      APP.plannerSubTab = tab;
+      saveAppState(false);
+      if (APP.activeView === 'PLANNER') renderPlannerView();
+    };
+    window.shiftPlannerDate = (delta) => {
+      const [y, m, d] = (APP.plannerDate || todayStr(0)).split('-').map(Number);
+      const dt = new Date(y, m - 1, d + delta);
+      APP.plannerDate = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+      renderPlannerView();
+    };
+    window.editWorkHoursSetting = () => {
+      const curS = Number(APP.workHours?.start || 9);
+      const curE = Number(APP.workHours?.end || 18);
+      document.getElementById('slotPickerTitle').textContent = '⚙️ 자동 배치 가용 시간 & 일일 목표 설정';
+      document.getElementById('slotPickerBody').innerHTML = `
+        <div style="display:grid;gap:10px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <label class="field-label">업무 시작 시각 (시)
+              <input id="whStartIn" type="number" min="5" max="15" value="${curS}" class="field-input" />
+            </label>
+            <label class="field-label">업무 종료 시각 (시)
+              <input id="whEndIn" type="number" min="12" max="23" value="${curE}" class="field-input" />
+            </label>
+          </div>
+          <label class="field-label">일일 적정 작업 용량 (분, 기본 480분=8시간)
+            <input id="whCapIn" type="number" min="60" max="900" step="30" value="${Number(APP.workHours?.dailyCapMin || 480)}" class="field-input" />
+          </label>
+          <button type="button" class="n-btn-primary" onclick="saveWorkHoursSetting()">💾 설정 저장</button>
+        </div>`;
+      openModal('slotPickerModal');
+    };
+    window.saveWorkHoursSetting = () => {
+      const s = Math.max(5, Math.min(16, Number(document.getElementById('whStartIn')?.value || 9)));
+      const e = Math.max(s + 2, Math.min(23, Number(document.getElementById('whEndIn')?.value || 18)));
+      const c = Math.max(60, Number(document.getElementById('whCapIn')?.value || 480));
+      APP.workHours = { start: s, end: e, dailyCapMin: c };
+      saveAppState();
+      closeModal('slotPickerModal');
+      renderAll();
+      showToast(`⚙️ 가용 시간 ${s}:00~${e}:00 (목표 ${formatMinutesKor(c)}) 저장 완료!`);
+    };
+
+    window.adjustTodoDurMin = (pageId, blockId, deltaMin) => {
+      const found = findBlockDeep(getContextObj(pageId), blockId);
+      if (!found) return;
+      const cur = Math.max(15, Number(found.block.estMinutes || 30));
+      found.block.estMinutes = Math.max(15, Math.min(360, cur + deltaMin));
+      saveAppState();
+      renderAll();
+    };
+    window.clearTodoScheduleTime = (pageId, blockId) => {
+      const found = findBlockDeep(getContextObj(pageId), blockId);
+      if (!found) return;
+      found.block.dueTime = '';
+      saveAppState();
+      renderAll();
+    };
+
+    function renderPlannerView() {
+      const sub = APP.plannerSubTab || 'TIMELINE';
+      const td = todayStr(0);
+      const sp = APP.activeSpace || 'ALL';
+      const allTodos = getAllGlobalTodos().filter(x => sp === 'ALL' || x.block.space === sp);
+      const overdueCount = allTodos.filter(x => !x.block.checked && x.block.dueDate && x.block.dueDate < td).length;
+      const inboxCount = allTodos.filter(x => !x.block.checked && (x.block.inboxOnly || !x.block.dueDate)).length;
+
+      let bodyHtml = '';
+      if (sub === 'TIMELINE') {
+        const pDate = APP.plannerDate || td;
+        const tl = getUnifiedTimelineForDate(pDate);
+        const dayTodos = allTodos.filter(x => x.block.dueDate === pDate);
+        const unscheduled = allTodos.filter(x => !x.block.checked && (!x.block.dueTime) && (x.block.dueDate === pDate || !x.block.dueDate));
+        const plannedMin = tl.items.filter(i => i.kind === 'todo').reduce((s, i) => s + i.durMin, 0);
+        const capMin = Number(APP.workHours?.dailyCapMin || 480);
+        const capPct = Math.min(100, Math.round((plannedMin / Math.max(60, capMin)) * 100));
+        const now = new Date();
+        const nowMin = now.getHours() * 60 + now.getMinutes();
+        let nowInserted = false;
+        const rowsWithGaps = [];
+        let lastEnd = Math.min(8 * 60, (APP.workHours?.start || 9) * 60);
+        tl.items.forEach(it => {
+          if (it.startMin - lastEnd >= 25) {
+            rowsWithGaps.push({ type: 'gap', startMin: lastEnd, endMin: it.startMin, durMin: it.startMin - lastEnd, startStr: minToTime(lastEnd), endStr: minToTime(it.startMin) });
+          }
+          if (pDate === td && !nowInserted && nowMin <= it.startMin) {
+            rowsWithGaps.push({ type: 'now', min: nowMin });
+            nowInserted = true;
+          }
+          rowsWithGaps.push({ type: 'item', it });
+          lastEnd = Math.max(lastEnd, it.endMin);
+        });
+        if (pDate === td && !nowInserted) rowsWithGaps.push({ type: 'now', min: nowMin });
+        const dayEnd = Math.max(21 * 60 + 30, (APP.workHours?.end || 18) * 60);
+        if (dayEnd - lastEnd >= 25) {
+          rowsWithGaps.push({ type: 'gap', startMin: lastEnd, endMin: dayEnd, durMin: dayEnd - lastEnd, startStr: minToTime(lastEnd), endStr: minToTime(dayEnd) });
+        }
+
+        bodyHtml = `
+          <div class="capacity-strip">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <button class="n-btn" onclick="shiftPlannerDate(-1)">◀ 어제</button>
+              <strong style="font-size:15px;">${fmtKorDate(pDate)}</strong>
+              <button class="n-btn" onclick="shiftPlannerDate(1)">내일 ▶</button>
+              <button class="n-btn" onclick="APP.plannerDate='${td}';renderPlannerView()">오늘</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:200px;">
+              <span style="font-size:12px;font-weight:700;">⏳ ${formatMinutesKor(plannedMin)} / ${formatMinutesKor(capMin)}</span>
+              <div class="capacity-meter"><div class="capacity-fill ${plannedMin>capMin?'over':(capPct>=80?'warn':'')}" style="width:${capPct}%;"></div></div>
+              ${tl.conflicts ? `<button type="button" class="n-btn" style="border-color:#ef4444;color:#dc2626;font-size:11.5px;padding:3px 8px;" onclick="resolveTodayTimeConflicts('${pDate}')">⚠️ 겹침 ${tl.conflicts}건 자동 정리</button>` : ''}
+            </div>
+          </div>
+          ${tl.allDayItems.length ? `
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+              ${tl.allDayItems.map(a => `<span class="ntag ${a.kind==='dday'?'ntag-yellow':(a.kind==='ext'?'ntag-purple':'ntag-blue')}">${a.icon} ${escHtml(a.title)}</span>`).join('')}
+            </div>` : ''}
+          <div class="st-layout">
+            <div class="st-timeline-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <strong style="font-size:14px;">⏳ 시간순 데일리 스케줄 (Structured)</strong>
+                <button type="button" class="n-btn-primary" style="font-size:12px;padding:4px 10px;" onclick="openSlotPickerForGap('${pDate}','${minToTime(Math.max(9*60, nowMin))}',60)">+ 새 일정 끼워넣기</button>
+              </div>
+              ${rowsWithGaps.map(row => {
+                if (row.type === 'now') {
+                  return `<div class="st-now-divider"><span>● 지금 ${minToTime(row.min)}</span></div>`;
+                }
+                if (row.type === 'gap') {
+                  return `<div class="st-free-gap" onclick="openSlotPickerForGap('${pDate}','${row.startStr}',${row.durMin})">
+                    <span>🌿 <b>${row.startStr} ~ ${row.endStr}</b> · ${formatMinutesKor(row.durMin)} 비어있음</span>
+                    <span style="font-weight:800;">+ 여기에 할일 넣기</span>
+                  </div>`;
+                }
+                const it = row.it;
+                const clsKind = it.kind === 'alarm' ? 'kind-alarm' : (it.kind === 'ext' ? 'kind-ext' : (it.space === 'KIDS' ? 'kind-kids' : ''));
+                return `
+                  <div class="st-event-row ${clsKind} ${it.isConflict ? 'is-conflict' : ''} ${it.checked ? 'is-done' : ''}">
+                    <div class="st-time-col">${it.timeStr}<div style="font-size:10px;opacity:0.7;">~${minToTime(it.endMin)} (${it.durMin}분)</div></div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                        ${it.kind === 'todo' ? `<input type="checkbox" class="n-chk" ${it.checked?'checked':''} onchange="toggleTodoBlock('${it.pageId}','${it.id}',this.checked)" />` : ''}
+                        <span style="font-size:13.5px;font-weight:700;">${it.kind==='alarm'?'🔔 ':(it.kind==='ext'?'🗓️ ':'')}${escHtml(it.title)}</span>
+                        ${it.isConflict ? `<span class="dep-lock-badge">⚠️ 시간 겹침</span>` : ''}
+                        <span class="ntag ${it.space==='KIDS'?'ntag-orange':(it.kind==='ext'?'ntag-purple':'ntag-blue')}" style="font-size:10px;">${it.kind==='ext'?'.ics':(it.space==='KIDS'?'애들·가족':(it.space==='PERSONAL'?'개인':'회사'))}</span>
+                      </div>
+                      ${it.location ? `<div style="font-size:11.5px;color:var(--ink-3);margin-top:2px;">📍 ${escHtml(it.location)}</div>` : ''}
+                    </div>
+                    ${it.kind === 'todo' ? `
+                      <div style="display:flex;gap:3px;flex-shrink:0;">
+                        <button type="button" class="n-btn-ghost" style="padding:2px 5px;font-size:11px;" onclick="adjustTodoDurMin('${it.pageId}','${it.id}',-15)" title="15분 단축">-15</button>
+                        <button type="button" class="n-btn-ghost" style="padding:2px 5px;font-size:11px;" onclick="adjustTodoDurMin('${it.pageId}','${it.id}',15)" title="15분 연장">+15</button>
+                        <button type="button" class="n-btn-ghost" style="padding:2px 5px;font-size:11px;" onclick="openFullscreenFocusOverlay('${it.pageId}','${it.id}')" title="집중 시작">🎯</button>
+                        <button type="button" class="n-btn-ghost" style="padding:2px 5px;font-size:11px;" onclick="clearTodoScheduleTime('${it.pageId}','${it.id}')" title="시간 배정 해제">×</button>
+                      </div>` : ''}
+                  </div>`;
+              }).join('')}
+            </div>
+            <div class="st-backlog-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <strong style="font-size:13.5px;">📥 시간 미정 할 일 (${unscheduled.length}건)</strong>
+                <button type="button" class="n-btn" style="font-size:11px;padding:3px 8px;" onclick="runMotionAutoSchedule()">🤖 자동배치</button>
+              </div>
+              <div style="display:grid;gap:6px;max-height:560px;overflow-y:auto;">
+                ${unscheduled.map(x => `
+                  <div class="todo-card-item" style="padding:8px 10px;justify-content:space-between;align-items:center;gap:6px;">
+                    <div style="min-width:0;flex:1;">
+                      <div style="font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${x.block.priority==='HIGH'?'🔴 ':''}${escHtml(x.block.text)}</div>
+                      <div style="font-size:10.5px;color:var(--ink-3);">${x.block.space==='KIDS'?'👨‍👧‍👦 애들':'💼 일'} · ${x.block.estMinutes||30}분</div>
+                    </div>
+                    <button type="button" class="n-btn" style="font-size:11px;padding:3px 7px;flex-shrink:0;" onclick="assignTodoToSlot('${x.page.id}','${x.block.id}','${pDate}','${tl.freeGaps[0]?.startStr || '09:00'}',${x.block.estMinutes||30})">+ 끼워넣기</button>
+                  </div>`).join('') || '<div style="font-size:12px;color:var(--ink-3);padding:18px 0;text-align:center;">모든 할 일에 시간이 배정되었습니다!</div>'}
+              </div>
+            </div>
+          </div>`;
+      } else if (sub === 'WEEK') {
+        const weekOff = Number(APP.plannerWeekOffset || 0);
+        const nowDt = new Date();
+        const mondayDelta = ((nowDt.getDay() + 6) % 7);
+        const effWeekMode = plannerWeekModeOverride || (window.innerWidth <= 768 ? '3day' : '7day');
+        const is3Day = effWeekMode === '3day';
+        const baseDays = is3Day
+          ? Array.from({ length: 3 }, (_, i) => todayStr(weekOff * 3 + i))
+          : Array.from({ length: 7 }, (_, i) => todayStr(-mondayDelta + weekOff * 7 + i));
+        const hours = Array.from({ length: 15 }, (_, i) => `${String(i + 8).padStart(2, '0')}:00`);
+        const unscheduled = allTodos.filter(x => !x.block.checked && !x.block.dueTime);
+
+        bodyHtml = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <button class="n-btn" onclick="APP.plannerWeekOffset=(APP.plannerWeekOffset||0)-1;renderPlannerView()">◀ 이전</button>
+              <strong style="font-size:14px;">${baseDays[0]} ~ ${baseDays[baseDays.length-1]}</strong>
+              <button class="n-btn" onclick="APP.plannerWeekOffset=(APP.plannerWeekOffset||0)+1;renderPlannerView()">다음 ▶</button>
+              <button class="n-btn" onclick="APP.plannerWeekOffset=0;renderPlannerView()">이번 주</button>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="n-btn ${!is3Day?'n-btn-primary':''}" onclick="plannerWeekModeOverride='7day';renderPlannerView()">7일</button>
+              <button class="n-btn ${is3Day?'n-btn-primary':''}" onclick="plannerWeekModeOverride='3day';renderPlannerView()">3일(모바일)</button>
+              <button class="n-btn-primary" onclick="runMotionAutoSchedule()">🤖 이번 주 빈 시간 자동 배치</button>
+            </div>
+          </div>
+          <div class="wk-layout">
+            <div class="st-backlog-card" style="padding:10px 12px;">
+              <div style="font-size:13px;font-weight:800;margin-bottom:8px;">📥 미배정 (${unscheduled.length}) <span style="font-size:11px;font-weight:500;color:var(--ink-3);">끌어서 시간표에 놓기</span></div>
+              <div style="display:grid;gap:6px;max-height:62vh;overflow-y:auto;">
+                ${unscheduled.map(x => `
+                  <div class="kanban-card dnd-target" data-dnd-target="board-card" data-board-col="TODO" style="padding:7px 9px;cursor:grab;margin:0;"
+                       onpointerdown="startNotionDrag(event,'board-card',{boardType:'global',pageId:'${x.page.id}',itemId:'${x.block.id}'},'${escJsStr((x.block.text||'').slice(0,18))}')">
+                    <div style="font-size:12px;font-weight:600;">${escHtml(x.block.text)}</div>
+                    <div style="font-size:10.5px;color:var(--ink-3);margin-top:2px;">${x.block.space==='KIDS'?'👨‍👧‍👦 애들':'💼 일'} · ${x.block.estMinutes||30}분</div>
+                  </div>`).join('') || '<div style="font-size:12px;color:var(--ink-3);text-align:center;padding:16px 0;">모두 배정됨</div>'}
+              </div>
+            </div>
+            <div class="wk-grid-scroll">
+              <div class="wk-table-wrap ${is3Day?'mode-3day':''}">
+                <div class="wk-head-row ${is3Day?'mode-3day':''}">
+                  <div class="wk-head-cell" style="border-left:none;">시각</div>
+                  ${baseDays.map(d => {
+                    const dt = new Date(d + 'T00:00:00');
+                    const w = ['일','월','화','수','목','금','토'][dt.getDay()];
+                    return `<div class="wk-head-cell ${d===td?'is-today':''}">${d.slice(5)} (${w})</div>`;
+                  }).join('')}
+                </div>
+                ${hours.map(hr => {
+                  const hh = hr.slice(0, 2);
+                  return `<div class="wk-body-row ${is3Day?'mode-3day':''}">
+                    <div class="wk-hour-lbl">${hr}</div>
+                    ${baseDays.map(d => {
+                      const slotTodos = allTodos.filter(x => x.block.dueDate === d && x.block.dueTime && x.block.dueTime.startsWith(hh));
+                      const slotAlms = getAlarmsOccurringOnDate(d).filter(a => a.time && a.time.startsWith(hh));
+                      const slotExt = (APP.externalEvents || []).filter(ev => ev.date === d && ev.startTime && ev.startTime.startsWith(hh));
+                      return `<div class="wk-slot-cell" data-week-slot="1" data-week-date="${d}" data-week-hour="${hr}" onclick="if(event.target===this) openSlotPickerForGap('${d}','${hr}',60)">
+                        ${slotAlms.map(a => `<div class="wk-pill kind-alarm" onclick="event.stopPropagation();openAlarmModal('${a.id}')">🔔 ${escHtml(a.time)} ${escHtml(a.title)}</div>`).join('')}
+                        ${slotExt.map(ev => `<div class="wk-pill kind-ext">🗓️ ${escHtml(ev.startTime)} ${escHtml(ev.title)}</div>`).join('')}
+                        ${slotTodos.map(x => `
+                          <div class="wk-pill space-${x.block.space||'WORK'} ${x.block.checked?'is-done':''}"
+                               style="min-height:${Math.max(28, Math.round(Number(x.block.estMinutes||30) * 0.72))}px;"
+                               onpointerdown="if(!event.target.closest('button'))startNotionDrag(event,'board-card',{boardType:'global',pageId:'${x.page.id}',itemId:'${x.block.id}'},'${escJsStr((x.block.text||'').slice(0,18))}')">
+                            <div style="display:flex;justify-content:space-between;gap:3px;">
+                              <span>${escHtml(x.block.dueTime)} ${escHtml(x.block.text)}</span>
+                              <button type="button" class="sb-act-mini" onclick="event.stopPropagation();clearTodoScheduleTime('${x.page.id}','${x.block.id}')">×</button>
+                            </div>
+                          </div>`).join('')}
+                      </div>`;
+                    }).join('')}
+                  </div>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>`;
+      } else if (sub === 'UPCOMING') {
+        const overdue = allTodos.filter(x => !x.block.checked && x.block.dueDate && x.block.dueDate < td);
+        const nextDays = Array.from({ length: 7 }, (_, i) => todayStr(i));
+        bodyHtml = `
+          ${overdue.length ? `
+            <div class="up-overdue-banner">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+                <strong style="font-size:14px;color:#b91c1c;">🚨 지난 미완료 지연 작업 (${overdue.length}건)</strong>
+                <div style="display:flex;gap:6px;">
+                  <button type="button" class="n-btn" style="font-size:12px;border-color:#fca5a5;color:#b91c1c;" onclick="rescheduleOverdueTodos('${td}')">📅 오늘로 모두 옮기기</button>
+                  <button type="button" class="n-btn" style="font-size:12px;" onclick="rescheduleOverdueTodos('${todayStr(1)}')">📆 내일로 옮기기</button>
+                </div>
+              </div>
+              <div style="display:grid;gap:5px;">
+                ${overdue.map(x => `
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface-card);padding:7px 10px;border-radius:8px;border:1px solid var(--border);">
+                    <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+                      <input type="checkbox" class="n-chk" onchange="toggleTodoBlock('${x.page.id}','${x.block.id}',this.checked)" />
+                      <span style="font-size:13px;font-weight:600;">${escHtml(x.block.text)}</span>
+                      <span style="font-size:11px;color:#dc2626;">(${x.block.dueDate})</span>
+                    </div>
+                    <button type="button" class="n-btn" style="font-size:11px;padding:3px 8px;" onclick="rescheduleSingleTodo('${x.page.id}','${x.block.id}','${td}')">오늘로</button>
+                  </div>`).join('')}
+              </div>
+            </div>` : ''}
+          <div class="up-days-grid">
+            ${nextDays.map((d, idx) => {
+              const items = allTodos.filter(x => x.block.dueDate === d);
+              const alms = getAlarmsOccurringOnDate(d);
+              const exts = (APP.externalEvents || []).filter(e => e.date === d);
+              return `
+                <div class="up-day-card ${idx===0?'is-today':''}">
+                  <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:6px;">
+                    <strong style="font-size:13.5px;">${idx===0?'☀️ 오늘 · ':idx===1?'📆 내일 · ':''}${fmtKorDate(d).replace(/^\d{4}년\s*/,'')}</strong>
+                    <span class="ntag ntag-blue">${items.length + alms.length + exts.length}</span>
+                  </div>
+                  ${alms.map(a => `<div style="font-size:12px;color:#c2410c;">🔔 <b>${escHtml(a.time)}</b> ${escHtml(a.title)}</div>`).join('')}
+                  ${exts.map(ev => `<div style="font-size:12px;color:#6d28d9;">🗓️ <b>${escHtml(ev.startTime||'종일')}</b> ${escHtml(ev.title)}</div>`).join('')}
+                  ${items.map(x => `
+                    <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;${x.block.checked?'opacity:0.5;text-decoration:line-through;':''}">
+                      <input type="checkbox" class="n-chk" ${x.block.checked?'checked':''} onchange="toggleTodoBlock('${x.page.id}','${x.block.id}',this.checked)" />
+                      <span style="flex:1;">${x.block.dueTime ? `<b style="color:var(--accent);">${escHtml(x.block.dueTime)}</b> ` : ''}${escHtml(x.block.text)}</span>
+                      <button type="button" class="sb-act-mini" onclick="rescheduleSingleTodo('${x.page.id}','${x.block.id}','${todayStr(idx+1)}')" title="다음 날로 미루기">→</button>
+                    </div>`).join('')}
+                  <div style="display:flex;gap:4px;margin-top:auto;padding-top:6px;">
+                    <input id="upAdd_${d}" class="field-input" style="padding:4px 8px;font-size:12px;" placeholder="+ ${d.slice(5)} 할 일 추가..." onkeydown="if(event.key==='Enter') addTodoForSpecificDate('${d}')" />
+                    <button type="button" class="n-btn" style="padding:4px 8px;font-size:11.5px;" onclick="addTodoForSpecificDate('${d}')">+</button>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>`;
+      } else if (sub === 'MYWORK') {
+        const kw = (myWorkSearchQ || '').trim().toLowerCase();
+        const unified = allTodos
+          .filter(x => myWorkFilterSpace === 'ALL' || x.block.space === myWorkFilterSpace)
+          .filter(x => !kw || (x.block.text || '').toLowerCase().includes(kw) || (x.page.title || '').toLowerCase().includes(kw));
+        const gUrgent = unified.filter(x => !x.block.checked && (x.block.priority === 'HIGH' || (x.block.dueDate && x.block.dueDate <= td)));
+        const gSoon = unified.filter(x => !x.block.checked && x.block.priority !== 'HIGH' && x.block.dueDate && x.block.dueDate > td);
+        const gBacklog = unified.filter(x => !x.block.checked && !x.block.dueDate);
+        const gDone = unified.filter(x => x.block.checked).slice(0, 12);
+        const monGroups = [
+          { title: '🔥 긴급 · 오늘 및 지연 작업', color: '#e11d48', items: gUrgent },
+          { title: '📅 다가오는 예정 작업', color: '#3b82f6', items: gSoon },
+          { title: '📥 수집함 · 날짜 미정 백로그', color: '#8b5cf6', items: gBacklog },
+          { title: '✅ 최근 완료됨', color: '#10b981', items: gDone }
+        ];
+        const statusCycleLbl = st => st === 'DONE' ? '완료됨' : (st === 'DOING' ? '진행 중' : (st === 'WAIT' ? '대기중' : '시작 전'));
+        const prioLbl = pr => pr === 'HIGH' ? '🔴 긴급' : (pr === 'LOW' ? '⚪ 여유' : '🟡 보통');
+
+        bodyHtml = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+            <div style="display:flex;gap:5px;">
+              ${[['ALL','전체'],['WORK','💼 업무'],['KIDS','👨‍👧‍👦 애들'],['PERSONAL','🔒 개인']].map(([k,l]) => `<button class="n-btn ${myWorkFilterSpace===k?'n-btn-primary':''}" onclick="myWorkFilterSpace='${k}';renderPlannerView()">${l}</button>`).join('')}
+            </div>
+            <input class="field-input" style="max-width:240px;padding:5px 10px;font-size:12.5px;" value="${escHtml(myWorkSearchQ)}" oninput="myWorkSearchQ=this.value;renderPlannerView()" placeholder="🔍 작업명 · 페이지 필터..." />
+          </div>
+          ${monGroups.map(grp => `
+            <div class="mon-group" style="border-left:4px solid ${grp.color};">
+              <div class="mon-group-hd" style="color:${grp.color};">
+                <span>${grp.title}</span>
+                <span class="ntag ntag-gray">${grp.items.length}건</span>
+              </div>
+              <div class="mon-table-scroll">
+                <table class="mon-table">
+                  <thead>
+                    <tr>
+                      <th style="width:32px;"></th>
+                      <th>작업명 (클릭 수정)</th>
+                      <th style="width:92px;">상태</th>
+                      <th style="width:88px;">우선순위</th>
+                      <th style="width:126px;">날짜</th>
+                      <th style="width:96px;">시각</th>
+                      <th style="width:74px;">예상시간</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${grp.items.map(({ page, block }) => {
+                      const stKey = block.checked ? 'DONE' : (block.status || 'TODO');
+                      const prKey = block.priority || 'MID';
+                      return `
+                        <tr>
+                          <td><input type="checkbox" class="n-chk" ${block.checked?'checked':''} onchange="toggleTodoBlock('${page.id}','${block.id}',this.checked)" /></td>
+                          <td>
+                            <div style="font-weight:600;">${block.top3 ? '🌟 ' : ''}${escHtml(block.text || '내용 없음')}</div>
+                            <div style="font-size:11px;color:var(--ink-3);">${escHtml(page.icon||'📄')} ${escHtml(page.title)}${(block.subtasks||[]).length ? ` · 🌿 ${(block.subtasks||[]).filter(s=>s.done).length}/${block.subtasks.length}` : ''}</div>
+                          </td>
+                          <td><button type="button" class="mon-pill-btn mon-st-${stKey}" onclick="cycleMondayTodoStatus('${page.id}','${block.id}')">${statusCycleLbl(stKey)}</button></td>
+                          <td><button type="button" class="mon-pill-btn mon-pr-${prKey}" onclick="cycleMondayTodoPriority('${page.id}','${block.id}')">${prioLbl(prKey)}</button></td>
+                          <td><input type="date" class="field-input" style="padding:3px 5px;font-size:11.5px;" value="${escHtml(block.dueDate||'')}" onchange="cycleTodoSpaceOrPriority('${page.id}','${block.id}','dueDate',this.value)" /></td>
+                          <td><input type="time" class="field-input" style="padding:3px 5px;font-size:11.5px;" value="${escHtml(block.dueTime||'')}" onchange="cycleTodoSpaceOrPriority('${page.id}','${block.id}','dueTime',this.value)" /></td>
+                          <td>
+                            <select class="field-select" style="padding:3px 4px;font-size:11.5px;" onchange="cycleTodoSpaceOrPriority('${page.id}','${block.id}','estMinutes',Number(this.value))">
+                              ${[0,15,30,45,60,90,120].map(m => `<option value="${m}" ${Number(block.estMinutes||0)===m?'selected':''}>${m?m+'분':'-'}</option>`).join('')}
+                            </select>
+                          </td>
+                        </tr>`;
+                    }).join('') || `<tr><td colspan="7" style="text-align:center;color:var(--ink-4);padding:14px;">해당 항목 없음</td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </div>`).join('')}`;
+      } else {
+        // INBOX (Todoist / Things 3 Unscheduled Brain Dump Triage)
+        const inboxList = allTodos.filter(x => !x.block.checked && (x.block.inboxOnly || !x.block.dueDate));
+        bodyHtml = `
+          <div class="v5-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+              <div>
+                <h3 style="margin:0;font-size:16px;font-weight:800;">📥 수집함 · 미정 작업 정리 (${inboxList.length}건)</h3>
+                <div style="font-size:12px;color:var(--ink-3);">생각나는 일을 날짜 없이 먼저 담아두고, 오늘·내일 또는 AI 빈 시간에 배정하세요.</div>
+              </div>
+              <button type="button" class="n-btn-primary" onclick="runMotionAutoSchedule()">🤖 수집함 모두 빈 시간 자동배치</button>
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:12px;">
+              <input id="inboxQuickIn" class="field-input" placeholder="+ 수집함에 아이디어/할 일 바로 던져두기 (Enter)..." onkeydown="if(event.key==='Enter') addInboxQuickTodo()" />
+              <button type="button" class="n-btn-primary" onclick="addInboxQuickTodo()">담기</button>
+            </div>
+            <div style="display:grid;gap:7px;">
+              ${inboxList.map(x => `
+                <div class="todo-card-item" style="justify-content:space-between;align-items:center;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1;">
+                    <input type="checkbox" class="n-chk" onchange="toggleTodoBlock('${x.page.id}','${x.block.id}',this.checked)" />
+                    <span style="font-size:13.5px;font-weight:600;">${escHtml(x.block.text)}</span>
+                    <span class="ntag ${x.block.space==='KIDS'?'ntag-orange':'ntag-blue'}">${x.block.space==='KIDS'?'애들':'일'}</span>
+                  </div>
+                  <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                    <button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="rescheduleSingleTodo('${x.page.id}','${x.block.id}','${td}')">📅 오늘</button>
+                    <button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="rescheduleSingleTodo('${x.page.id}','${x.block.id}','${todayStr(1)}')">📆 내일</button>
+                    <button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="deleteBlock('${x.page.id}','${x.block.id}')">🗑</button>
+                  </div>
+                </div>`).join('') || '<div style="text-align:center;padding:28px;color:var(--ink-3);font-size:13px;">수집함이 깔끔하게 비어 있습니다 ✨</div>'}
+            </div>
+          </div>`;
+      }
+
+      document.getElementById('mainViewContainer').innerHTML = `
+        <div class="ws-canvas wide-view">
+          <div class="planner-header">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+              <div>
+                <h2 style="margin:0;font-size:21px;font-weight:800;">🗓️ 올인원 플래너 · 타임블록 허브</h2>
+                <div style="font-size:12.5px;color:var(--ink-2);margin-top:2px;">일간 타임라인 · 주간 시간표 · 다가오는 7일 · My Work · 외부 캘린더(.ics) 통합</div>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" class="v5-action-chip primary" onclick="openPlanMyDayModal()">☀️ 오늘 계획하기</button>
+                <button type="button" class="v5-action-chip" onclick="runMotionAutoSchedule()">🤖 빈시간 자동배치</button>
+                <button type="button" class="v5-action-chip" onclick="editWorkHoursSetting()">⚙️ 가용시간</button>
+                <button type="button" class="v5-action-chip" onclick="document.getElementById('icsImportInput').click()">📤 .ics 가져오기</button>
+                <button type="button" class="v5-action-chip" onclick="exportAlarmsToIcs()">📥 .ics 내보내기</button>
+              </div>
+            </div>
+            <div class="v5-subtabs" style="margin-bottom:0;">
+              <button type="button" class="v5-subtab ${sub==='TIMELINE'?'active':''}" onclick="setPlannerSubTab('TIMELINE')">⏳ 일간 타임라인</button>
+              <button type="button" class="v5-subtab ${sub==='WEEK'?'active':''}" onclick="setPlannerSubTab('WEEK')">📆 주간 타임블록</button>
+              <button type="button" class="v5-subtab ${sub==='UPCOMING'?'active':''}" onclick="setPlannerSubTab('UPCOMING')">🔭 다가오는 7일${overdueCount?` (${overdueCount})`:''}</button>
+              <button type="button" class="v5-subtab ${sub==='MYWORK'?'active':''}" onclick="setPlannerSubTab('MYWORK')">📊 My Work 테이블</button>
+              <button type="button" class="v5-subtab ${sub==='INBOX'?'active':''}" onclick="setPlannerSubTab('INBOX')">📥 수집함${inboxCount?` (${inboxCount})`:''}</button>
+            </div>
+          </div>
+          ${bodyHtml}
+        </div>`;
+    }
+    window.cycleMondayTodoStatus = (pageId, blockId) => {
+      const found = findBlockDeep(getContextObj(pageId), blockId);
+      if (!found) return;
+      const b = found.block;
+      const seq = ['TODO', 'DOING', 'WAIT', 'DONE'];
+      const cur = b.checked ? 'DONE' : (b.status || 'TODO');
+      const nxt = seq[(seq.indexOf(cur) + 1) % seq.length];
+      b.status = nxt;
+      const wasDone = Boolean(b.checked);
+      b.checked = (nxt === 'DONE');
+      if (wasDone !== b.checked) awardTodoKarma(b, b.checked);
+      saveAppState();
+      renderPlannerView();
+    };
+    window.cycleMondayTodoPriority = (pageId, blockId) => {
+      const found = findBlockDeep(getContextObj(pageId), blockId);
+      if (!found) return;
+      const seq = ['HIGH', 'MID', 'LOW'];
+      found.block.priority = seq[(seq.indexOf(found.block.priority || 'MID') + 1) % seq.length];
+      saveAppState();
+      renderPlannerView();
+    };
+    window.rescheduleSingleTodo = (pageId, blockId, targetIso) => {
+      const found = findBlockDeep(getContextObj(pageId), blockId);
+      if (!found) return;
+      found.block.dueDate = targetIso;
+      found.block.inboxOnly = false;
+      saveAppState();
+      renderAll();
+      showToast(`📅 '${(found.block.text||'').slice(0,14)}' → ${targetIso} 이동`);
+    };
+    window.rescheduleOverdueTodos = (targetIso) => {
+      const td = todayStr(0);
+      let cnt = 0;
+      getAllGlobalTodos().forEach(({ block }) => {
+        if (!block.checked && block.dueDate && block.dueDate < td) {
+          block.dueDate = targetIso; block.inboxOnly = false; cnt++;
+        }
+      });
+      saveAppState();
+      renderAll();
+      showToast(`♻️ 지연된 ${cnt}건을 ${targetIso}로 재조정했습니다.`);
+    };
+    window.addTodoForSpecificDate = (isoDate) => {
+      const inp = document.getElementById(`upAdd_${isoDate}`);
+      const txt = (inp?.value || '').trim();
+      if (!txt) return;
+      const parsed = parseSmartKoreanTodo(txt, APP.activeSpace === 'KIDS' ? 'KIDS' : 'WORK');
+      const tdPage = ensureTodayDailyPage();
+      tdPage.blocks.unshift(createBlock('todo', {
+        text: parsed.cleanText || txt,
+        space: parsed.space,
+        priority: parsed.priority,
+        dueDate: isoDate,
+        dueTime: parsed.dueTime || '',
+        estMinutes: parsed.estMinutes || 30,
+        inboxOnly: false
+      }));
+      saveAppState();
+      renderAll();
+    };
+    window.addInboxQuickTodo = () => {
+      const inp = document.getElementById('inboxQuickIn');
+      const txt = (inp?.value || '').trim();
+      if (!txt) return;
+      const parsed = parseSmartKoreanTodo(txt, APP.activeSpace === 'KIDS' ? 'KIDS' : 'WORK');
+      const tdPage = ensureTodayDailyPage();
+      tdPage.blocks.unshift(createBlock('todo', {
+        text: parsed.cleanText || txt, space: parsed.space, priority: parsed.priority,
+        dueDate: '', dueTime: '', estMinutes: parsed.estMinutes || 30, inboxOnly: true
+      }));
+      saveAppState();
+      renderAll();
+    };
+
+    // ---------- 8) TickTick "오늘 계획하기 (Plan My Day)" Morning Wizard ----------
+    window.openPlanMyDayModal = () => {
+      const td = todayStr(0);
+      const all = getAllGlobalTodos();
+      const overdue = all.filter(x => !x.block.checked && x.block.dueDate && x.block.dueDate < td);
+      const todayItems = all.filter(x => !x.block.checked && x.block.dueDate === td);
+      const tl = getUnifiedTimelineForDate(td);
+      const totalEst = todayItems.reduce((s, x) => s + Number(x.block.estMinutes || 30), 0);
+      const capMin = Number(APP.workHours?.dailyCapMin || 480);
+
+      document.getElementById('planMyDayBody').innerHTML = `
+        <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:11px;padding:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <strong style="font-size:13.5px;">1️⃣ 어제 남은 미완료 · 지연 (${overdue.length}건)</strong>
+            ${overdue.length ? `<button type="button" class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="rescheduleOverdueTodos('${td}');openPlanMyDayModal()">모두 오늘로 가져오기</button>` : ''}
+          </div>
+          ${overdue.length ? overdue.slice(0, 6).map(x => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;padding:4px 0;border-bottom:1px dashed var(--border);font-size:12.5px;">
+              <span>${escHtml(x.block.text)} <span style="font-size:11px;color:#dc2626;">(${x.block.dueDate})</span></span>
+              <button type="button" class="n-btn" style="font-size:11px;padding:2px 7px;" onclick="rescheduleSingleTodo('${x.page.id}','${x.block.id}','${td}');openPlanMyDayModal()">오늘</button>
+            </div>`).join('') : '<div style="font-size:12px;color:#059669;">✅ 밀린 할 일이 없습니다!</div>'}
+        </div>
+
+        <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:11px;padding:12px;">
+          <strong style="font-size:13.5px;display:block;margin-bottom:6px;">2️⃣ 오늘 고정 알람 · 캘린더 (${tl.items.filter(i=>i.kind!=='todo').length}건)</strong>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            ${tl.items.filter(i => i.kind !== 'todo').map(i => `<span class="ntag ${i.kind==='alarm'?'ntag-orange':'ntag-purple'}">${i.timeStr} ${escHtml(i.title)}</span>`).join('') || '<span style="font-size:12px;color:var(--ink-3);">오늘 예정된 고정 알람/외부 일정이 없습니다.</span>'}
+          </div>
+        </div>
+
+        <div style="background:var(--bg-subtle);border:1px solid var(--border);border-radius:11px;padding:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <strong style="font-size:13.5px;">3️⃣ 오늘 꼭 끝낼 TOP 3 핵심 고르기 (★ 클릭)</strong>
+            <span style="font-size:11.5px;color:var(--ink-3);">예상 총 ${formatMinutesKor(totalEst)} / 목표 ${formatMinutesKor(capMin)}</span>
+          </div>
+          <div style="display:grid;gap:5px;max-height:190px;overflow-y:auto;">
+            ${todayItems.map(x => `
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 8px;background:var(--surface-card);border:1px solid ${x.block.top3?'#f59e0b':'var(--border)'};border-radius:8px;">
+                <span style="font-size:12.5px;font-weight:600;">${escHtml(x.block.text)}</span>
+                <button type="button" class="n-btn" style="padding:2px 8px;font-size:12px;${x.block.top3?'background:#fef3c7;border-color:#f59e0b;color:#b45309;':''}" onclick="toggleTodoTop3('${x.page.id}','${x.block.id}');openPlanMyDayModal()">${x.block.top3 ? '★ TOP3 지정됨' : '☆ TOP3 선택'}</button>
+              </div>`).join('') || '<div style="font-size:12px;color:var(--ink-3);">오늘 등록된 미완료 할 일이 없습니다.</div>'}
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="n-btn" onclick="closeModal('planMyDayModal')">닫기</button>
+          <button type="button" class="n-btn-primary" onclick="runMotionAutoSchedule();addKarmaPoints(15,'모닝 플래닝');closeModal('planMyDayModal')">🤖 빈 시간에 자동 배치하고 하루 시작! (+15 XP)</button>
+        </div>`;
+      openModal('planMyDayModal');
+    };
+
+    // ---------- 9) TickTick Fullscreen Deep Focus Mode ----------
+    window.openFullscreenFocusOverlay = (ctxId = null, bid = null) => {
+      if (ctxId && bid) {
+        const found = findBlockDeep(getContextObj(ctxId), bid);
+        if (found) {
+          activeFocusRef = { ctxId, bid };
+          pomoState.targetText = found.block.text || '집중 작업';
+          resetPomodoroTimer(Math.min(60, Math.max(15, Number(found.block.estMinutes || 25))));
+        }
+      } else {
+        const firstOpen = getAllGlobalTodos().find(x => !x.block.checked);
+        if (firstOpen && !activeFocusRef) {
+          activeFocusRef = { ctxId: firstOpen.page.id, bid: firstOpen.block.id };
+          pomoState.targetText = firstOpen.block.text || '집중 작업';
+        }
+      }
+      document.getElementById('fullscreenFocusModal')?.classList.add('open');
+      refreshFullscreenFocusUi();
+    };
+    window.closeFullscreenFocusOverlay = () => {
+      document.getElementById('fullscreenFocusModal')?.classList.remove('open');
+    };
+    window.refreshFullscreenFocusUi = () => {
+      const modal = document.getElementById('fullscreenFocusModal');
+      if (!modal || !modal.classList.contains('open')) return;
+      const clock = document.getElementById('focusClockBig');
+      const btn = document.getElementById('focusStartPauseBtn');
+      const snd = document.getElementById('focusSoundToggleBtn');
+      const titleEl = document.getElementById('focusTargetTitle');
+      const subBox = document.getElementById('focusSubtasksBox');
+      const actRow = document.getElementById('focusActionRow');
+
+      const mm = String(Math.floor(pomoState.remaining / 60)).padStart(2, '0');
+      const ss = String(pomoState.remaining % 60).padStart(2, '0');
+      if (clock) clock.textContent = `${mm}:${ss}`;
+      if (btn) btn.textContent = pomoState.running ? '⏸️ 일시정지' : '▶️ 집중 시작';
+      if (snd) snd.textContent = ambientNoiseState.mode === 1 ? '🌧️ 빗소리 ON' : (ambientNoiseState.mode === 2 ? '📻 백색소음 ON' : '🎧 배경음 OFF');
+      if (titleEl) titleEl.textContent = pomoState.targetText || '지금 집중할 핵심 작업';
+
+      const found = activeFocusRef ? findBlockDeep(getContextObj(activeFocusRef.ctxId), activeFocusRef.bid) : null;
+      if (subBox) {
+        const subs = found?.block?.subtasks || [];
+        subBox.innerHTML = subs.length ? `
+          <div style="font-size:11.5px;color:#94a3b8;font-weight:700;margin-bottom:6px;">🌿 체크리스트 (${subs.filter(s=>s.done).length}/${subs.length})</div>
+          ${subs.map(st => `
+            <label style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.06);border-radius:8px;margin-bottom:4px;cursor:pointer;font-size:13px;${st.done?'text-decoration:line-through;opacity:0.55;':''}">
+              <input type="checkbox" ${st.done?'checked':''} onchange="toggleSubtaskDone('${activeFocusRef.ctxId}','${activeFocusRef.bid}','${st.id}',this.checked)" />
+              <span>${escHtml(st.text)}</span>
+            </label>`).join('')}` : '';
+      }
+      if (actRow) {
+        actRow.innerHTML = found
+          ? `<button type="button" onclick="completeFocusTaskAndNext()" style="border:none;background:#10b981;color:#fff;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;">✅ 작업 완료(+XP) & 다음 할일</button>`
+          : '';
+      }
+    };
+    window.completeFocusTaskAndNext = () => {
+      if (activeFocusRef) {
+        toggleTodoBlock(activeFocusRef.ctxId, activeFocusRef.bid, true);
+      }
+      const next = getAllGlobalTodos().find(x => !x.block.checked);
+      if (next) {
+        activeFocusRef = { ctxId: next.page.id, bid: next.block.id };
+        pomoState.targetText = next.block.text;
+        resetPomodoroTimer(Math.min(60, Math.max(15, Number(next.block.estMinutes || 25))));
+        refreshFullscreenFocusUi();
+        showToast(`⏭️ 다음 작업 전환: ${next.block.text.slice(0, 18)}`);
+      } else {
+        closeFullscreenFocusOverlay();
+        showToast('🎉 오늘 예정된 작업을 모두 끝냈습니다!');
+      }
+    };
+
+    // ---------- 10) 2-Way .ics Calendar File Parser & Importer (Google / Apple / Naver) ----------
+    function parseIcsTextToEvents(icsText) {
+      const unfolded = String(icsText || '').replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
+      const blocks = unfolded.split(/BEGIN:VEVENT/i).slice(1);
+      const events = [];
+      const parseIcsDt = (raw) => {
+        const val = String(raw || '').split(':').pop().trim();
+        const mDate = val.match(/^(\d{4})(\d{2})(\d{2})$/);
+        if (mDate) return { date: `${mDate[1]}-${mDate[2]}-${mDate[3]}`, time: '', allDay: true };
+        const mDt = val.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(Z?)$/);
+        if (!mDt) return null;
+        if (mDt[7] === 'Z') {
+          const dUtc = new Date(Date.UTC(Number(mDt[1]), Number(mDt[2]) - 1, Number(mDt[3]), Number(mDt[4]), Number(mDt[5])));
+          const kst = new Date(dUtc.getTime() + 9 * 3600 * 1000);
+          return {
+            date: `${kst.getUTCFullYear()}-${String(kst.getUTCMonth()+1).padStart(2,'0')}-${String(kst.getUTCDate()).padStart(2,'0')}`,
+            time: `${String(kst.getUTCHours()).padStart(2,'0')}:${String(kst.getUTCMinutes()).padStart(2,'0')}`,
+            allDay: false
+          };
+        }
+        return { date: `${mDt[1]}-${mDt[2]}-${mDt[3]}`, time: `${mDt[4]}:${mDt[5]}`, allDay: false };
+      };
+      blocks.forEach(blk => {
+        const endBody = blk.split(/END:VEVENT/i)[0] || blk;
+        const lines = endBody.split(/\r?\n/);
+        let summary = '', dtStart = null, dtEnd = null, location = '', desc = '', extUid = '';
+        lines.forEach(ln => {
+          if (/^SUMMARY/i.test(ln)) summary = ln.replace(/^SUMMARY[^:]*:/i, '').replace(/\\n/g, ' ').replace(/\\,/g, ',').trim();
+          else if (/^DTSTART/i.test(ln)) dtStart = parseIcsDt(ln);
+          else if (/^DTEND/i.test(ln)) dtEnd = parseIcsDt(ln);
+          else if (/^LOCATION/i.test(ln)) location = ln.replace(/^LOCATION[^:]*:/i, '').trim();
+          else if (/^DESCRIPTION/i.test(ln)) desc = ln.replace(/^DESCRIPTION[^:]*:/i, '').trim();
+          else if (/^UID/i.test(ln)) extUid = ln.replace(/^UID[^:]*:/i, '').trim();
+        });
+        if (summary && dtStart?.date) {
+          events.push({
+            id: extUid || uid('ics'),
+            title: summary,
+            date: dtStart.date,
+            startTime: dtStart.time || '',
+            endTime: dtEnd?.time || '',
+            allDay: Boolean(dtStart.allDay),
+            location,
+            desc
+          });
+        }
+      });
+      return events;
+    }
+    window.importIcsCalendarFiles = async (files) => {
+      if (!files || !files.length) return;
+      if (!Array.isArray(APP.externalEvents)) APP.externalEvents = [];
+      let added = 0;
+      for (const f of Array.from(files)) {
+        const txt = await f.text();
+        const parsed = parseIcsTextToEvents(txt);
+        parsed.forEach(ev => {
+          const dup = APP.externalEvents.some(x => (x.id && x.id === ev.id) || (x.date === ev.date && x.startTime === ev.startTime && x.title === ev.title));
+          if (!dup) { APP.externalEvents.push({ ...ev, source: f.name }); added++; }
+        });
+      }
+      saveAppState();
+      renderAll();
+      const inp = document.getElementById('icsImportInput'); if (inp) inp.value = '';
+      showToast(added ? `📤 외부 캘린더(.ics) 일정 ${added}건을 가져왔습니다! 캘린더·플래너·자동배치에 즉시 반영됩니다.` : '이미 등록된 일정이거나 VEVENT를 찾지 못했습니다.');
     };
 
     // ==================== 18. 부팅 ====================
