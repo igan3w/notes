@@ -514,41 +514,46 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      padding: 4px 14px;
+      gap: 10px;
+      padding: 5px 14px;
       border-bottom: 1px solid var(--border);
       background: var(--bg-subtle);
+      flex-shrink: 0;
+    }
+    .view-pills {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex: 1;
+      min-width: 0;
       overflow-x: auto;
       scrollbar-width: none;
-      flex-shrink: 0;
+      scroll-behavior: smooth;
     }
-    .view-switcher-strip::-webkit-scrollbar { display: none; }
-    .view-pills {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-      flex-shrink: 0;
-    }
+    .view-pills::-webkit-scrollbar { display: none; }
     .view-pill {
-      border: none;
+      border: 1px solid transparent;
       background: transparent;
-      padding: 4px 10px;
-      border-radius: 5px;
-      font-size: 12.5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--ink-2);
       cursor: pointer;
       white-space: nowrap;
+      flex-shrink: 0;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
     }
     .view-pill:hover { background: var(--bg-hover); color: var(--ink); }
     .view-pill.active {
-      background: #ffffff;
-      color: var(--ink);
-      font-weight: 600;
-      box-shadow: 0 1px 2px rgba(55,53,47,0.08);
+      background: var(--surface-card);
+      color: var(--accent);
+      font-weight: 700;
+      border-color: rgba(37, 99, 235, 0.30);
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
     }
 
     /* Main Scroll Canvas */
@@ -2446,7 +2451,7 @@
           <span class="sb-item-left"><span class="sb-item-icon">🔍</span><span class="sb-item-title">검색</span></span>
           <span style="font-size:11px;color:var(--ink-3);">Ctrl+K</span>
         </button>
-        <button type="button" class="sb-item" id="sbNavHome" onclick="setMainView('TODAY')">
+        <button type="button" class="sb-item" id="sbNavHome" onclick="APP.activeFilterId='';setMainView('TODAY')">
           <span class="sb-item-left"><span class="sb-item-icon">🏠</span><span class="sb-item-title">홈 · 오늘 보드</span></span>
           <span id="sbTodayRemain" class="sb-item-count">0</span>
         </button>
@@ -2581,7 +2586,7 @@
           <button type="button" class="view-pill" data-view="TODAY" onclick="setMainView('TODAY')">🏠 홈 · 오늘</button>
           <button type="button" class="view-pill" data-view="PLANNER" onclick="setMainView('PLANNER')">🗓️ 플래너</button>
           <button type="button" class="view-pill" data-view="ALARMS" onclick="setMainView('ALARMS')">🔔 알람센터</button>
-          <button type="button" class="view-pill" data-view="JOURNAL" onclick="setMainView('JOURNAL')">📓 가족·기록·금고</button>
+          <button type="button" class="view-pill" data-view="JOURNAL" onclick="setMainView('JOURNAL')">📓 가족·금고</button>
           <button type="button" class="view-pill" data-view="CALENDAR" onclick="setMainView('CALENDAR')">📅 캘린더</button>
           <button type="button" class="view-pill" data-view="EDITOR" onclick="setMainView('EDITOR')">📝 페이지</button>
           <button type="button" class="view-pill" data-view="PROJECT" onclick="setMainView('PROJECT')">📁 프로젝트</button>
@@ -4964,6 +4969,8 @@
     window.setMainView = function(viewKey) {
       APP.activeView = viewKey;
       closeMobileSidebar();
+      const ws = document.getElementById('wsContent');
+      if (ws) ws.scrollTop = 0;
       saveAppState(false);
       renderAll();
     };
@@ -5261,7 +5268,9 @@
       document.getElementById('sbNavPlanner')?.classList.toggle('active', APP.activeView === 'PLANNER');
       document.getElementById('sbNavAlarms')?.classList.toggle('active', APP.activeView === 'ALARMS');
       document.getElementById('sbNavJournal')?.classList.toggle('active', APP.activeView === 'JOURNAL');
-      document.getElementById('sbNavInbox')?.classList.toggle('active', APP.activeView === 'KANBAN' || APP.activeView === 'CALENDAR');
+      document.getElementById('sbNavCalendar')?.classList.toggle('active', APP.activeView === 'CALENDAR');
+      document.getElementById('sbNavInbox')?.classList.toggle('active', APP.activeView === 'KANBAN');
+      document.getElementById('sbNavGraph')?.classList.toggle('active', APP.activeView === 'GRAPH');
       document.getElementById('sbNavPhotos')?.classList.toggle('active', APP.activeView === 'GALLERY');
       document.getElementById('sbNavHabits')?.classList.toggle('active', APP.activeView === 'HABITS');
       const almCnt = (APP.alarms || []).filter(a => a.active !== false).length;
@@ -5442,6 +5451,20 @@
       if (pBtn) pBtn.textContent = APP.privacyBlur ? '🔒' : '🙈';
       document.querySelectorAll('.space-chip').forEach(c => c.classList.toggle('active', c.dataset.space === APP.activeSpace));
       document.querySelectorAll('#mainViewTabs .view-pill').forEach(p => p.classList.toggle('active', p.dataset.view === APP.activeView));
+      requestAnimationFrame(() => {
+        const tabsBox = document.getElementById('mainViewTabs');
+        const activePill = tabsBox?.querySelector('.view-pill.active');
+        if (tabsBox && activePill) {
+          const pillRect = activePill.getBoundingClientRect();
+          const boxRect = tabsBox.getBoundingClientRect();
+          const targetLeft = Math.max(0, tabsBox.scrollLeft + (pillRect.left - boxRect.left) - (tabsBox.clientWidth / 2) + (pillRect.width / 2));
+          tabsBox.scrollTo({ left: targetLeft, behavior: 'smooth' });
+        }
+        const activeSbItem = document.querySelector('#sidebar .sb-item.active');
+        if (activeSbItem && activeSbItem.scrollIntoView) {
+          activeSbItem.scrollIntoView({ block: 'nearest' });
+        }
+      });
       document.querySelectorAll('#mobileBottomNav .mob-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.mview === APP.activeView));
       updateTopStatusMetrics();
       renderBreadcrumbs();
