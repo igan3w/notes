@@ -2843,6 +2843,20 @@
       <div style="font-size:12px;color:var(--ink-2);margin-bottom:8px;">
         예시: <code>내일 오후 3시 애들 우유·간식 장보기 !긴급 #애들</code> · 여러 줄로 쏟아내면 한 번에 쪼개서 등록됩니다.
       </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <div>
+          <label class="field-label">메인 카테고리</label>
+          <select id="qcSpace" class="field-select" onchange="syncQuickCaptureSubcategories()">
+            <option value="WORK">🏢 회사 · 업무</option>
+            <option value="KIDS">👨‍👧‍👦 가족 · 애들</option>
+            <option value="PERSONAL">🔒 개인 · 생활</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">서브 카테고리</label>
+          <select id="qcCategory" class="field-select"></select>
+        </div>
+      </div>
       <textarea id="qcInputBox" rows="3" class="field-textarea" placeholder="날짜(오늘/내일/모레), 시간(오후 3시/15:00), !긴급, #일/#애들 자동 인식..." oninput="updateQuickCapturePreview()"></textarea>
       <div id="qcPreviewChips" class="live-nlp-preview" style="margin-top:8px;"></div>
       <label style="display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:var(--ink-2);cursor:pointer;">
@@ -2916,7 +2930,6 @@
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap;">
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
           <button type="button" class="n-btn-primary" onclick="saveSyncSettings(); syncToGithubVault(false);">💾 저장 &amp; Git 올리기</button>
-          <button type="button" class="n-btn" onclick="saveSyncSettings(); testGithubConnection();">🧪 연결 테스트</button>
           <button type="button" class="n-btn" onclick="saveSyncSettings(); pullFromGithubVault();">⬇️ Git에서 불러오기</button>
         </div>
         <button type="button" class="n-btn" onclick="document.getElementById('jsonImportFile').click()">📂 JSON 복원</button>
@@ -3030,9 +3043,6 @@
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;">
         <button type="button" class="n-btn-primary" onclick="saveTelegramSettings()">💾 저장 &amp; 서버·클라우드 반영</button>
-        <button type="button" class="n-btn" onclick="testTelegramChannel('WORK')">💼 업무방 테스트</button>
-        <button type="button" class="n-btn" onclick="testTelegramChannel('KIDS')">👨‍👧‍👦 가족방 테스트</button>
-        <button type="button" class="n-btn" onclick="testTelegramChannel('WORK', 'EVENING')">🌙 마감 리포트 테스트</button>
         <button type="button" class="n-btn" onclick="sendDailySummaryToTelegram()">📤 오늘 할일 요약</button>
         <button type="button" class="n-btn" onclick="pullTelegramInbox()">📥 메모 가져오기</button>
       </div>
@@ -3175,24 +3185,16 @@
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
           <div>
-            <label class="field-label">영역 구분</label>
-            <select id="almSpace" class="field-select">
+            <label class="field-label">메인 카테고리</label>
+            <select id="almSpace" class="field-select" onchange="syncAlarmSubcategories()">
               <option value="WORK">🏢 회사 · 업무</option>
               <option value="KIDS">👨‍👧‍👦 가족 · 애들</option>
               <option value="PERSONAL">🔒 개인 · 건강</option>
             </select>
           </div>
           <div>
-            <label class="field-label">카테고리</label>
-            <select id="almCategory" class="field-select">
-              <option value="출고/마감">🚚 출고/마감</option>
-              <option value="세무/결제">🧾 세무/결제</option>
-              <option value="거래처/미팅">🤝 거래처/미팅</option>
-              <option value="등하원/학원">🎒 등하원/학원</option>
-              <option value="병원/접종">🏥 병원/접종</option>
-              <option value="기념일/가족">🎂 기념일/가족</option>
-              <option value="개인/기타">✨ 개인/기타</option>
-            </select>
+            <label class="field-label">서브 카테고리</label>
+            <select id="almCategory" class="field-select"></select>
           </div>
         </div>
         <div class="mob-stack-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
@@ -3508,6 +3510,88 @@
     ];
     const COVER_ALIAS = { blue: 'ocean', rose: 'sunrise', emerald: 'sage', amber: 'terracotta', slate: 'ink', aurora: 'aurora' };
 
+    const SPACE_SUBCATEGORIES = {
+      WORK: [
+        { value: '출고/마감', label: '🚚 출고/마감' },
+        { value: '세무/결제', label: '🧾 세무/결제' },
+        { value: '거래처/미팅', label: '🤝 거래처/미팅' },
+        { value: '발주/입고', label: '📦 발주/입고' },
+        { value: '스토어/CS', label: '🛒 스토어/CS' },
+        { value: '업무/기타', label: '💼 업무/기타' }
+      ],
+      KIDS: [
+        { value: '등하원/학원', label: '🎒 등하원/학원' },
+        { value: '준비물/학교', label: '🧸 준비물/학교' },
+        { value: '소아과/접종', label: '🏥 소아과/접종' },
+        { value: '기념일/생일', label: '🎂 기념일/생일' },
+        { value: '가족행사/외출', label: '🚗 가족행사/외출' },
+        { value: '가족/기타', label: '👨‍👧‍👦 가족/기타' }
+      ],
+      PERSONAL: [
+        { value: '건강/병원', label: '💊 건강/병원' },
+        { value: '운동/생활', label: '🏃 운동/생활' },
+        { value: '차량/보험', label: '🚗 차량/보험' },
+        { value: '금융/납부', label: '💳 금융/납부' },
+        { value: '자기계발/독서', label: '📚 자기계발/독서' },
+        { value: '개인/기타', label: '🔒 개인/기타' }
+      ]
+    };
+    const LEDGER_SUBCATEGORIES = {
+      WORK: [
+        { value: '화물/택배비', label: '🚚 화물/택배비' },
+        { value: '식대/접대비', label: '🍽️ 식대/접대비' },
+        { value: '사무/비품', label: '🖨️ 사무/비품' },
+        { value: '매입/발주', label: '📦 매입/발주' },
+        { value: '광고/마케팅', label: '📢 광고/마케팅' },
+        { value: '업무/기타', label: '💼 업무/기타' }
+      ],
+      KIDS: [
+        { value: '육아/교육', label: '🎒 육아/교육' },
+        { value: '식비/장보기', label: '🛒 식비/장보기' },
+        { value: '병원/약국', label: '🏥 병원/약국' },
+        { value: '의류/용품', label: '👕 의류/용품' },
+        { value: '가족외식/나들이', label: '🎡 가족외식/나들이' },
+        { value: '가족/기타', label: '👨‍👧‍👦 가족/기타' }
+      ],
+      PERSONAL: [
+        { value: '건강/의료', label: '💊 건강/의료' },
+        { value: '차량/주유', label: '⛽ 차량/주유' },
+        { value: '운동/취미', label: '🏃 운동/취미' },
+        { value: '통신/보험', label: '📱 통신/보험' },
+        { value: '개인/기타', label: '🔒 개인/기타' }
+      ]
+    };
+
+    function populateSubcategorySelect(mapObj, spaceVal, selectEl, preferredVal = '', blankLabel = '') {
+      if (!selectEl) return;
+      const list = mapObj[spaceVal] || mapObj.WORK || [];
+      const opts = [];
+      if (blankLabel) opts.push({ value: '', label: blankLabel });
+      list.forEach(item => opts.push(item));
+      if (preferredVal && !opts.some(o => o.value === preferredVal)) {
+        opts.unshift({ value: preferredVal, label: preferredVal });
+      }
+      selectEl.innerHTML = opts.map(o => `<option value="${escHtml(o.value)}">${escHtml(o.label)}</option>`).join('');
+      if (preferredVal && opts.some(o => o.value === preferredVal)) {
+        selectEl.value = preferredVal;
+      } else if (opts.length) {
+        selectEl.value = opts[0].value;
+      }
+    }
+
+    window.syncAlarmSubcategories = (preferredVal = '') => {
+      const sp = document.getElementById('almSpace')?.value || 'WORK';
+      populateSubcategorySelect(SPACE_SUBCATEGORIES, sp, document.getElementById('almCategory'), preferredVal);
+    };
+    window.syncQuickCaptureSubcategories = (preferredVal = '') => {
+      const sp = document.getElementById('qcSpace')?.value || 'WORK';
+      populateSubcategorySelect(SPACE_SUBCATEGORIES, sp, document.getElementById('qcCategory'), preferredVal);
+    };
+    window.syncLedgerSubcategories = (preferredVal = '') => {
+      const sp = document.getElementById('lgSpace')?.value || 'WORK';
+      populateSubcategorySelect(LEDGER_SUBCATEGORIES, sp, document.getElementById('lgCat'), preferredVal);
+    };
+
     const DRAG_SVG = `<svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor"><circle cx="3.5" cy="2.5" r="1.2"/><circle cx="8.5" cy="2.5" r="1.2"/><circle cx="3.5" cy="7" r="1.2"/><circle cx="8.5" cy="7" r="1.2"/><circle cx="3.5" cy="11.5" r="1.2"/><circle cx="8.5" cy="11.5" r="1.2"/></svg>`;
     const PLUS_SVG = `<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v10M3 8h10" stroke-linecap="round"/></svg>`;
 
@@ -3676,6 +3760,7 @@
         color: '',
         bg: '',
         space: overrides.space || 'WORK',
+        category: overrides.category || '',
         priority: overrides.priority || 'MID',
         status: overrides.checked ? 'DONE' : (overrides.status || 'TODO'),
         checked: Boolean(overrides.checked),
@@ -7547,6 +7632,7 @@
                      style="width:100%;border:none;outline:none;background:transparent;font-size:13.5px;line-height:1.45;${b.checked ? 'text-decoration:line-through;color:var(--ink-3);' : 'color:var(--ink);'}${isBlocked ? 'opacity:0.65;' : ''}" />
               <div style="display:flex;align-items:center;gap:5px;margin-top:4px;font-size:11px;color:var(--ink-3);flex-wrap:wrap;">
                 ${b.top3 ? `<span class="ntag ntag-yellow" style="padding:1px 5px;font-size:10.5px;">🌟 TOP3</span>` : ''}
+                ${b.category ? `<span class="ntag ntag-gray" style="padding:1px 5px;font-size:10.5px;">🏷️ ${escHtml(b.category)}</span>` : ''}
                 <span>${b.priority === 'HIGH' ? '🔴 긴급' : (b.priority === 'LOW' ? '⚪ 여유' : '🟡 보통')}</span>
                 ${b.dueDate ? `<span>📅 ${escHtml(b.dueDate)}</span>` : `<span class="ntag ntag-gray" style="padding:1px 5px;font-size:10px;">📥 수집함</span>`}
                 ${b.dueTime ? `<span class="ntag ntag-purple" style="padding:1px 5px;font-size:10.5px;">⏰ ${escHtml(b.dueTime)}</span>` : ''}
@@ -7682,8 +7768,12 @@
                 <span style="font-size:11.5px;color:var(--ink-3);">⋮⋮ 끌어 순서/칸 이동</span>
               </div>
               
-              <div style="display:flex;gap:6px;margin-bottom:6px;">
-                <input id="quickWorkTodoIn" class="field-input" style="background:#fff;" placeholder="+ 자연어 입력 (예: 내일 오후 3시 견적서 발송 !긴급)" oninput="previewQuickInlineNlp('WORK',this.value)" onkeydown="if(event.key==='Enter') addQuickTodayTodo('WORK')" />
+              <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
+                <select id="quickCat_WORK" class="field-select" style="width:auto;max-width:130px;background:#fff;font-size:12px;padding:6px 8px;">
+                  <option value="">💼 분류 선택</option>
+                  ${(SPACE_SUBCATEGORIES.WORK || []).map(c => `<option value="${escHtml(c.value)}">${escHtml(c.label)}</option>`).join('')}
+                </select>
+                <input id="quickWorkTodoIn" class="field-input" style="flex:1;min-width:150px;background:#fff;" placeholder="+ 자연어 입력 (예: 내일 오후 3시 견적서 발송 !긴급)" oninput="previewQuickInlineNlp('WORK',this.value)" onkeydown="if(event.key==='Enter') addQuickTodayTodo('WORK')" />
                 <button type="button" class="n-btn" onclick="addQuickTodayTodo('WORK')">추가</button>
               </div>
               <div id="nlpPreview_WORK" class="live-nlp-preview" style="display:none;margin-bottom:8px;"></div>
@@ -7698,8 +7788,12 @@
                 </span>
                 <span style="font-size:11.5px;color:var(--ink-3);">⋮⋮ 끌어 순서/칸 이동</span>
               </div>
-              <div style="display:flex;gap:6px;margin-bottom:6px;">
-                <input id="quickKidsTodoIn" class="field-input" style="background:#fff;" placeholder="+ 자연어 입력 (예: 금요일 준비물 물통 !긴급 #애들)" oninput="previewQuickInlineNlp('KIDS',this.value)" onkeydown="if(event.key==='Enter') addQuickTodayTodo('KIDS')" />
+              <div style="display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;">
+                <select id="quickCat_KIDS" class="field-select" style="width:auto;max-width:130px;background:#fff;font-size:12px;padding:6px 8px;">
+                  <option value="">👨‍👧‍👦 분류 선택</option>
+                  ${(SPACE_SUBCATEGORIES.KIDS || []).map(c => `<option value="${escHtml(c.value)}">${escHtml(c.label)}</option>`).join('')}
+                </select>
+                <input id="quickKidsTodoIn" class="field-input" style="flex:1;min-width:150px;background:#fff;" placeholder="+ 자연어 입력 (예: 금요일 준비물 물통 !긴급 #애들)" oninput="previewQuickInlineNlp('KIDS',this.value)" onkeydown="if(event.key==='Enter') addQuickTodayTodo('KIDS')" />
                 <button type="button" class="n-btn" onclick="addQuickTodayTodo('KIDS')">추가</button>
               </div>
               <div id="nlpPreview_KIDS" class="live-nlp-preview" style="display:none;margin-bottom:8px;"></div>
@@ -7804,15 +7898,18 @@
     };
     window.addQuickTodayTodo = function(space) {
       const inp = document.getElementById(space === 'KIDS' ? 'quickKidsTodoIn' : 'quickWorkTodoIn');
+      const catSel = document.getElementById(space === 'KIDS' ? 'quickCat_KIDS' : 'quickCat_WORK');
       const txt = (inp?.value || '').trim();
       if (!txt) return;
       pushUndoSnapshot('빠른 할 일 추가');
       const parsed = parseSmartKoreanTodo(txt, space);
       const targetSpace = parsed.space || space;
+      const category = (catSel?.value || '').trim();
       const tdPage = ensureTodayDailyPage();
       tdPage.blocks.unshift(createBlock('todo', {
         text: parsed.cleanText || txt,
         space: targetSpace,
+        category,
         priority: parsed.priority || (targetSpace === 'KIDS' ? 'MID' : 'HIGH'),
         dueDate: parsed.inboxOnly ? '' : (parsed.dueDate || todayStr(0)),
         dueTime: parsed.dueTime || '',
@@ -7833,6 +7930,13 @@
     let qcVoiceRecog = null;
     let qcVoiceActive = false;
     window.openQuickCaptureModal = function() {
+      const defSp = APP.activeSpace === 'KIDS' ? 'KIDS' : (APP.activeSpace === 'PERSONAL' ? 'PERSONAL' : 'WORK');
+      const spSel = document.getElementById('qcSpace');
+      if (spSel) {
+        spSel.value = defSp;
+        spSel.dataset.manualPicked = '';
+        syncQuickCaptureSubcategories();
+      }
       openModal('quickCaptureModal');
       const box = document.getElementById('qcInputBox');
       const chips = document.getElementById('qcPreviewChips');
@@ -7850,6 +7954,10 @@
             }
           });
         }
+        if (spSel && !spSel.dataset.boundManual) {
+          spSel.dataset.boundManual = '1';
+          spSel.addEventListener('change', () => { spSel.dataset.manualPicked = '1'; });
+        }
         setTimeout(() => box.focus(), 40);
       }
       if (chips) chips.innerHTML = '<span style="font-size:12px;color:var(--ink-3);">예시: 내일 오후 3시 거래처 미팅 !긴급 #일 · 금요일 준비물 챙기기 #애들</span>';
@@ -7857,15 +7965,23 @@
     window.updateQuickCapturePreview = function() {
       const raw = document.getElementById('qcInputBox')?.value || '';
       const chips = document.getElementById('qcPreviewChips');
+      const spSel = document.getElementById('qcSpace');
       if (!chips) return;
       const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
       if (!lines.length) {
         chips.innerHTML = '<span style="font-size:12px;color:var(--ink-3);">입력 줄마다 날짜 · 시간 · 우선순위 · 스페이스를 자동 분석합니다.</span>';
         return;
       }
-      const defSp = APP.activeSpace === 'KIDS' ? 'KIDS' : (APP.activeSpace === 'PERSONAL' ? 'PERSONAL' : 'WORK');
+      const defSp = spSel?.value || (APP.activeSpace === 'KIDS' ? 'KIDS' : (APP.activeSpace === 'PERSONAL' ? 'PERSONAL' : 'WORK'));
+      if (spSel && !spSel.dataset.manualPicked) {
+        const firstParsed = parseSmartKoreanTodo(lines[0], defSp);
+        if (firstParsed.space && firstParsed.space !== spSel.value && (/#일|#회사|#업무|#애들|#가족|#개인/.test(lines[0]))) {
+          spSel.value = firstParsed.space;
+          syncQuickCaptureSubcategories();
+        }
+      }
       chips.innerHTML = lines.map((ln, idx) => {
-        const p = parseSmartKoreanTodo(ln, defSp);
+        const p = parseSmartKoreanTodo(ln, spSel?.value || defSp);
         return `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;width:100%;padding:4px 0;border-bottom:1px dashed var(--border);">
           <span style="font-size:11px;color:var(--ink-3);">#${idx + 1}</span>
           ${formatNlpChipsHtml(p)}
@@ -7880,15 +7996,17 @@
       if (!lines.length) return;
       if (qcVoiceRecog && qcVoiceActive) { try { qcVoiceRecog.stop(); } catch (_) {} }
       pushUndoSnapshot('빠른 캡처 저장');
-      const defSp = APP.activeSpace === 'KIDS' ? 'KIDS' : (APP.activeSpace === 'PERSONAL' ? 'PERSONAL' : 'WORK');
+      const pickedSp = document.getElementById('qcSpace')?.value || (APP.activeSpace === 'KIDS' ? 'KIDS' : (APP.activeSpace === 'PERSONAL' ? 'PERSONAL' : 'WORK'));
+      const pickedCat = (document.getElementById('qcCategory')?.value || '').trim();
       const forceInbox = Boolean(document.getElementById('qcInboxMode')?.checked);
       const tdPage = ensureTodayDailyPage();
       const added = lines.map(ln => {
-        const p = parseSmartKoreanTodo(ln, defSp);
+        const p = parseSmartKoreanTodo(ln, pickedSp);
         const asInbox = forceInbox || p.inboxOnly;
         return createBlock('todo', {
           text: p.cleanText || ln,
-          space: p.space || defSp,
+          space: p.space || pickedSp,
+          category: pickedCat,
           priority: p.priority || (p.space === 'KIDS' ? 'MID' : 'HIGH'),
           dueDate: asInbox ? '' : (p.dueDate || todayStr(0)),
           dueTime: p.dueTime || '',
@@ -11205,7 +11323,6 @@
             </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
               <button class="n-btn" style="font-size:12px;" onclick="openTelegramModal()">✈️ 텔레그램 설정</button>
-              <button class="n-btn" style="font-size:12px;" onclick="testAlarmRingSample()">🔊 알람 테스트 울리기</button>
             </div>
           </div>
 
@@ -11260,7 +11377,6 @@
                       ${next ? `<span>· 다음: ${next.date}</span>` : ''}
                     </div>
                     <div style="display:flex;gap:5px;margin-top:4px;padding-top:8px;border-top:1px dashed var(--border);flex-wrap:wrap;">
-                      <button class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="fireProAlarmNow(APP.alarms.find(x=>x.id==='${a.id}'),'🔊 미리 울리기')">🔊 테스트</button>
                       <button class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="markProAlarmDone('${a.id}')">✅ 완료(${(a.completedHistory||[]).length})</button>
                       <button class="n-btn" style="font-size:11.5px;padding:3px 8px;" onclick="openAlarmModal('${a.id}')">✏️ 수정</button>
                       <button class="n-btn-ghost" style="font-size:11.5px;padding:3px 7px;color:#dc2626;margin-left:auto;" onclick="deleteProAlarm('${a.id}')">삭제</button>
@@ -11281,11 +11397,12 @@
 
     window.openAlarmModal = (editId = '', defaultDate = '') => {
       const alm = editId ? (APP.alarms || []).find(a => a.id === editId) : null;
+      const defaultSpace = alm ? (alm.space || 'WORK') : (APP.activeSpace === 'KIDS' ? 'KIDS' : (APP.activeSpace === 'PERSONAL' ? 'PERSONAL' : 'WORK'));
       document.getElementById('almEditId').value = alm ? alm.id : '';
       document.getElementById('alarmModalTitle').textContent = alm ? '✏️ 프로 알람 수정' : '🔔 회사·가족 프로 알람 등록';
       document.getElementById('almTitle').value = alm ? alm.title : '';
-      document.getElementById('almSpace').value = alm ? (alm.space || 'WORK') : 'WORK';
-      document.getElementById('almCategory').value = alm ? (alm.category || '출고/마감') : '출고/마감';
+      document.getElementById('almSpace').value = defaultSpace;
+      syncAlarmSubcategories(alm ? (alm.category || '') : '');
       document.getElementById('almDate').value = alm ? (alm.date || todayStr(0)) : (defaultDate || todayStr(0));
       document.getElementById('almTime').value = alm ? (alm.time || '09:00') : '09:00';
       document.getElementById('almRepeat').value = alm ? (alm.repeat || 'NONE') : 'NONE';
@@ -11365,10 +11482,6 @@
       saveAppState();
       renderAll();
       showToast('🗑️ 알람이 삭제되었습니다.');
-    };
-    window.testAlarmRingSample = () => {
-      const sample = (APP.alarms || [])[0] || { id: '', title: '서뉴으뉴 노션 알람 테스트입니다', time: new Date().toTimeString().slice(0,5), space: 'WORK', category: '테스트', sound: 'VOICE', sendPush: true, sendTelegram: false, note: '소리·음성·OS 푸시 정상 작동 확인!' };
-      fireProAlarmNow(sample, '🔊 테스트 알림');
     };
 
     window.addQuickNlpAlarm = () => {
@@ -12054,11 +12167,14 @@
           <div class="v5-stat-pill"><span class="v5-stat-lbl">💰 이달 총 합계</span><span class="v5-stat-val priv-blur">${total.toLocaleString()}원</span></div>
         </div>
         <div class="v5-card" style="margin-bottom:14px;">
-          <div style="display:grid;grid-template-columns:115px 115px 1fr 110px 95px auto;gap:6px;align-items:center;" class="ledger-in-row">
-            <select id="lgSpace" class="field-select" style="font-size:12px;"><option value="WORK">🏢 회사경비</option><option value="KIDS">👨‍👧‍👦 가족지출</option></select>
+          <div style="display:grid;grid-template-columns:115px 125px 1fr 110px 95px auto;gap:6px;align-items:center;" class="ledger-in-row">
+            <select id="lgSpace" class="field-select" style="font-size:12px;" onchange="syncLedgerSubcategories()">
+              <option value="WORK">🏢 회사경비</option>
+              <option value="KIDS">👨‍👧‍👦 가족지출</option>
+              <option value="PERSONAL">🔒 개인지출</option>
+            </select>
             <select id="lgCat" class="field-select" style="font-size:12px;">
-              <option value="화물/택배비">화물/택배비</option><option value="식대/접대비">식대/접대비</option><option value="사무/비품">사무/비품</option>
-              <option value="식비/장보기">식비/장보기</option><option value="육아/교육">육아/교육</option><option value="병원/약국">병원/약국</option><option value="차량/주유">차량/주유</option>
+              ${(LEDGER_SUBCATEGORIES.WORK || []).map(c => `<option value="${escHtml(c.value)}">${escHtml(c.label)}</option>`).join('')}
             </select>
             <input id="lgTitle" class="field-input" style="font-size:12.5px;" placeholder="내역 (예: 장보기 / 식비 / 업무 경비)" onkeydown="if(event.key==='Enter') addQuickLedgerItem()" />
             <input id="lgAmount" type="number" class="field-input" style="font-size:12.5px;" placeholder="금액(원)" onkeydown="if(event.key==='Enter') addQuickLedgerItem()" />
@@ -12074,7 +12190,7 @@
             <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;background:var(--bg-subtle);border-radius:9px;flex-wrap:wrap;">
               <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
                 <span style="font-size:11.5px;color:var(--ink-3);font-family:var(--font-mono);">${x.date}</span>
-                <span class="ntag ${x.space==='WORK'?'ntag-blue':'ntag-orange'}">${x.space==='WORK'?'회사':'가족'} · ${escHtml(x.category)}</span>
+                <span class="ntag ${x.space==='WORK'?'ntag-blue':(x.space==='PERSONAL'?'ntag-purple':'ntag-orange')}">${x.space==='WORK'?'회사':(x.space==='PERSONAL'?'개인':'가족')} · ${escHtml(x.category)}</span>
                 <strong style="font-size:13px;">${escHtml(x.title)}</strong>
                 <span style="font-size:11px;color:var(--ink-3);">(${escHtml(x.method)})</span>
               </div>
@@ -12097,7 +12213,7 @@
       saveAppState(); renderJournalHubView();
     };
     window.exportQuickLedgerCsv = () => {
-      const rows = [['날짜','구분','카테고리','내역','금액','결제수단'], ...(APP.quickLedger || []).map(x => [x.date, x.space==='WORK'?'회사경비':'가족지출', x.category, x.title, x.amount, x.method])];
+      const rows = [['날짜','구분','카테고리','내역','금액','결제수단'], ...(APP.quickLedger || []).map(x => [x.date, x.space==='WORK'?'회사경비':(x.space==='PERSONAL'?'개인지출':'가족지출'), x.category, x.title, x.amount, x.method])];
       const csv = '\uFEFF' + rows.map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
       const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
       a.download = `서뉴으뉴_노션_가계부_${todayStr(0)}.csv`; a.click();
